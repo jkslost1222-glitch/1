@@ -32,7 +32,6 @@ export const DeliverableCard: React.FC<DeliverableCardProps> = ({ item, onOpen }
     if (item.type === 'pet-em-dia') return 'bg-gradient-to-br from-[#059669] to-[#047857] text-white';
     if (item.type === 'antibafo') return 'bg-gradient-to-br from-[#0891b2] to-[#155e75] text-white';
     if (item.type === 'comer-coco') return 'bg-gradient-to-br from-[#b45309] to-[#78350f] text-white';
-    if (item.type === 'xixi-coco') return 'bg-gradient-to-br from-[#0284c7] to-[#0c4a6e] text-white';
     return 'bg-gradient-to-br from-slate-700 to-slate-900 text-white';
   };
 
@@ -107,9 +106,13 @@ export const DeliverableCard: React.FC<DeliverableCardProps> = ({ item, onOpen }
         {/* Action Button & Metadata */}
         <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
           <div className="text-[11px] font-bold text-slate-400 flex items-center gap-1">
-            {item.content.lessons && <span>{item.content.lessons.length} aulas • </span>}
+            {item.content.lessons && (
+              <span>{item.content.lessons.length} {isEn ? 'lessons' : 'aulas'} • </span>
+            )}
             {item.content.materials && <span>{item.content.materials.length} PDFs • </span>}
-            {item.content.audioTracks && <span>{item.content.audioTracks.length} faixas • </span>}
+            {item.content.audioTracks && (
+              <span>{item.content.audioTracks.length} {isEn ? 'tracks' : 'faixas'} • </span>
+            )}
             <span className="text-teal-700 font-semibold">{t.dashboard.badgeVerified}</span>
           </div>
 

@@ -35,7 +35,7 @@ interface PetProfile {
 }
 
 export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose }) => {
-  const { t, openInstallModal } = useApp();
+  const { t, isEn, openInstallModal } = useApp();
 
   // Load saved pet profile from localStorage if exists
   const [pet, setPet] = useState<PetProfile | null>(() => {
@@ -73,7 +73,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
   }, [pet]);
 
   const handleFinishQuiz = () => {
-    const finalName = nameInput.trim() || 'Seu cãozinho';
+    const finalName = nameInput.trim() || (isEn ? 'Your pup' : 'Seu cãozinho');
     const finalWeight = parseFloat(weightInput) || 5;
     const newProfile: PetProfile = {
       name: finalName,
@@ -92,6 +92,50 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
 
   // Dynamic ingredient scaling according to pet's weight
   const getBifinhoIngredients = (weight: number) => {
+    if (isEn) {
+      if (weight <= 5) {
+        return {
+          label: 'Up to 5 kg (11 lbs)',
+          mel: '1/2 tablespoon',
+          iogurte: '1 tablespoon',
+          aveia: '2 tablespoons',
+          oleoCoco: '1/2 small teaspoon',
+          rendimento: 'Yields ~10 to 12 small treats',
+          doseDiaria: '1 treat per day'
+        };
+      } else if (weight <= 15) {
+        return {
+          label: '5 kg to 15 kg (11-33 lbs)',
+          mel: '1 tablespoon',
+          iogurte: '2 tablespoons',
+          aveia: '4 tablespoons',
+          oleoCoco: '1 teaspoon',
+          rendimento: 'Yields ~15 medium treats',
+          doseDiaria: '1 to 2 treats per day'
+        };
+      } else if (weight <= 25) {
+        return {
+          label: '15 kg to 25 kg (33-55 lbs)',
+          mel: '1 and 1/2 tablespoons',
+          iogurte: '3 tablespoons',
+          aveia: '6 tablespoons',
+          oleoCoco: '1 heaping teaspoon',
+          rendimento: 'Yields ~20 treats',
+          doseDiaria: '2 treats per day'
+        };
+      } else {
+        return {
+          label: 'Over 25 kg (55+ lbs)',
+          mel: '2 tablespoons',
+          iogurte: '4 tablespoons',
+          aveia: '8 tablespoons',
+          oleoCoco: '1 tablespoon',
+          rendimento: 'Yields ~25 large treats',
+          doseDiaria: '2 to 3 treats per day'
+        };
+      }
+    }
+
     if (weight <= 5) {
       return {
         label: 'Até 5 kg',
@@ -137,53 +181,101 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
 
   const currentIngredients = getBifinhoIngredients(pet?.weight || 5);
 
-  const lessons = [
-    {
-      id: 1,
-      title: 'Aula 1: Anatomia do Canal em L & Sinais Precoces de Otite',
-      duration: '08:45',
-      summary: 'Entenda por que o formato anatômico do canal canino facilita a proliferação de fungos (Malassezia) e bactérias quando há umidade ou cera acumulada.',
-      keyPoints: [
-        'O canal vertical desce e faz uma curva de 90° em canal horizontal até o tímpano.',
-        'Cotonetes empurram a cera para o fundo da curva em L e causam impacto doloroso.',
-        'Inspeção semanal sem dor: olfato e visualização do pavilhão auricular.'
+  const lessons = isEn
+    ? [
+        {
+          id: 1,
+          title: 'Lesson 1: Anatomy of the L-Shaped Canal & Early Otitis Signs',
+          duration: '08:45',
+          summary: 'Understand why the canine L-shaped ear canal traps moisture and accelerates yeast (Malassezia) and bacterial growth.',
+          keyPoints: [
+            'The vertical canal descends and takes a 90° turn into the horizontal canal toward the eardrum.',
+            'Cotton swabs push wax deep into the L-bend causing painful impactions.',
+            'Pain-free weekly checks: smell assessment and pinna visualization.'
+          ]
+        },
+        {
+          id: 2,
+          title: 'Lesson 2: Painless & Safe Ear Cleaning Technique',
+          duration: '12:20',
+          summary: 'Step-by-step method to apply lukewarm cleaning solution, massage the ear base, and let your dog shake out debris naturally.',
+          keyPoints: [
+            'Warm the cleaning solution between your palms to avoid cold shock.',
+            'Fill the canal gently without touching the bottle tip to the ear.',
+            'Massage the ear base for 30 seconds (listen for the squishy liquid sound).',
+            'Let your dog shake their head and gently wipe away dislodged external wax with gauze.'
+          ]
+        },
+        {
+          id: 3,
+          title: 'Lesson 3: Natural Green Propolis & Calendula Soothing Drops',
+          duration: '10:15',
+          summary: 'Natural antiseptic and soothing formula with anti-fungal and healing properties for ear flap application.',
+          keyPoints: [
+            'Alcohol-free standardized aqueous green propolis extract.',
+            'Pure calendula or jojoba carrier oil to replenish delicate lipid skin barriers.',
+            'Gentle application of 2 to 3 drops to the pinna with light massage.'
+          ]
+        },
+        {
+          id: 4,
+          title: 'Lesson 4: Post-Bath Care & Prevention in Floppy-Eared Breeds',
+          duration: '14:30',
+          summary: 'Protecting dogs with heavy, drop ears (Cocker, Golden, Beagle, Basset, Shih Tzu) from trapped post-bath moisture.',
+          keyPoints: [
+            'Use dry hydrophobic cotton balls during baths.',
+            'Controlled thermal drying and proper ear flap ventilation.',
+            'Bi-weekly preventive maintenance routine.'
+          ]
+        }
       ]
-    },
-    {
-      id: 2,
-      title: 'Aula 2: Técnica de Higienização Sem Dor e Sem Trauma',
-      duration: '12:20',
-      summary: 'Passo a passo seguro para aplicar solução limpadora morna, massagear a base cartilaginosa e deixar o cão chacoalhar naturalmente.',
-      keyPoints: [
-        'Aqueça levemente a solução de limpeza nas mãos para não dar choque térmico.',
-        'Preencha o canal sem encostar o bico do frasco para não contaminar.',
-        'Massageie a base do ouvido por 30 segundos (ouça o som característico de líquido).',
-        'Deixe o cão chacoalhar a cabeça e remova apenas o excesso externo com algodão ou gaze.'
-      ]
-    },
-    {
-      id: 3,
-      title: 'Aula 3: Gotas Naturais de Própolis Verde & Calêndula',
-      duration: '10:15',
-      summary: 'Fórmula calmante natural antisséptica com ação cicatrizante e antifúngica para aplicação nas orelhas.',
-      keyPoints: [
-        'Própolis verde sem álcool (extrato aquoso ou glicólico padronizado).',
-        'Óleo carreador puro de calêndula ou jojoba para restaurar a barreira lipídica.',
-        'Aplicação suave de 2 a 3 gotas no pavilhão com massagem leve.'
-      ]
-    },
-    {
-      id: 4,
-      title: 'Aula 4: Prevenção Pós-Banho & Cuidados em Cães de Orelha Caída',
-      duration: '14:30',
-      summary: 'Como proteger cães com orelhas pendulosas (Cocker, Golden, Beagle, Basset, Shih Tzu) contra umidade retida pós-banho.',
-      keyPoints: [
-        'Uso de algodão hidrófobo (impermeável) durante o banho.',
-        'Secagem térmica controlada e ventilação das orelhas.',
-        'Rotina de manutenção quinzenal preventiva.'
-      ]
-    }
-  ];
+    : [
+        {
+          id: 1,
+          title: 'Aula 1: Anatomia do Canal em L & Sinais Precoces de Otite',
+          duration: '08:45',
+          summary: 'Entenda por que o formato anatômico do canal canino facilita a proliferação de fungos (Malassezia) e bactérias quando há umidade ou cera acumulada.',
+          keyPoints: [
+            'O canal vertical desce e faz uma curva de 90° em canal horizontal até o tímpano.',
+            'Cotonetes empurram a cera para o fundo da curva em L e causam impacto doloroso.',
+            'Inspeção semanal sem dor: olfato e visualização do pavilhão auricular.'
+          ]
+        },
+        {
+          id: 2,
+          title: 'Aula 2: Técnica de Higienização Sem Dor e Sem Trauma',
+          duration: '12:20',
+          summary: 'Passo a passo seguro para aplicar solução limpadora morna, massagear a base cartilaginosa e deixar o cão chacoalhar naturalmente.',
+          keyPoints: [
+            'Aqueça levemente a solução de limpeza nas mãos para não dar choque térmico.',
+            'Preencha o canal sem encostar o bico do frasco para não contaminar.',
+            'Massageie a base do ouvido por 30 segundos (ouça o som característico de líquido).',
+            'Deixe o cão chacoalhar a cabeça e remova apenas o excesso externo com algodão ou gaze.'
+          ]
+        },
+        {
+          id: 3,
+          title: 'Aula 3: Gotas Naturais de Própolis Verde & Calêndula',
+          duration: '10:15',
+          summary: 'Fórmula calmante natural antisséptica com ação cicatrizante e antifúngica para aplicação nas orelhas.',
+          keyPoints: [
+            'Própolis verde sem álcool (extrato aquoso ou glicólico padronizado).',
+            'Óleo carreador puro de calêndula ou jojoba para restaurar a barreira lipídica.',
+            'Aplicação suave de 2 a 3 gotas no pavilhão com massagem leve.'
+          ]
+        },
+        {
+          id: 4,
+          title: 'Aula 4: Prevenção Pós-Banho & Cuidados em Cães de Orelha Caída',
+          duration: '14:30',
+          summary: 'Como proteger cães com orelhas pendulosas (Cocker, Golden, Beagle, Basset, Shih Tzu) contra umidade retida pós-banho.',
+          keyPoints: [
+            'Uso de algodão hidrófobo (impermeável) durante o banho.',
+            'Secagem térmica controlada e ventilação das orelhas.',
+            'Rotina de manutenção quinzenal preventiva.'
+          ]
+        }
+      ];
 
   return (
     <div className="w-full bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-teal-100 shadow-2xl flex flex-col animate-fade-in">
@@ -194,7 +286,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
           id="btn-close-otite-view"
           onClick={onClose}
           className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-all cursor-pointer"
-          title="Fechar"
+          title={isEn ? "Close" : "Fechar"}
         >
           <X className="w-5 h-5" />
         </button>
@@ -206,16 +298,18 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
           <div>
             <div className="inline-flex items-center gap-1.5 bg-white/20 text-teal-100 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md">
               <Sparkles className="w-3 h-3 text-yellow-300" />
-              <span>Protocolo Oficial Adeus Otite</span>
+              <span>{isEn ? "Official Goodbye Otitis Protocol" : "Protocolo Oficial Adeus Otite"}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Cuidados com os Ouvidos Canino
+              {isEn ? "Canine Ear Care & Health" : "Cuidados com os Ouvidos Canino"}
             </h2>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-teal-100 max-w-3xl leading-relaxed mt-1 font-medium">
-          Vamos cuidar do seu cãozinho! Receitas naturais, dosagens personalizadas por peso, higiene sem dor e prevenção definitiva de recidivas.
+          {isEn
+            ? "Let's take care of your pup! Natural recipes, weight-personalized dosages, painless ear hygiene, and definitive relapse prevention."
+            : "Vamos cuidar do seu cãozinho! Receitas naturais, dosagens personalizadas por peso, higiene sem dor e prevenção definitiva de recidivas."}
         </p>
 
         {/* If pet is configured, show tab navigation */}
@@ -231,7 +325,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               }`}
             >
               <Utensils className="w-3.5 h-3.5" />
-              <span>Bifinho</span>
+              <span>{isEn ? "Treat Recipe" : "Bifinho"}</span>
             </button>
 
             <button
@@ -244,7 +338,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               }`}
             >
               <Wind className="w-3.5 h-3.5" />
-              <span>Spray</span>
+              <span>{isEn ? "Soothing Spray" : "Spray"}</span>
             </button>
 
             <button
@@ -257,7 +351,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               }`}
             >
               <CookingPot className="w-3.5 h-3.5" />
-              <span>Preparar</span>
+              <span>{isEn ? "Preparation" : "Preparar"}</span>
             </button>
 
             <button
@@ -270,7 +364,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               }`}
             >
               <Lightbulb className="w-3.5 h-3.5" />
-              <span>Dicas</span>
+              <span>{isEn ? "Care Tips" : "Dicas"}</span>
             </button>
 
             <button
@@ -283,7 +377,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               }`}
             >
               <PlayCircle className="w-3.5 h-3.5" />
-              <span>4 Videoaulas</span>
+              <span>{isEn ? "4 Video Lessons" : "4 Videoaulas"}</span>
             </button>
           </div>
         )}
@@ -316,10 +410,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               🐶
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-slate-900">
-              Adeus Otite
+              {isEn ? "Goodbye Otitis" : "Adeus Otite"}
             </h3>
             <p className="text-xs text-slate-500 font-medium mt-0.5">
-              Vamos personalizar as dosagens para o seu cãozinho
+              {isEn ? "Let's customize the exact natural dosages for your dog" : "Vamos personalizar as dosagens para o seu cãozinho"}
             </p>
           </div>
 
@@ -330,10 +424,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               <div className="space-y-5 animate-fade-in">
                 <div className="text-center space-y-1">
                   <h4 className="text-base sm:text-lg font-black text-slate-800">
-                    Qual o nome do seu cão?
+                    {isEn ? "What is your dog's name?" : "Qual o nome do seu cão?"}
                   </h4>
                   <p className="text-xs text-slate-400">
-                    Pode ser apelido também
+                    {isEn ? "Nicknames work great too" : "Pode ser apelido também"}
                   </p>
                 </div>
 
@@ -344,7 +438,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     autoFocus
                     value={nameInput}
                     onChange={e => setNameInput(e.target.value)}
-                    placeholder="Ex: Thor, Luna, Max..."
+                    placeholder={isEn ? "e.g., Thor, Luna, Max..." : "Ex: Thor, Luna, Max..."}
                     className="w-full bg-white border-2 border-teal-300 focus:border-teal-500 rounded-2xl px-4 py-3.5 text-center text-base sm:text-lg font-bold text-slate-900 shadow-xs focus:outline-none"
                   />
                 </div>
@@ -354,7 +448,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                   onClick={() => setQuizStep(2)}
                   className="w-full bg-[#00c5b3] hover:bg-teal-500 text-teal-950 font-black py-3.5 rounded-2xl text-sm sm:text-base shadow-md transition-all cursor-pointer"
                 >
-                  Continuar
+                  {isEn ? "Continue" : "Continuar"}
                 </button>
               </div>
             )}
@@ -364,7 +458,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               <div className="space-y-5 animate-fade-in">
                 <div className="text-center space-y-1">
                   <h4 className="text-base sm:text-lg font-black text-slate-800">
-                    Qual o sexo de {nameInput || 'seu pet'}?
+                    {isEn ? `What is the sex of ${nameInput || 'your pet'}?` : `Qual o sexo de ${nameInput || 'seu pet'}?`}
                   </h4>
                 </div>
 
@@ -378,7 +472,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                         : 'bg-white border-slate-200 text-slate-700 hover:border-teal-200'
                     }`}
                   >
-                    <span>♂ Macho</span>
+                    <span>{isEn ? "♂ Male" : "♂ Macho"}</span>
                   </button>
 
                   <button
@@ -390,7 +484,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                         : 'bg-white border-slate-200 text-slate-700 hover:border-teal-200'
                     }`}
                   >
-                    <span>♀ Fêmea</span>
+                    <span>{isEn ? "♀ Female" : "♀ Fêmea"}</span>
                   </button>
                 </div>
 
@@ -399,13 +493,13 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     onClick={() => setQuizStep(1)}
                     className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-2xl text-xs transition-colors cursor-pointer"
                   >
-                    Voltar
+                    {isEn ? "Back" : "Voltar"}
                   </button>
                   <button
                     onClick={() => setQuizStep(3)}
                     className="flex-2 bg-[#00c5b3] hover:bg-teal-500 text-teal-950 font-black py-3 rounded-2xl text-xs sm:text-sm shadow-md transition-all cursor-pointer"
                   >
-                    Continuar
+                    {isEn ? "Continue" : "Continuar"}
                   </button>
                 </div>
               </div>
@@ -416,15 +510,15 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               <div className="space-y-5 animate-fade-in">
                 <div className="text-center space-y-1">
                   <h4 className="text-base sm:text-lg font-black text-slate-800">
-                    Qual a idade de {nameInput || 'seu pet'}?
+                    {isEn ? `How old is ${nameInput || 'your pet'}?` : `Qual a idade de ${nameInput || 'seu pet'}?`}
                   </h4>
                 </div>
 
                 <div className="space-y-2.5">
                   {[
-                    { val: 'Filhote (até 1 ano)', label: 'Filhote (até 1 ano)' },
-                    { val: 'Adulto (1 a 7 anos)', label: 'Adulto (1 a 7 anos)' },
-                    { val: 'Idoso (mais de 7 anos)', label: 'Idoso (mais de 7 anos)' }
+                    { val: 'Filhote (até 1 ano)', label: isEn ? 'Puppy (under 1 year)' : 'Filhote (até 1 ano)' },
+                    { val: 'Adulto (1 a 7 anos)', label: isEn ? 'Adult (1 to 7 years)' : 'Adulto (1 a 7 anos)' },
+                    { val: 'Idoso (mais de 7 anos)', label: isEn ? 'Senior (over 7 years)' : 'Idoso (mais de 7 anos)' }
                   ].map(option => (
                     <button
                       key={option.val}
@@ -447,13 +541,13 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     onClick={() => setQuizStep(2)}
                     className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-2xl text-xs transition-colors cursor-pointer"
                   >
-                    Voltar
+                    {isEn ? "Back" : "Voltar"}
                   </button>
                   <button
                     onClick={() => setQuizStep(4)}
                     className="flex-2 bg-[#00c5b3] hover:bg-teal-500 text-teal-950 font-black py-3 rounded-2xl text-xs sm:text-sm shadow-md transition-all cursor-pointer"
                   >
-                    Continuar
+                    {isEn ? "Continue" : "Continuar"}
                   </button>
                 </div>
               </div>
@@ -464,10 +558,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               <div className="space-y-5 animate-fade-in">
                 <div className="text-center space-y-1">
                   <h4 className="text-base sm:text-lg font-black text-slate-800">
-                    Quantos quilos {nameInput || 'ele'} pesa?
+                    {isEn ? `How many kilograms does ${nameInput || 'your dog'} weigh?` : `Quantos quilos ${nameInput || 'ele'} pesa?`}
                   </h4>
                   <p className="text-xs text-slate-400">
-                    Aproximadamente, se não souber o peso exato
+                    {isEn ? "Approximately, if you do not know the exact weight" : "Aproximadamente, se não souber o peso exato"}
                   </p>
                 </div>
 
@@ -495,13 +589,13 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     onClick={() => setQuizStep(3)}
                     className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-2xl text-xs transition-colors cursor-pointer"
                   >
-                    Voltar
+                    {isEn ? "Back" : "Voltar"}
                   </button>
                   <button
                     onClick={() => setQuizStep(5)}
                     className="flex-2 bg-[#00c5b3] hover:bg-teal-500 text-teal-950 font-black py-3 rounded-2xl text-xs sm:text-sm shadow-md transition-all cursor-pointer"
                   >
-                    Continuar
+                    {isEn ? "Continue" : "Continuar"}
                   </button>
                 </div>
               </div>
@@ -512,10 +606,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               <div className="space-y-6 text-center animate-fade-in">
                 <div className="space-y-1">
                   <h4 className="text-lg sm:text-xl font-black text-slate-900">
-                    Tudo certo? 🎉
+                    {isEn ? "All set? 🎉" : "Tudo certo? 🎉"}
                   </h4>
                   <p className="text-xs text-slate-500">
-                    Confira as informações do seu pet antes de começar
+                    {isEn ? "Review your pup's details before starting" : "Confira as informações do seu pet antes de começar"}
                   </p>
                 </div>
 
@@ -524,7 +618,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     🐶
                   </div>
                   <h5 className="text-base font-black text-slate-900">
-                    {nameInput || 'Seu Pet'}
+                    {nameInput || (isEn ? 'Your Pet' : 'Seu Pet')}
                   </h5>
                   <p className="text-xs font-bold text-teal-700 bg-teal-50 py-1 px-3 rounded-xl inline-block">
                     {genderInput} • {ageInput.split(' ')[0]} • {weightInput || 5} kg
@@ -536,14 +630,14 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     onClick={() => setQuizStep(4)}
                     className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-2xl text-xs transition-colors cursor-pointer"
                   >
-                    Voltar
+                    {isEn ? "Back" : "Voltar"}
                   </button>
                   <button
                     id="btn-quiz-start"
                     onClick={handleFinishQuiz}
                     className="flex-2 bg-gradient-to-r from-[#00c5b3] to-teal-700 hover:from-teal-400 hover:to-teal-600 text-white font-black py-3.5 rounded-2xl text-sm sm:text-base shadow-lg shadow-teal-700/20 transition-all cursor-pointer hover:scale-[1.01]"
                   >
-                    Começar! 🚀
+                    {isEn ? "Start Protocol! 🚀" : "Começar! 🚀"}
                   </button>
                 </div>
               </div>
@@ -578,10 +672,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
             <button
               onClick={handleResetPet}
               className="text-xs font-bold text-teal-800 hover:text-teal-950 bg-white border border-teal-200 hover:bg-teal-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Trocar cãozinho ou recalcular dosagem"
+              title={isEn ? "Switch dog or recalculate dosage" : "Trocar cãozinho ou recalcular dosagem"}
             >
               <RotateCcw className="w-3.5 h-3.5 text-teal-600" />
-              <span>Trocar Cãozinho</span>
+              <span>{isEn ? "Switch Dog Profile" : "Trocar Cãozinho"}</span>
             </button>
           </div>
 
@@ -593,10 +687,12 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               </div>
               <div>
                 <h4 className="text-xs sm:text-sm font-black text-white">
-                  Instale o aplicativo na tela inicial para usar offline
+                  {isEn ? "Install the app on your home screen for offline access" : "Instale o aplicativo na tela inicial para usar offline"}
                 </h4>
                 <p className="text-[11px] text-teal-200 mt-0.5">
-                  Como instalar: Abra este site no celular (Chrome ou Safari) e use a opção de adicionar à tela inicial.
+                  {isEn
+                    ? "How to install: Open this site on mobile (Chrome or Safari) and tap 'Add to Home Screen'."
+                    : "Como instalar: Abra este site no celular (Chrome ou Safari) e use a opção de adicionar à tela inicial."}
                 </p>
               </div>
             </div>
@@ -604,7 +700,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               onClick={openInstallModal}
               className="bg-[#00c5b3] hover:bg-teal-300 text-teal-950 font-black text-xs px-4 py-2 rounded-xl shadow-md transition-all shrink-0 cursor-pointer self-stretch sm:self-auto text-center"
             >
-              Instalar App
+              {isEn ? "Install App" : "Instalar App"}
             </button>
           </div>
 
@@ -616,21 +712,23 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                   <div>
                     <span className="text-[11px] font-black uppercase text-teal-700 tracking-wider">
-                      Fórmula Funcional Diária
+                      {isEn ? "Daily Functional Formula" : "Fórmula Funcional Diária"}
                     </span>
                     <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
-                      Bifinho do Lyndor (Desinflamatório)
+                      {isEn ? "Lyndor's Soothing Ear Treat" : "Bifinho do Lyndor (Desinflamatório)"}
                     </h3>
                   </div>
                   <span className="bg-teal-100 text-teal-950 font-black text-xs px-3 py-1 rounded-xl">
-                    Faixa: {currentIngredients.label}
+                    {isEn ? "Weight Range" : "Faixa"}: {currentIngredients.label}
                   </span>
                 </div>
 
                 {/* Ingredients Table */}
                 <div>
                   <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">
-                    Ingredientes Exatos para {pet.name} ({pet.weight} kg):
+                    {isEn
+                      ? `Exact Ingredients for ${pet.name} (${pet.weight} kg):`
+                      : `Ingredientes Exatos para ${pet.name} (${pet.weight} kg):`}
                   </h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -638,8 +736,8 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       <div className="flex items-center gap-2.5">
                         <span className="text-xl">🍯</span>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">Mel puro</p>
-                          <p className="text-[11px] text-slate-500">Antibacteriano e prebiótico natural</p>
+                          <p className="text-xs font-bold text-slate-800">{isEn ? "Pure Natural Honey" : "Mel puro"}</p>
+                          <p className="text-[11px] text-slate-500">{isEn ? "Antibacterial & natural prebiotic" : "Antibacteriano e prebiótico natural"}</p>
                         </div>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-teal-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
@@ -651,8 +749,8 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       <div className="flex items-center gap-2.5">
                         <span className="text-xl">🥛</span>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">Iogurte integral natural</p>
-                          <p className="text-[11px] text-slate-500">Probiótico vivo de flora intestinal</p>
+                          <p className="text-xs font-bold text-slate-800">{isEn ? "Plain Whole Yogurt" : "Iogurte integral natural"}</p>
+                          <p className="text-[11px] text-slate-500">{isEn ? "Live gut flora probiotics" : "Probiótico vivo de flora intestinal"}</p>
                         </div>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-teal-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
@@ -664,8 +762,8 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       <div className="flex items-center gap-2.5">
                         <span className="text-xl">🌾</span>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">Aveia em flocos finos</p>
-                          <p className="text-[11px] text-slate-500">Fibras que acalmam a barreira dérmica</p>
+                          <p className="text-xs font-bold text-slate-800">{isEn ? "Fine Rolled Oats" : "Aveia em flocos finos"}</p>
+                          <p className="text-[11px] text-slate-500">{isEn ? "Prebiotic fibers supporting skin barrier" : "Fibras que acalmam a barreira dérmica"}</p>
                         </div>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-teal-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
@@ -677,8 +775,8 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       <div className="flex items-center gap-2.5">
                         <span className="text-xl">🥥</span>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">Óleo de coco extra-virgem</p>
-                          <p className="text-[11px] text-slate-500">Ácido láurico antifúngico natural</p>
+                          <p className="text-xs font-bold text-slate-800">{isEn ? "Extra Virgin Coconut Oil" : "Óleo de coco extra-virgem"}</p>
+                          <p className="text-[11px] text-slate-500">{isEn ? "Natural antifungal lauric acid" : "Ácido láurico antifúngico natural"}</p>
                         </div>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-teal-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
@@ -692,9 +790,13 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 <div className="bg-teal-50/80 rounded-2xl p-4 border border-teal-200 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
                   <div className="text-xs text-teal-950 space-y-1">
-                    <p className="font-black text-sm">Como Oferecer a {pet.name}:</p>
+                    <p className="font-black text-sm">{isEn ? `How to feed ${pet.name}:` : `Como Oferecer a ${pet.name}:`}</p>
                     <p className="text-teal-900 leading-relaxed font-medium">
-                      Ofereça <strong>{currentIngredients.doseDiaria}</strong>. Pode ser dado diariamente como reforço de imunidade ou como petisco calmante antes do procedimento de limpeza dos ouvidos.
+                      {isEn ? (
+                        <>Offer <strong>{currentIngredients.doseDiaria}</strong>. Can be given daily as an immunity booster or as a calming treat before ear cleaning.</>
+                      ) : (
+                        <>Ofereça <strong>{currentIngredients.doseDiaria}</strong>. Pode ser dado diariamente como reforço de imunidade ou como petisco calmante antes do procedimento de limpeza dos ouvidos.</>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -707,7 +809,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                     onClick={() => setActiveTab('preparar')}
                     className="bg-[#00c5b3] hover:bg-teal-400 text-teal-950 font-black text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <span>Ver Modo de Preparo</span>
+                    <span>{isEn ? "View Preparation Steps" : "Ver Modo de Preparo"}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -724,43 +826,43 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                   <div>
                     <span className="text-[11px] font-black uppercase text-teal-700 tracking-wider">
-                      Uso Tópico Externo
+                      {isEn ? "External Topical Use" : "Uso Tópico Externo"}
                     </span>
                     <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
-                      Spray Calmante Auricular
+                      {isEn ? "Soothing Ear Spray & Wipe" : "Spray Calmante Auricular"}
                     </h3>
                   </div>
                   <span className="bg-emerald-100 text-emerald-900 font-black text-xs px-3 py-1 rounded-xl">
-                    100% Natural & Seguro
+                    {isEn ? "100% Natural & Gentle" : "100% Natural & Seguro"}
                   </span>
                 </div>
 
                 {/* Ingredients */}
                 <div>
                   <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">
-                    Ingredientes e Proporções:
+                    {isEn ? "Ingredients & Proportions:" : "Ingredientes e Proporções:"}
                   </h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
                       <span className="text-xl">🌼</span>
-                      <p className="text-xs font-bold text-slate-800">Chá de Camomila Concentrado</p>
+                      <p className="text-xs font-bold text-slate-800">{isEn ? "Concentrated Chamomile Tea" : "Chá de Camomila Concentrado"}</p>
                       <p className="text-sm font-black text-teal-800">150 ml</p>
-                      <p className="text-[10px] text-slate-400">Acalma a coceira e o ardor</p>
+                      <p className="text-[10px] text-slate-400">{isEn ? "Soothes itchiness and burning" : "Acalma a coceira e o ardor"}</p>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
                       <span className="text-xl">🍏</span>
-                      <p className="text-xs font-bold text-slate-800">Vinagre de Maçã Orgânico</p>
-                      <p className="text-sm font-black text-teal-800">1 colher de chá</p>
-                      <p className="text-[10px] text-slate-400">Equilibra o pH contra fungos</p>
+                      <p className="text-xs font-bold text-slate-800">{isEn ? "Organic Apple Cider Vinegar" : "Vinagre de Maçã Orgânico"}</p>
+                      <p className="text-sm font-black text-teal-800">{isEn ? "1 teaspoon" : "1 colher de chá"}</p>
+                      <p className="text-[10px] text-slate-400">{isEn ? "Balances ear pH against fungi" : "Equilibra o pH contra fungos"}</p>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
                       <span className="text-xl">💧</span>
-                      <p className="text-xs font-bold text-slate-800">Soro Fisiológico 0,9%</p>
+                      <p className="text-xs font-bold text-slate-800">{isEn ? "0.9% Sterile Saline Solution" : "Soro Fisiológico 0,9%"}</p>
                       <p className="text-sm font-black text-teal-800">50 ml</p>
-                      <p className="text-[10px] text-slate-400">Base isotônica não agressiva</p>
+                      <p className="text-[10px] text-slate-400">{isEn ? "Gentle isotonic liquid base" : "Base isotônica não agressiva"}</p>
                     </div>
                   </div>
                 </div>
@@ -768,15 +870,25 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 {/* Application Guide */}
                 <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
                   <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">
-                    Modo de Aplicação Correto:
+                    {isEn ? "Correct Application Method:" : "Modo de Aplicação Correto:"}
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                    Umedeça um <strong>algodão limpo ou gaze</strong> com a solução e limpe delicadamente a parte visível da orelha (pavilhão auricular) de <strong>1 a 2 vezes ao dia</strong>. Nunca force para dentro do canal auditivo profundo.
+                    {isEn ? (
+                      <>Dampen a <strong>clean cotton pad or gauze</strong> with the solution and gently wipe the visible ear flap (pinna) <strong>1 to 2 times daily</strong>. Never force swabs into the deep ear canal.</>
+                    ) : (
+                      <>Umedeça um <strong>algodão limpo ou gaze</strong> com a solução e limpe delicadamente a parte visível da orelha (pavilhão auricular) de <strong>1 a 2 vezes ao dia</strong>. Nunca force para dentro do canal auditivo profundo.</>
+                    )}
                   </p>
 
                   <div className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-950 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                    <span><strong>Atenção:</strong> NÃO BORRIFE o spray diretamente no canal do ouvido nem próximo aos olhos do cão. Utilize sempre o algodão umedecido.</span>
+                    <span>
+                      {isEn ? (
+                        <><strong>Warning:</strong> DO NOT spray directly into the deep ear canal or near the dog's eyes. Always apply using a moistened cotton pad.</>
+                      ) : (
+                        <><strong>Atenção:</strong> NÃO BORRIFE o spray diretamente no canal do ouvido nem próximo aos olhos do cão. Utilize sempre o algodão umedecido.</>
+                      )}
+                    </span>
                   </div>
                 </div>
 
@@ -791,15 +903,46 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 
                 <div className="border-b border-slate-100 pb-4">
                   <span className="text-[11px] font-black uppercase text-teal-700 tracking-wider">
-                    Passo a Passo da Cozinha
+                    {isEn ? "Kitchen Step-by-Step" : "Passo a Passo da Cozinha"}
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
-                    Modo de Preparo do Bifinho
+                    {isEn ? "How to Prepare the Soothing Treat" : "Modo de Preparo do Bifinho"}
                   </h3>
                 </div>
 
                 <div className="space-y-3">
-                  {[
+                  {(isEn ? [
+                    {
+                      step: 1,
+                      title: 'Liquid Blending',
+                      text: 'Mix the honey and whole yogurt in a clean bowl until completely smooth and creamy.'
+                    },
+                    {
+                      step: 2,
+                      title: 'Adding the Oats',
+                      text: 'Gradually stir in the fine rolled oats, kneading until a moldable dough texture forms.'
+                    },
+                    {
+                      step: 3,
+                      title: 'Coconut Oil Infusion',
+                      text: 'Stir in the liquid virgin coconut oil last (gently warm if solidified).'
+                    },
+                    {
+                      step: 4,
+                      title: 'Shaping the Treats',
+                      text: `Shape into bite-sized balls or strips the size of small grapes and place on a parchment-lined baking sheet.`
+                    },
+                    {
+                      step: 5,
+                      title: 'Baking',
+                      text: 'Bake at 180°C (350°F) for 15 to 20 minutes in a standard oven (or 14 to 16 minutes in an Air Fryer) until lightly golden.'
+                    },
+                    {
+                      step: 6,
+                      title: 'Cooling & Storing',
+                      text: `Let cool completely before serving to ${pet.name}. Store in an airtight container in the refrigerator for up to 5 days.`
+                    }
+                  ] : [
                     {
                       step: 1,
                       title: 'Mistura dos Líquidos',
@@ -830,7 +973,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       title: 'Resfriamento e Armazenamento',
                       text: 'Espere esfriar completamente antes de oferecer a ' + pet.name + '. Guarde em um pote hermético na geladeira por até 5 dias.'
                     }
-                  ].map(item => (
+                  ]).map(item => (
                     <div key={item.step} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3.5">
                       <div className="w-7 h-7 rounded-xl bg-teal-700 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                         {item.step}
@@ -851,9 +994,11 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200 flex items-start gap-3">
                   <Lightbulb className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
                   <div className="text-xs text-amber-950 space-y-0.5">
-                    <p className="font-bold">Dica Importante:</p>
+                    <p className="font-bold">{isEn ? "Veterinary Tip:" : "Dica Importante:"}</p>
                     <p className="text-amber-900 leading-relaxed">
-                      Evite colocar qualquer substância líquida dentro do canal se houver secreção com pus ativo sem a limpeza diária prévia. O bifinho atua de dentro para fora, restabelecendo a imunidade intestinal do pet.
+                      {isEn
+                        ? "Avoid pouring liquids into the ear canal if there is active purulent discharge. The functional treat works from the inside out, restoring healthy gut and mucosal immunity."
+                        : "Evite colocar qualquer substância líquida dentro do canal se houver secreção com pus ativo sem a limpeza diária prévia. O bifinho atua de dentro para fora, restabelecendo a imunidade intestinal do pet."}
                     </p>
                   </div>
                 </div>
@@ -869,10 +1014,10 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 
                 <div className="border-b border-slate-100 pb-4">
                   <span className="text-[11px] font-black uppercase text-teal-700 tracking-wider">
-                    Prevenção Definitiva
+                    {isEn ? "Definitive Prevention" : "Prevenção Definitiva"}
                   </span>
                   <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
-                    Guia de Cuidados e Prevenção
+                    {isEn ? "Care & Relapse Prevention Guide" : "Guia de Cuidados e Prevenção"}
                   </h3>
                 </div>
 
@@ -882,10 +1027,14 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                   <div className="p-5 rounded-2xl bg-teal-50/70 border border-teal-200 space-y-2">
                     <h4 className="text-sm font-black text-teal-950 flex items-center gap-2">
                       <Droplets className="w-4 h-4 text-teal-700" />
-                      Cuidado Rigoroso no Banho
+                      {isEn ? "Strict Bath Protection" : "Cuidado Rigoroso no Banho"}
                     </h4>
                     <p className="text-xs sm:text-sm text-teal-900/90 leading-relaxed font-medium">
-                      Sempre coloque <strong>chumaços de algodão secos</strong> nos ouvidos de {pet.name} antes de iniciar o banho. Após o enxágue, retire os algodões e seque muito bem a região com uma toalha macia para não deixar umidade retida no canal em L.
+                      {isEn ? (
+                        <>Always place <strong>dry cotton balls</strong> inside {pet.name}'s ears before starting any bath. Remove immediately after rinsing and thoroughly dry the ear flaps to prevent trapped water in the L-canal.</>
+                      ) : (
+                        <>Sempre coloque <strong>chumaços de algodão secos</strong> nos ouvidos de {pet.name} antes de iniciar o banho. Após o enxágue, retire os algodões e seque muito bem a região com uma toalha macia para não deixar umidade retida no canal em L.</>
+                      )}
                     </p>
                   </div>
 
@@ -893,10 +1042,14 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                   <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
                     <h4 className="text-sm font-black text-emerald-950 flex items-center gap-2">
                       <HeartPulse className="w-4 h-4 text-emerald-700" />
-                      Imunidade e Flora Intestinal
+                      {isEn ? "Gut Microbiome & Ear Immunity Axis" : "Imunidade e Flora Intestinal"}
                     </h4>
                     <p className="text-xs sm:text-sm text-emerald-900/90 leading-relaxed font-medium">
-                      Cerca de 80% das otites recorrentes têm origem em desequilíbrios alérgicos da microbiota intestinal. O bifinho funcional com mel e probiótico atua fortalecendo a barreira imunológica, evitando crises fúngicas.
+                      {isEn ? (
+                        <>Over 80% of recurrent canine ear troubles stem from gut microbiome dysbiosis and allergic skin reactions. The functional recipe with honey and live yogurt reinforces natural immunity against fungal overgrowth.</>
+                      ) : (
+                        <>Cerca de 80% das otites recorrentes têm origem em desequilíbrios alérgicos da microbiota intestinal. O bifinho funcional com mel e probiótico atua fortalecendo a barreira imunológica, evitando crises fúngicas.</>
+                      )}
                     </p>
                   </div>
 
@@ -904,10 +1057,14 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                   <div className="p-5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
                     <h4 className="text-sm font-black text-rose-950 flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-rose-700" />
-                      Sinais de Alerta para Avaliação Presencial
+                      {isEn ? "Clinical Warning Signs" : "Sinais de Alerta para Avaliação Presencial"}
                     </h4>
                     <p className="text-xs sm:text-sm text-rose-900/90 leading-relaxed font-medium">
-                      Se o cão apresentar dor intensa ao simples toque, febre, cabeça inclinada constante (andar em círculos) ou corrimento com sangue, leve imediatamente a um médico veterinário para exame otoscópico com descarte de tímpano perfurado.
+                      {isEn ? (
+                        <>If your dog shows acute pain upon slight touch, fever, continuous head tilt (circling), or bloody discharge, see an in-person veterinarian immediately for an otoscopic evaluation to rule out a ruptured eardrum.</>
+                      ) : (
+                        <>Se o cão apresentar dor intensa ao simples toque, febre, cabeça inclinada constante (andar em círculos) ou corrimento com sangue, leve imediatamente a um médico veterinário para exame otoscópico com descarte de tímpano perfurado.</>
+                      )}
                     </p>
                   </div>
 
@@ -932,13 +1089,13 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                           {lessons[activeLessonIndex].title}
                         </h4>
                         <p className="text-xs text-teal-200">
-                          Reproduzindo Masterclass • Duração: {lessons[activeLessonIndex].duration}
+                          {isEn ? "Playing Masterclass • Duration:" : "Reproduzindo Masterclass • Duração:"} {lessons[activeLessonIndex].duration}
                         </p>
                         <button
                           onClick={() => setIsPlayingVideo(false)}
                           className="bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-4 py-2 rounded-xl mt-4 cursor-pointer"
                         >
-                          Pausar Aula
+                          {isEn ? "Pause Lesson" : "Pausar Aula"}
                         </button>
                       </div>
                     ) : (
@@ -954,7 +1111,9 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                             {lessons[activeLessonIndex].title}
                           </h4>
                           <p className="text-xs text-slate-400 mt-0.5">
-                            Clique para assistir à aula gravada ({lessons[activeLessonIndex].duration})
+                            {isEn
+                              ? `Click to watch recorded masterclass (${lessons[activeLessonIndex].duration})`
+                              : `Clique para assistir à aula gravada (${lessons[activeLessonIndex].duration})`}
                           </p>
                         </div>
                       </div>
@@ -964,7 +1123,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                   {/* Lesson summary */}
                   <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
                     <h4 className="text-sm font-black text-slate-900 mb-2">
-                      Resumo da Aula:
+                      {isEn ? "Lesson Summary:" : "Resumo da Aula:"}
                     </h4>
                     <p className="text-xs sm:text-sm text-slate-700 mb-3 font-medium">
                       {lessons[activeLessonIndex].summary}
@@ -983,7 +1142,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                 {/* Right: Lesson Playlist */}
                 <div className="space-y-2.5">
                   <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">
-                    Conteúdo Programático:
+                    {isEn ? "Course Curriculum:" : "Conteúdo Programático:"}
                   </h4>
                   {lessons.map((lesson, idx) => {
                     const isActive = activeLessonIndex === idx;
@@ -1002,7 +1161,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
                       >
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <span className="text-[11px] font-black text-teal-700">
-                            Aula {idx + 1}
+                            {isEn ? `Lesson ${idx + 1}` : `Aula ${idx + 1}`}
                           </span>
                           <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
                             {lesson.duration}
@@ -1028,7 +1187,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Voltar para o Painel Principal</span>
+              <span>{isEn ? "Back to Main Dashboard" : "Voltar para o Painel Principal"}</span>
             </button>
 
             <button
@@ -1036,7 +1195,7 @@ export const OtiteProtocolView: React.FC<OtiteProtocolViewProps> = ({ onClose })
               className="bg-teal-50 hover:bg-teal-100 text-teal-800 font-black px-4 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition-colors cursor-pointer border border-teal-200"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Imprimir / Salvar Receitas</span>
+              <span>{isEn ? "Print / Save Recipes" : "Imprimir / Salvar Receitas"}</span>
             </button>
           </div>
 

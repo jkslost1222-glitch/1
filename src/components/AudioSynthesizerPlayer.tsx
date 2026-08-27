@@ -18,7 +18,7 @@ interface AudioSynthesizerPlayerProps {
 }
 
 export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ onClose }) => {
-  const { t } = useApp();
+  const { t, isEn } = useApp();
   const [selectedFreq, setSelectedFreq] = useState<number>(432);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(0.4);
@@ -32,36 +32,67 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
 
-  const tracks = [
-    {
-      hz: 432,
-      name: 'Calma Profunda & Anti-Ansiedade',
-      tag: '432 Hz • Frequência Áurea',
-      benefit: 'Diminuição do ritmo cardíaco, relaxamento consciente do sistema nervoso autônomo.',
-      color: 'from-teal-600 to-emerald-700'
-    },
-    {
-      hz: 528,
-      name: 'Alívio de Dores & Regeneração',
-      tag: '528 Hz • Frequência Milagrosa',
-      benefit: 'Ressonância biológica de alívio muscular e suporte a dores articulares e pós-cirúrgicas.',
-      color: 'from-cyan-600 to-blue-700'
-    },
-    {
-      hz: 174,
-      name: 'Sono Restaurador & Anti-Latidos',
-      tag: '174 Hz • Tom Base Acolhedor',
-      benefit: 'Acalma cães que latem à noite por solidão, reduzindo a sensação de isolamento.',
-      color: 'from-indigo-600 to-purple-700'
-    },
-    {
-      hz: 396,
-      name: 'Dessensibilização a Trovões & Fogos',
-      tag: '396 Hz • Blindagem Sonora',
-      benefit: 'Dissipação de medos acústicos súbitos e contracondicionamento sonoro.',
-      color: 'from-amber-600 to-rose-700'
-    }
-  ];
+  const tracks = isEn
+    ? [
+        {
+          hz: 432,
+          name: 'Deep Calming & Anti-Anxiety',
+          tag: '432 Hz • Golden Frequency',
+          benefit: 'Heart rate reduction, gentle calming of the autonomic nervous system.',
+          color: 'from-teal-600 to-emerald-700'
+        },
+        {
+          hz: 528,
+          name: 'Pain Relief & Muscle Recovery',
+          tag: '528 Hz • Miracle Frequency',
+          benefit: 'Biological resonance for muscle tension relief, joint comfort, and post-surgery support.',
+          color: 'from-cyan-600 to-blue-700'
+        },
+        {
+          hz: 174,
+          name: 'Restorative Sleep & Anti-Barking',
+          tag: '174 Hz • Grounding Base Tone',
+          benefit: 'Soothes dogs who bark at night due to loneliness, easing isolation anxiety.',
+          color: 'from-indigo-600 to-purple-700'
+        },
+        {
+          hz: 396,
+          name: 'Thunder & Fireworks Shield',
+          tag: '396 Hz • Sonic Shielding',
+          benefit: 'Dissipates sudden acoustic fear and aids sound desensitization.',
+          color: 'from-amber-600 to-rose-700'
+        }
+      ]
+    : [
+        {
+          hz: 432,
+          name: 'Calma Profunda & Anti-Ansiedade',
+          tag: '432 Hz • Frequência Áurea',
+          benefit: 'Diminuição do ritmo cardíaco, relaxamento consciente do sistema nervoso autônomo.',
+          color: 'from-teal-600 to-emerald-700'
+        },
+        {
+          hz: 528,
+          name: 'Alívio de Dores & Regeneração',
+          tag: '528 Hz • Frequência Milagrosa',
+          benefit: 'Ressonância biológica de alívio muscular e suporte a dores articulares e pós-cirúrgicas.',
+          color: 'from-cyan-600 to-blue-700'
+        },
+        {
+          hz: 174,
+          name: 'Sono Restaurador & Anti-Latidos',
+          tag: '174 Hz • Tom Base Acolhedor',
+          benefit: 'Acalma cães que latem à noite por solidão, reduzindo a sensação de isolamento.',
+          color: 'from-indigo-600 to-purple-700'
+        },
+        {
+          hz: 396,
+          name: 'Dessensibilização a Trovões & Fogos',
+          tag: '396 Hz • Blindagem Sonora',
+          benefit: 'Dissipação de medos acústicos súbitos e contracondicionamento sonoro.',
+          color: 'from-amber-600 to-rose-700'
+        }
+      ];
 
   const currentTrack = tracks.find(t => t.hz === selectedFreq) || tracks[0];
 
@@ -247,16 +278,18 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest bg-white/20 text-white px-2.5 py-0.5 rounded-md">
-              Sintetizador Canino em Tempo Real
+              {isEn ? 'Real-Time Canine Synthesizer' : 'Sintetizador Canino em Tempo Real'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Frequências Terapêuticas de Alívio
+              {isEn ? 'Therapeutic Relief Frequencies' : 'Frequências Terapêuticas de Alívio'}
             </h2>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-white/90 max-w-3xl leading-relaxed mt-2 font-medium">
-          Áudios sintetizados com ondas puras ajustadas para a faixa acústica dos cães, promovendo alívio imediato contra estresse, tempestades, fogos de artifício e hiperatividade.
+          {isEn
+            ? 'Real-time synthesized pure sound waves calibrated specifically for canine hearing frequencies, fostering rapid relief from anxiety, fireworks, thunderstorms, and stress.'
+            : 'Áudios sintetizados com ondas puras ajustadas para a faixa acústica dos cães, promovendo alívio imediato contra estresse, tempestades, fogos de artifício e hiperatividade.'}
         </p>
       </div>
 
@@ -281,7 +314,7 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
             <div className="flex items-center gap-3">
               <div className="text-right">
                 <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
-                  Temporizador
+                  {isEn ? 'Timer' : 'Temporizador'}
                 </span>
                 <span className="text-lg font-black text-teal-300 font-mono">
                   {formatTime(remainingSeconds)}
@@ -299,7 +332,9 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
               className="w-full h-16 rounded"
             />
             <span className="text-[10px] font-bold text-slate-500 mt-1">
-              {isPlaying ? `Sintetizando ${selectedFreq} Hz com modulação delta ativa` : 'Áudio Pausado'}
+              {isPlaying
+                ? (isEn ? `Synthesizing ${selectedFreq} Hz with active delta modulation` : `Sintetizando ${selectedFreq} Hz com modulação delta ativa`)
+                : (isEn ? 'Audio Paused' : 'Áudio Pausado')}
             </span>
           </div>
 
@@ -339,7 +374,7 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
             <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
               <span className="text-[10px] font-bold text-slate-400 px-2 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                Tempo:
+                {isEn ? 'Timer:' : 'Tempo:'}
               </span>
               {[15, 30, 60].map(mins => (
                 <button
@@ -364,7 +399,7 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
         {/* 4 Available Frequency Cards */}
         <div>
           <h4 className="text-sm font-black text-slate-900 mb-3">
-            Selecione a Frequência Recomendada para a Situação:
+            {isEn ? 'Select Recommended Frequency for the Situation:' : 'Selecione a Frequência Recomendada para a Situação:'}
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -408,7 +443,10 @@ export const AudioSynthesizerPlayer: React.FC<AudioSynthesizerPlayerProps> = ({ 
 
         {/* Usage Advice */}
         <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 text-xs text-amber-950">
-          <strong>Dica de Aplicação:</strong> Os cães possuem audição cerca de 4x mais sensível que a humana. Deixe o volume suave e ambiente, sem fones de ouvido no pet, permitindo que a frequência preencha a sala de forma relaxante.
+          <strong>{isEn ? 'Application Tip:' : 'Dica de Aplicação:'}</strong>{' '}
+          {isEn
+            ? 'Dogs have hearing about 4 times more sensitive than humans. Keep the volume at a gentle, ambient level without headphones on the pet, allowing the frequency to fill the room comfortably.'
+            : 'Os cães possuem audição cerca de 4x mais sensível que a humana. Deixe o volume suave e ambiente, sem fones de ouvido no pet, permitindo que a frequência preencha a sala de forma relaxante.'}
         </div>
 
       </div>

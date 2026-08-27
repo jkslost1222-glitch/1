@@ -7,56 +7,105 @@ interface PetEmDiaViewProps {
 }
 
 export const PetEmDiaView: React.FC<PetEmDiaViewProps> = ({ onClose }) => {
-  const { isEn } = useApp();
+  const { isEn, t } = useApp();
   const [selectedArticleId, setSelectedArticleId] = useState<string>('news-1');
 
-  const articles = [
-    {
-      id: 'news-1',
-      title: 'Protegendo seu cão das ondas de calor: 5 regras vitais',
-      date: 'Publicado hoje',
-      category: 'Saúde & Clima',
-      readTime: '3 min',
-      image: '☀️',
-      summary: 'Como evitar o golpe de calor (hipertermia), horários seguros para passeio e receitas de picolés naturais de caldo de ossos.',
-      content: `Durante períodos de temperaturas elevadas, cães sofrem muito mais com o calor do que nós humanos. Eles transpiram exclusivamente pelas almofadinhas das patas (coxins) e regulam a temperatura interna através da respiração ofegante.
+  const articles = isEn
+    ? [
+        {
+          id: 'news-1',
+          title: 'Protecting your dog during heatwaves: 5 vital rules',
+          date: 'Published today',
+          category: 'Health & Weather',
+          readTime: '3 min',
+          image: '☀️',
+          summary: 'How to avoid heatstroke (hyperthermia), safe walking hours, and natural bone broth popsicle recipes.',
+          content: `During hot weather, dogs suffer from heat much more than humans do. They only sweat through their paw pads and regulate their body temperature mainly through panting.
+
+Golden Rules for Hot Days:
+1. The 7-Second Asphalt Test: Place the back of your hand on the pavement. If you cannot hold it comfortably for 7 seconds, the asphalt will burn your dog’s paws.
+2. Infused Hydration: Add cucumber slices, fresh mint leaves, or seedless watermelon cubes to their water bowl.
+3. Bone Broth Popsicles: Freeze homemade chicken or beef bone broth (with zero onion, garlic, or salt) in ice cube trays for a refreshing joint-supporting treat.
+4. Never shave double-coated breeds down to the skin: Their fur acts as a natural thermal shield against extreme heat and damaging UV rays.`
+        },
+        {
+          id: 'news-2',
+          title: 'The vital role of chewing in preventing tartar and anxiety',
+          date: 'Yesterday',
+          category: 'Behavior & Hygiene',
+          readTime: '4 min',
+          image: '🦴',
+          summary: 'Natural dehydrated chews release dopamine and scrub away dental plaque without harsh abrasives.',
+          content: `Gnawing and chewing is an essential, hardwired canine behavior. When a dog chews appropriate items:
+- The brain releases dopamine and calming endorphins, reducing reactivity and stress.
+- Abundant saliva production neutralizes oral acids and flushes food debris away.
+- Gentle mechanical scraping against teeth keeps breath fresh and slows tartar buildup.
+
+Recommended natural single-ingredient dehydrated chews (beef ears with hair, beef hooves, or water buffalo horns) offered under supervision 3 times weekly.`
+        },
+        {
+          id: 'news-3',
+          title: 'Seasonal superfoods that supercharge canine cellular immunity',
+          date: '3 days ago',
+          category: 'Functional Nutrition',
+          readTime: '5 min',
+          image: '🥬',
+          summary: 'Cooked kabocha pumpkin, ground pumpkin seeds, and cold-pressed coconut oil as potent antioxidant sources.',
+          content: `About 70% to 80% of a dog’s immune system cells reside directly in the gastrointestinal tract (GALT).
+
+Easy superfoods to add to their diet:
+1. Steamed Kabocha Squash: Rich in carotenoids and soluble prebiotic fiber that nourishes beneficial microbiome bacteria.
+2. Ground Raw Pumpkin Seeds: Gentle natural anti-parasitic support rich in cucurbitacin, zinc, and magnesium.
+3. Virgin Coconut Oil: Natural source of medium-chain lauric acid with broad antibacterial and antifungal benefits.`
+        }
+      ]
+    : [
+        {
+          id: 'news-1',
+          title: 'Protegendo seu cão das ondas de calor: 5 regras vitais',
+          date: 'Publicado hoje',
+          category: 'Saúde & Clima',
+          readTime: '3 min',
+          image: '☀️',
+          summary: 'Como evitar o golpe de calor (hipertermia), horários seguros para passeio e receitas de picolés naturais de caldo de ossos.',
+          content: `Durante períodos de temperaturas elevadas, cães sofrem muito mais com o calor do que nós humanos. Eles transpiram exclusivamente pelas almofadinhas das patas (coxins) e regulam a temperatura interna através da respiração ofegante.
 
 Regras de Ouro para Dias Quentes:
 1. Teste do Asfalto dos 7 Segundos: Coloque o dorso da sua mão no chão. Se não aguentar por 7 segundos, o asfalto queimará as patas do seu cão.
 2. Hidratação Aromatizada: Adicione rodelas de pepino, folhas de hortelã ou cubos de melancia sem sementes na vasilha de água.
 3. Picolés de Caldo de Ossos: Congele caldo de frango ou carne (sem sal, alho ou cebola) em forminhas para o cão se refrescar e nutrir as articulações.
 4. Jamais tose cães de pelagem dupla até a pele: A pelagem funciona como isolante térmico contra o calor extremo e os raios UV.`
-    },
-    {
-      id: 'news-2',
-      title: 'O papel vital da mastigação na prevenção de tártaro e ansiedade',
-      date: 'Ontem',
-      category: 'Comportamento & Higiene',
-      readTime: '4 min',
-      image: '🦴',
-      summary: 'Mordedores desidratados naturais liberam endorfina e limpam as placas bacterianas sem produtos químicos abrasivos.',
-      content: `A necessidade de roer e mastigar é um comportamento canino intrínseco e vital. Quando o cão mastiga itens apropriados:
+        },
+        {
+          id: 'news-2',
+          title: 'O papel vital da mastigação na prevenção de tártaro e ansiedade',
+          date: 'Ontem',
+          category: 'Comportamento & Higiene',
+          readTime: '4 min',
+          image: '🦴',
+          summary: 'Mordedores desidratados naturais liberam endorfina e limpam as placas bacterianas sem produtos químicos abrasivos.',
+          content: `A necessidade de roer e mastigar é um comportamento canino intrínseco e vital. Quando o cão mastiga itens apropriados:
 - O cérebro libera dopamina e endorfinas, reduzindo o estresse e a reatividade.
 - A salivação abundante neutraliza ácidos e lava restos de alimentos dos dentes.
 - A remoção mecânica suave do tártaro inicial mantém o hálito limpo.
 
 Recomenda-se oferecer itens naturais desidratados (orelhas de boi com pelos, cascos bovinos ou chifres de búfalo) sob supervisão 3 vezes por semana.`
-    },
-    {
-      id: 'news-3',
-      title: 'Superalimentos da estação que aumentam a imunidade celular do cão',
-      date: '3 dias atrás',
-      category: 'Nutrição Funcional',
-      readTime: '5 min',
-      image: '🥬',
-      summary: 'Abóbora cabotiá cozida, semente de abóbora triturada e espinafre como fontes ricas de antioxidantes.',
-      content: `Cerca de 70% a 80% das células do sistema imunológico do cão estão localizadas no trato gastrointestinal (GALT).
+        },
+        {
+          id: 'news-3',
+          title: 'Superalimentos da estação que aumentam a imunidade celular do cão',
+          date: '3 dias atrás',
+          category: 'Nutrição Funcional',
+          readTime: '5 min',
+          image: '🥬',
+          summary: 'Abóbora cabotiá cozida, semente de abóbora triturada e espinafre como fontes ricas de antioxidantes.',
+          content: `Cerca de 70% a 80% das células do sistema imunológico do cão estão localizadas no trato gastrointestinal (GALT).
 Superalimentos fáceis de incluir na rotina:
 1. Abóbora Cabotiá Cozida: Rica em carotenoides e prebióticos que alimentam bactérias benéficas.
 2. Semente de Abóbora Moída: Vermífugo natural suave rico em cucurbitacina e magnésio.
 3. Óleo de Coco Virgem: Fonte de ácido láurico com ação antibacteriana e antifúngica natural.`
-    }
-  ];
+        }
+      ];
 
   const activeArticle = articles.find(a => a.id === selectedArticleId) || articles[0];
 
@@ -77,16 +126,18 @@ Superalimentos fáceis de incluir na rotina:
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest bg-white/20 text-emerald-100 px-2.5 py-0.5 rounded-md">
-              Notícias & Dicas Veterinárias
+              {isEn ? 'Veterinary News & Insights' : 'Notícias & Dicas Veterinárias'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Pet em Dia • Saúde Preventiva
+              {isEn ? 'Pet em Dia • Preventive Wellness' : 'Pet em Dia • Saúde Preventiva'}
             </h2>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-emerald-100 max-w-3xl leading-relaxed mt-2 font-medium">
-          Artigos semanais selecionados por especialistas em saúde funcional, nutrição integrativa e comportamento canino.
+          {isEn
+            ? 'Weekly curated articles by specialists in holistic canine health, integrative nutrition, and behavior.'
+            : 'Artigos semanais selecionados por especialistas em saúde funcional, nutrição integrativa e comportamento canino.'}
         </p>
       </div>
 
@@ -95,7 +146,7 @@ Superalimentos fáceis de incluir na rotina:
           {/* Article List */}
           <div className="space-y-3">
             <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">
-              Artigos Recentes:
+              {isEn ? 'Recent Articles:' : 'Artigos Recentes:'}
             </h4>
             {articles.map(art => {
               const isSelected = art.id === selectedArticleId;
@@ -137,7 +188,7 @@ Superalimentos fáceis de incluir na rotina:
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
-                  {activeArticle.readTime} de leitura
+                  {activeArticle.readTime} {isEn ? 'read' : 'de leitura'}
                 </span>
               </div>
             </div>

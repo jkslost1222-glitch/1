@@ -27,7 +27,152 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
   const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
   const [copied, setCopied] = useState(false);
 
-  const activeRecipe = recipesData.find(r => r.id === selectedRecipeId) || recipesData[0];
+  const localizedRecipes = isEn
+    ? [
+        {
+          id: 1,
+          number: 1,
+          name: 'Well-Nourished Dog',
+          categoryName: 'Anti-inflammatory Supplement & Immunity',
+          badge: 'Joints & Cellular Immunity',
+          icon: '🥣',
+          accentColor: 'from-[#c92a17] via-[#dc2626] to-[#b91c1c]',
+          targetBenefit: 'Potent systemic anti-inflammatory support, immune modulation, and cellular protection against free radicals.',
+          baseDosageGramsPer10kg: 10,
+          ingredients: [
+            { name: 'Pure culinary turmeric powder (human grade)', amountPer10kg: '1/2 tsp (1.5g)', rawAmount: 1.5, unit: 'g', purpose: 'Curcuminoids providing potent natural anti-inflammatory action' },
+            { name: 'Cold-pressed extra virgin coconut oil', amountPer10kg: '1 level tsp (5g)', rawAmount: 5, unit: 'g', purpose: 'Medium-chain fatty acids (lauric acid) serving as lipid carrier' },
+            { name: 'Freshly ground black pepper', amountPer10kg: '1 microscopic pinch (<0.1g)', rawAmount: 0.1, unit: 'g', purpose: 'Piperine boosts curcumin bio-absorption by up to 2000%' },
+            { name: 'Ground golden flaxseed meal', amountPer10kg: '1 tsp (3.5g)', rawAmount: 3.5, unit: 'g', purpose: 'Plant-based Omega-3 (ALA) and microbiome prebiotic fiber' }
+          ],
+          instructions: [
+            'Combine turmeric powder with a microscopic pinch of freshly ground black pepper in a clean glass bowl.',
+            'Gently warm coconut oil in a warm water bath (never boiling) just until it turns liquid.',
+            'Incorporate turmeric and flaxseed meal into the coconut oil, stirring with a silicone spatula into a smooth golden paste.',
+            'Serve mixed directly into food once daily according to your dog’s weight.'
+          ],
+          tips: [
+            'Store in an airtight dark glass jar in the refrigerator for up to 14 days.',
+            'If your dog has never had turmeric, start with half dose for the first 3 days.'
+          ],
+          warning: 'Do not use in pregnant females or dogs with diagnosed bile duct obstruction without veterinary consultation.'
+        },
+        {
+          id: 2,
+          number: 2,
+          name: 'Flexible Joints',
+          categoryName: 'Collagen & Joint Cartilage Regeneration',
+          badge: 'Mobility & Collagen',
+          icon: '🦴',
+          accentColor: 'from-[#b91c1c] via-[#ea580c] to-[#c2410c]',
+          targetBenefit: 'Cartilage rebuilding, synovial fluid lubrication, and relief of morning stiffness in senior or large-breed dogs.',
+          baseDosageGramsPer10kg: 15,
+          ingredients: [
+            { name: 'Unflavored pure gelatin (hydrolyzed collagen)', amountPer10kg: '1 heaping tsp (4g)', rawAmount: 4, unit: 'g', purpose: 'Rich source of glycine, proline, and bioactive collagen peptides' },
+            { name: 'Homemade bone broth concentrated in natural gelatin', amountPer10kg: '1 tbsp (15ml)', rawAmount: 15, unit: 'ml', purpose: 'Glucosaminoglycans, chondroitin sulfate, and bio-available minerals' },
+            { name: 'Purified Omega-3 fish oil (EPA/DHA)', amountPer10kg: '1/2 small tsp (1.5ml)', rawAmount: 1.5, unit: 'ml', purpose: 'Suppression of inflammatory cytokines in synovial joint capsules' },
+            { name: 'Freshly ground sesame seeds', amountPer10kg: '1/2 tsp (2g)', rawAmount: 2, unit: 'g', purpose: 'Natural bio-available calcium and muscle-relaxing magnesium' }
+          ],
+          instructions: [
+            'Bloom unflavored gelatin in 2 tablespoons of warm filtered water until fully dissolved.',
+            'Add warm homemade bone broth and stir thoroughly with the gelatin.',
+            'Add the Omega-3 fish oil and ground sesame seeds immediately before serving.',
+            'Drizzle over your pet’s morning meal.'
+          ],
+          tips: [
+            'Ideal for senior dogs, hip-dysplasia prone breeds (Golden, German Shepherd, Labrador), or dogs with stiffness.',
+            'Can be poured into paw silicone molds and frozen into refreshing, cooling summer joint treats.'
+          ],
+          warning: 'Ensure gelatin contains zero artificial sweeteners, added sugars, or xylitol.'
+        },
+        {
+          id: 3,
+          number: 3,
+          name: 'Natural Calming Formula',
+          categoryName: 'Relaxing & Neuroprotective Supplement',
+          badge: 'Anxiety & Stress',
+          icon: '💤',
+          accentColor: 'from-[#c2410c] via-[#d97706] to-[#b45309]',
+          targetBenefit: 'Cortisol reduction, hyperactivity relief, support during thunderstorms, fireworks, vet visits, and car rides.',
+          baseDosageGramsPer10kg: 8,
+          ingredients: [
+            { name: 'Chamomile and Passionflower (Passiflora) concentrated tea', amountPer10kg: '2 tbsp (20ml)', rawAmount: 20, unit: 'ml', purpose: 'Apigenin and natural flavonoids acting on calming GABA receptors' },
+            { name: 'Canine Valerian root powder / dried leaf', amountPer10kg: '1 light pinch (0.5g)', rawAmount: 0.5, unit: 'g', purpose: 'Muscular relaxation and vegetative nervous system anchoring' },
+            { name: 'Natural L-Tryptophan (Brewer’s nutritional yeast)', amountPer10kg: '1/2 tsp (1.5g)', rawAmount: 1.5, unit: 'g', purpose: 'Direct biochemical precursor to soothing serotonin and melatonin' },
+            { name: 'Ripe mashed banana', amountPer10kg: '1 medium slice (10g)', rawAmount: 10, unit: 'g', purpose: 'Flavorful carrier rich in magnesium and tryptophan transport carbs' }
+          ],
+          instructions: [
+            'Brew a concentrated infusion of chamomile and passionflower leaves (100ml water to 1 tbsp herbs). Allow to cool completely.',
+            'Mash a slice of ripe banana with a fork into a fine puree.',
+            'Mix brewer’s yeast, valerian pinch, and 2 tbsp of the cool herbal tea into the banana mash.',
+            'Offer 45 to 60 minutes prior to stressful events (thunderstorms, guests, fireworks, travel, or departure).'
+          ],
+          tips: [
+            'Can be stuffed inside an interactive lick toy (like a Kong) and frozen for 30 minutes of calming licking activity.',
+            'Does not cause sedation or loss of motor control; promotes mindful, biological relaxation.'
+          ],
+          warning: 'Never use teas containing black/green tea caffeine or industrial artificial flavorings.'
+        },
+        {
+          id: 4,
+          number: 4,
+          name: 'Odor & Digestion Control',
+          categoryName: 'Digestive Supplement & Fresh Breath',
+          badge: 'Body Odor & Breath',
+          icon: '🧼',
+          accentColor: 'from-[#c92a17] via-[#dc2626] to-[#ea580c]',
+          targetBenefit: 'Drastic reduction of intestinal gas, firmer stools with minimal odor, clean coat smell, and refreshed breath.',
+          baseDosageGramsPer10kg: 6,
+          ingredients: [
+            { name: 'Cold-pressed pure Chlorella powder', amountPer10kg: '1/4 small tsp (0.5g)', rawAmount: 0.5, unit: 'g', purpose: 'Natural chlorophyll acting as a whole-body internal deodorizer' },
+            { name: 'Fresh organic mint leaves finely minced', amountPer10kg: '3 clean leaves', rawAmount: 1, unit: 'g', purpose: 'Refreshing action, oral antiseptics, and carminative gas reduction' },
+            { name: 'Pure coconut flour (prebiotic fiber)', amountPer10kg: '1 tsp (3g)', rawAmount: 3, unit: 'g', purpose: 'Fermentable fibers that nourish beneficial colonic microbiome bacteria' },
+            { name: 'Plain unsweetened whole milk yogurt or kefir', amountPer10kg: '1 dessert spoon (10g)', rawAmount: 10, unit: 'g', purpose: 'Live probiotic Lactobacillus strains to restore gut flora balance' }
+          ],
+          instructions: [
+            'Wash fresh mint leaves thoroughly and mince them finely.',
+            'In a small bowl, place plain unsweetened yogurt.',
+            'Dust chlorella powder and coconut flour over top, stirring until emerald green and uniform.',
+            'Fold in the minced mint and mix into food or offer as a healthy post-meal treat.'
+          ],
+          tips: [
+            'Within 7 to 10 days of consistent use, notice a sharp drop in flatulence and much fresher breath.',
+            'Especially beneficial for flat-faced brachycephalic breeds (Bulldogs, Pugs, Shih Tzus).'
+          ],
+          warning: 'Yogurt must be 100% plain (milk + cultures only) without added sugars, xylitol, or artificial colorings.'
+        },
+        {
+          id: 5,
+          number: 5,
+          name: 'Healthy Weight Management',
+          categoryName: 'Satiety & Metabolism Support',
+          badge: 'Satiety & Metabolism',
+          icon: '⚖️',
+          accentColor: 'from-[#c92a17] via-[#ea580c] to-[#d97706]',
+          targetBenefit: 'Increased meal volume and fullness with negligible calories, lipid metabolism support, and lean muscle retention.',
+          baseDosageGramsPer10kg: 25,
+          ingredients: [
+            { name: 'Steamed zucchini or chayote squash puree', amountPer10kg: '2 heaping tbsp (20g)', rawAmount: 20, unit: 'g', purpose: 'High stomach fullness with near-zero calorie density and deep hydration' },
+            { name: 'Pure psyllium husk powder', amountPer10kg: '1/3 tsp (1g)', rawAmount: 1, unit: 'g', purpose: 'Soluble mucilaginous fiber that slows gastric emptying gently' },
+            { name: 'Fresh ginger root finely grated', amountPer10kg: '1 millimeter micro-grate (<0.2g)', rawAmount: 0.2, unit: 'g', purpose: 'Mild thermogenic gingerols aiding healthy fat metabolism' },
+            { name: 'Organic raw unfiltered apple cider vinegar', amountPer10kg: '1/2 small tsp (1.5ml)', rawAmount: 1.5, unit: 'ml', purpose: 'Acetic acid modulating post-meal blood sugar and digestion' }
+          ],
+          instructions: [
+            'Steam zucchini until tender and mash thoroughly with a fork.',
+            'Mix psyllium powder and apple cider vinegar into the warm vegetable puree.',
+            'Let rest for 3 minutes until the psyllium expands into a satisfying, gelatinous texture.',
+            'Replace 15% to 20% of your dog’s standard kibble portion with this filling functional puree.'
+          ],
+          tips: [
+            'Allows overweight dogs to enjoy generous meal bowls without constant begging or hunger stress.',
+            'Improves gut transit time and helps prevent constipation through cellular hydration.'
+          ],
+          warning: 'Always ensure your dog has unlimited access to clean fresh water when consuming psyllium fiber.'
+        }
+      ]
+    : recipesData;
+
+  const activeRecipe = localizedRecipes.find(r => r.id === selectedRecipeId) || localizedRecipes[0];
 
   // Convert weight to kg for calculation
   const weightInKg = weightUnit === 'lbs' ? dogWeight * 0.453592 : dogWeight;
@@ -37,17 +182,29 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
   const calculatedDailyGrams = (activeRecipe.baseDosageGramsPer10kg * multiplier).toFixed(1);
 
   const handleCopyRecipe = () => {
-    const text = `🐾 ${activeRecipe.name} (${activeRecipe.categoryName})\n` +
-      `Para cão de ${dogWeight} ${weightUnit} (Dose diária recomendada: ${calculatedDailyGrams}g):\n\n` +
-      `Ingredientes Proporcionais:\n` +
-      activeRecipe.ingredients
-        .map(ing => {
-          const scaled = (ing.rawAmount * multiplier).toFixed(1);
-          return `- ${ing.name}: ${scaled}${ing.unit} (${ing.purpose})`;
-        })
-        .join('\n') +
-      `\n\nModo de Preparo:\n` +
-      activeRecipe.instructions.map((ins, i) => `${i + 1}. ${ins}`).join('\n');
+    const text = isEn
+      ? `🐾 ${activeRecipe.name} (${activeRecipe.categoryName})\n` +
+        `For dog of ${dogWeight} ${weightUnit} (Recommended daily dose: ${calculatedDailyGrams}g):\n\n` +
+        `Proportional Ingredients:\n` +
+        activeRecipe.ingredients
+          .map(ing => {
+            const scaled = (ing.rawAmount * multiplier).toFixed(1);
+            return `- ${ing.name}: ${scaled}${ing.unit} (${ing.purpose})`;
+          })
+          .join('\n') +
+        `\n\nInstructions:\n` +
+        activeRecipe.instructions.map((ins, i) => `${i + 1}. ${ins}`).join('\n')
+      : `🐾 ${activeRecipe.name} (${activeRecipe.categoryName})\n` +
+        `Para cão de ${dogWeight} ${weightUnit} (Dose diária recomendada: ${calculatedDailyGrams}g):\n\n` +
+        `Ingredientes Proporcionais:\n` +
+        activeRecipe.ingredients
+          .map(ing => {
+            const scaled = (ing.rawAmount * multiplier).toFixed(1);
+            return `- ${ing.name}: ${scaled}${ing.unit} (${ing.purpose})`;
+          })
+          .join('\n') +
+        `\n\nModo de Preparo:\n` +
+        activeRecipe.instructions.map((ins, i) => `${i + 1}. ${ins}`).join('\n');
 
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -66,9 +223,9 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             <span className="text-[11px] font-black uppercase text-amber-400 tracking-wider shrink-0 pr-2 border-r border-slate-700">
-              Combo 5 Receitas:
+              {isEn ? '5-Formula Combo:' : 'Combo 5 Receitas:'}
             </span>
-            {recipesData.map(recipe => {
+            {localizedRecipes.map(recipe => {
               const isSelected = recipe.id === selectedRecipeId;
               return (
                 <button
@@ -82,7 +239,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
                   }`}
                 >
                   <span>{recipe.icon}</span>
-                  <span>Receita {recipe.number}: {recipe.name}</span>
+                  <span>{isEn ? `Recipe ${recipe.number}: ${recipe.name}` : `Receita ${recipe.number}: ${recipe.name}`}</span>
                 </button>
               );
             })}
@@ -91,7 +248,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center shrink-0 cursor-pointer"
-            title="Fechar Leitor"
+            title={isEn ? 'Close Reader' : 'Fechar Leitor'}
           >
             <X className="w-4 h-4" />
           </button>
@@ -108,7 +265,9 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
             <div>
               <div className="flex items-center gap-2 text-xs font-bold text-amber-200 uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                Receita {activeRecipe.number} de 5 • {activeRecipe.categoryName}
+                {isEn
+                  ? `Recipe ${activeRecipe.number} of 5 • ${activeRecipe.categoryName}`
+                  : `Receita ${activeRecipe.number} de 5 • ${activeRecipe.categoryName}`}
               </div>
               <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white mt-0.5">
                 {activeRecipe.name}
@@ -136,7 +295,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
         </div>
 
         <p className="mt-3 text-xs sm:text-sm text-white/90 font-medium max-w-3xl leading-relaxed">
-          <strong>Objetivo Terapêutico:</strong> {activeRecipe.targetBenefit}
+          <strong>{isEn ? 'Therapeutic Goal:' : 'Objetivo Terapêutico:'}</strong> {activeRecipe.targetBenefit}
         </p>
       </div>
 
@@ -152,10 +311,12 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
               </div>
               <div>
                 <h4 className="text-sm font-black text-amber-950">
-                  Calculadora Inteligente de Dosagem Proporcional
+                  {isEn ? 'Smart Proportional Dosage Calculator' : 'Calculadora Inteligente de Dosagem Proporcional'}
                 </h4>
                 <p className="text-xs text-amber-800">
-                  Ajuste o peso do seu cão para calcular os ingredientes e a dose diária exata
+                  {isEn
+                    ? 'Adjust your dog’s weight to instantly calculate proportional ingredients and exact daily dose'
+                    : 'Ajuste o peso do seu cão para calcular os ingredientes e a dose diária exata'}
                 </p>
               </div>
             </div>
@@ -185,11 +346,11 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <div className="sm:col-span-2 space-y-2">
               <div className="flex justify-between text-xs font-bold text-slate-600">
-                <span>Porte Mini (2 {weightUnit})</span>
+                <span>{isEn ? `Toy / Mini (2 ${weightUnit})` : `Porte Mini (2 ${weightUnit})`}</span>
                 <span className="text-amber-900 font-extrabold text-sm">
                   {dogWeight} {weightUnit}
                 </span>
-                <span>Porte Gigante (50+ {weightUnit})</span>
+                <span>{isEn ? `Giant (50+ ${weightUnit})` : `Porte Gigante (50+ ${weightUnit})`}</span>
               </div>
               <input
                 id="slider-dog-weight"
@@ -205,13 +366,13 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
 
             <div className="bg-white rounded-xl p-3 border border-amber-300 text-center shadow-xs">
               <span className="text-[11px] font-bold uppercase text-slate-500 block">
-                Dose Diária Indicada
+                {isEn ? 'Recommended Daily Dose' : 'Dose Diária Indicada'}
               </span>
               <span className="text-xl sm:text-2xl font-black text-amber-700">
                 {calculatedDailyGrams} g
               </span>
               <span className="text-[10px] text-slate-400 block font-medium">
-                misturado à comida (1x ao dia)
+                {isEn ? 'mixed with food (1x daily)' : 'misturado à comida (1x ao dia)'}
               </span>
             </div>
           </div>
@@ -227,10 +388,12 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
                 <span className="w-6 h-6 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold">
                   1
                 </span>
-                Ingredientes Proporcionais ({dogWeight} {weightUnit})
+                {isEn
+                  ? `Proportional Ingredients (${dogWeight} ${weightUnit})`
+                  : `Ingredientes Proporcionais (${dogWeight} ${weightUnit})`}
               </h3>
               <span className="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
-                Calculado
+                {isEn ? 'Calculated' : 'Calculado'}
               </span>
             </div>
 
@@ -262,7 +425,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
             <div className="bg-teal-50/80 rounded-xl p-4 border border-teal-200 text-xs text-teal-950 space-y-1.5">
               <div className="flex items-center gap-1.5 font-black text-teal-900">
                 <Info className="w-4 h-4 text-teal-700" />
-                Dicas Práticas & Conservação:
+                {isEn ? 'Practical Tips & Storage:' : 'Dicas Práticas & Conservação:'}
               </div>
               <ul className="list-disc list-inside space-y-1 text-teal-900/90 pl-1">
                 {activeRecipe.tips.map((tip, i) => (
@@ -279,10 +442,10 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
                 <span className="w-6 h-6 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-bold">
                   2
                 </span>
-                Modo de Preparo Passo a Passo
+                {isEn ? 'Step-by-Step Preparation' : 'Modo de Preparo Passo a Passo'}
               </h3>
               <span className="text-xs font-bold text-slate-500">
-                {activeRecipe.instructions.length} passos
+                {activeRecipe.instructions.length} {isEn ? 'steps' : 'passos'}
               </span>
             </div>
 
@@ -306,7 +469,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
             <div className="bg-rose-50 rounded-xl p-4 border border-rose-200 text-xs text-rose-950 space-y-1">
               <div className="flex items-center gap-1.5 font-black text-rose-800">
                 <AlertTriangle className="w-4 h-4 text-rose-600" />
-                Aviso Veterinário & Segurança:
+                {isEn ? 'Veterinary Warning & Safety:' : 'Aviso Veterinário & Segurança:'}
               </div>
               <p className="text-rose-900/90 font-medium">
                 {activeRecipe.warning}
@@ -324,11 +487,11 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
-            Receita Anterior
+            {isEn ? 'Previous Recipe' : 'Receita Anterior'}
           </button>
 
           <span className="text-xs font-extrabold text-slate-500">
-            {selectedRecipeId} de 5
+            {isEn ? `${selectedRecipeId} of 5` : `${selectedRecipeId} de 5`}
           </span>
 
           <button
@@ -336,7 +499,7 @@ export const CaoBlindadoReader: React.FC<CaoBlindadoReaderProps> = ({ onClose })
             disabled={selectedRecipeId === 5}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
-            Próxima Receita
+            {isEn ? 'Next Recipe' : 'Próxima Receita'}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

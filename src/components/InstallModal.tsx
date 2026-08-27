@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { Smartphone, Share, PlusSquare, MoreVertical, Check, Sparkles, X } from 'lucide-react';
 
 export const InstallModal: React.FC = () => {
-  const { isInstallOpen, closeInstallModal, t } = useApp();
+  const { isInstallOpen, closeInstallModal, t, isEn } = useApp();
   const [activeTab, setActiveTab] = useState<'ios' | 'android'>('ios');
 
   if (!isInstallOpen) return null;
@@ -69,7 +69,11 @@ export const InstallModal: React.FC = () => {
                   1
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  No Safari, toque no ícone de <strong>Compartilhar</strong> (<Share className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) na barra inferior.
+                  {isEn ? (
+                    <>In Safari, tap the <strong>Share</strong> icon (<Share className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) in the bottom toolbar.</>
+                  ) : (
+                    <>No Safari, toque no ícone de <strong>Compartilhar</strong> (<Share className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) na barra inferior.</>
+                  )}
                 </div>
               </div>
 
@@ -78,7 +82,11 @@ export const InstallModal: React.FC = () => {
                   2
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  Role a lista para baixo e selecione <strong>Adicionar à Tela de Início</strong> (<PlusSquare className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />).
+                  {isEn ? (
+                    <>Scroll down and tap <strong>Add to Home Screen</strong> (<PlusSquare className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />).</>
+                  ) : (
+                    <>Role a lista para baixo e selecione <strong>Adicionar à Tela de Início</strong> (<PlusSquare className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />).</>
+                  )}
                 </div>
               </div>
 
@@ -87,7 +95,11 @@ export const InstallModal: React.FC = () => {
                   3
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  Toque em <strong>Adicionar</strong> no canto superior direito. Pronto! O ícone oficial aparecerá na tela do seu iPhone.
+                  {isEn ? (
+                    <>Tap <strong>Add</strong> in the top right corner. Done! The official icon is now on your home screen.</>
+                  ) : (
+                    <>Toque em <strong>Adicionar</strong> no canto superior direito. Pronto! O ícone oficial aparecerá na tela do seu iPhone.</>
+                  )}
                 </div>
               </div>
             </div>
@@ -98,7 +110,11 @@ export const InstallModal: React.FC = () => {
                   1
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  No Google Chrome, toque no menu de <strong>3 pontinhos</strong> (<MoreVertical className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) no canto superior direito.
+                  {isEn ? (
+                    <>In Google Chrome, tap the <strong>3 dots menu</strong> (<MoreVertical className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) in the top right corner.</>
+                  ) : (
+                    <>No Google Chrome, toque no menu de <strong>3 pontinhos</strong> (<MoreVertical className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) no canto superior direito.</>
+                  )}
                 </div>
               </div>
 
@@ -107,7 +123,11 @@ export const InstallModal: React.FC = () => {
                   2
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  Toque na opção <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.
+                  {isEn ? (
+                    <>Select <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</>
+                  ) : (
+                    <>Toque na opção <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</>
+                  )}
                 </div>
               </div>
 
@@ -116,7 +136,11 @@ export const InstallModal: React.FC = () => {
                   3
                 </div>
                 <div className="text-xs text-slate-700 leading-relaxed">
-                  Confirme a instalação. O aplicativo estará pronto para ser usado mesmo offline!
+                  {isEn ? (
+                    <>Confirm installation. The app will be ready to use even offline!</>
+                  ) : (
+                    <>Confirme a instalação. O aplicativo estará pronto para ser usado mesmo offline!</>
+                  )}
                 </div>
               </div>
             </div>

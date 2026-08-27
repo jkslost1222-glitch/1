@@ -60,7 +60,16 @@ export const translations = {
       spotlightTitle: 'Cuidados com os Ouvidos Canino (Adeus Otite)',
       spotlightDesc: 'Receita do Bifinho do Lyndor, Spray Calmante Auricular de Camomila, Modo de Preparo e Técnica de Higiene sem Dor em 4 etapas.',
       spotlightBtn: 'Acessar Protocolo & Calculadora',
-      clear: 'Limpar'
+      clear: 'Limpar',
+      vetTipBadge: 'Dica Veterinária do Dia:',
+      vetTipQuote: '"Nunca utilize cotonetes dentro do canal auditivo canino. O canal tem formato em L e a cera é empurrada para a curva profunda."',
+      vetTipLink: 'Ver protocolo de limpeza indolor',
+      metricsUnlocked: 'liberados',
+      quickCoach: 'Coach 24h',
+      quickAudio: 'Frequências',
+      badgeOfficial: 'MÉTODO OFICIAL VERIFICADO',
+      heroTitle: 'Seu cão saudável, calmo e livre de infecções.',
+      heroSubtitle: 'Acesse abaixo todos os protocolos naturais, calculadoras de dosagem por peso, frequências sonoras e consultoria canina 24 horas.'
     },
     categories: {
       all: 'Todos',
@@ -220,7 +229,16 @@ export const translations = {
       spotlightTitle: 'Canine Ear Care (Goodbye Otitis)',
       spotlightDesc: 'Lyndor Dog Treat Recipe, Chamomile Calming Ear Spray, Step-by-Step Preparation, and Painless 4-Step Hygiene.',
       spotlightBtn: 'Access Protocol & Calculator',
-      clear: 'Clear'
+      clear: 'Clear',
+      vetTipBadge: 'Daily Vet Tip:',
+      vetTipQuote: '"Never insert cotton swabs into the canine ear canal. The canal is L-shaped and wax gets shoved deep into the curve."',
+      vetTipLink: 'View painless ear cleaning guide',
+      metricsUnlocked: 'unlocked',
+      quickCoach: 'Coach 24/7',
+      quickAudio: 'Frequencies',
+      badgeOfficial: 'OFFICIAL VERIFIED METHOD',
+      heroTitle: 'A calm, healthy dog free from infections.',
+      heroSubtitle: 'Access all natural veterinary protocols, exact weight dosage calculators, sound therapy frequencies, and 24/7 canine coach.'
     },
     categories: {
       all: 'All',

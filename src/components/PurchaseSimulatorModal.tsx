@@ -12,6 +12,7 @@ export const PurchaseSimulatorModal: React.FC = () => {
     lockEntitlement,
     unlockAll,
     resetEntitlements,
+    isEn,
     t
   } = useApp();
 
@@ -107,12 +108,12 @@ export const PurchaseSimulatorModal: React.FC = () => {
                   {isUnlocked ? (
                     <>
                       <Unlock className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>Liberado</span>
+                      <span>{isEn ? "Unlocked" : "Liberado"}</span>
                     </>
                   ) : (
                     <>
                       <Lock className="w-3.5 h-3.5 text-amber-700" />
-                      <span>Bloqueado</span>
+                      <span>{isEn ? "Locked" : "Bloqueado"}</span>
                     </>
                   )}
                 </button>

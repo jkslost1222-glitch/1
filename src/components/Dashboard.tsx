@@ -12,7 +12,6 @@ import { BonusGiftsView } from './BonusGiftsView';
 import { PetEmDiaView } from './PetEmDiaView';
 import { FreshBreathView } from './FreshBreathView';
 import { StopCoprophagiaView } from './StopCoprophagiaView';
-import { XixiCocoProtocolView } from './XixiCocoProtocolView';
 import { LiveClassesView } from './LiveClassesView';
 import {
   Search,
@@ -31,6 +30,7 @@ import {
 export const Dashboard: React.FC = () => {
   const {
     t,
+    isEn,
     deliverables,
     searchQuery,
     setSearchQuery,
@@ -62,7 +62,7 @@ export const Dashboard: React.FC = () => {
     if (selectedCategory === 'training' && (item.type === 'aulas-ao-vivo' || item.type === 'coach-canino')) return true;
     if (selectedCategory === 'bonuses' && item.type === 'presentes') return true;
     if (selectedCategory === 'dental' && item.type === 'antibafo') return true;
-    if (selectedCategory === 'behavior' && (item.type === 'comer-coco' || item.type === 'xixi-coco' || item.type === 'aulas-ao-vivo')) return true;
+    if (selectedCategory === 'behavior' && (item.type === 'comer-coco' || item.type === 'aulas-ao-vivo')) return true;
 
     return false;
   });
@@ -90,9 +90,6 @@ export const Dashboard: React.FC = () => {
           )}
           {activeModuleId === 'anticoceira' && (
             <AntiItchProtocolView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'xixi-coco' && (
-            <XixiCocoProtocolView onClose={() => setActiveModuleId(null)} />
           )}
           {activeModuleId === 'mobilidade' && (
             <MobilityProtocolView onClose={() => setActiveModuleId(null)} />
@@ -136,7 +133,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <div className="flex items-center gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                <span>{unlockedCount} de {totalCount} {t.dashboard.metricsUnlocked}</span>
+                <span>{unlockedCount} {isEn ? 'of' : 'de'} {totalCount} {t.dashboard.metricsUnlocked}</span>
               </div>
 
               <button
@@ -162,16 +159,16 @@ export const Dashboard: React.FC = () => {
           {/* Quick CTA Card */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-center sm:text-left space-y-2 shrink-0 md:max-w-xs">
             <span className="text-[11px] font-black uppercase text-amber-300 tracking-wider block">
-              Dica Veterinária do Dia:
+              {t.dashboard.vetTipBadge}
             </span>
             <p className="text-xs text-white/95 leading-relaxed font-medium">
-              "Nunca utilize cotonetes dentro do canal auditivo canino. O canal tem formato em L e a cera é empurrada para a curva profunda."
+              {t.dashboard.vetTipQuote}
             </p>
             <button
               onClick={() => setActiveModuleId('antiotite')}
               className="text-xs font-black text-white hover:text-amber-300 inline-flex items-center gap-1 underline cursor-pointer"
             >
-              Ver protocolo de limpeza indolor <ArrowRight className="w-3 h-3" />
+              {t.dashboard.vetTipLink} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
         </div>

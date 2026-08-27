@@ -79,7 +79,7 @@ export const Navbar: React.FC = () => {
                   id="btn-user-profile"
                   onClick={openNonClientModal}
                   className="flex items-center gap-1.5 bg-teal-900/60 hover:bg-teal-800/80 px-2.5 py-1.5 rounded-xl border border-teal-700/50 transition-all cursor-pointer text-left"
-                  title="Clique para gerenciar seu e-mail de acesso"
+                  title={isEn ? "Click to manage your account access" : "Clique para gerenciar seu e-mail de acesso"}
                 >
                   <div className="w-6 h-6 rounded-full bg-teal-500/30 flex items-center justify-center text-xs text-teal-200">
                     <User className="w-3.5 h-3.5" />
@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
                 className="flex items-center gap-1.5 bg-[#00c5b3] hover:bg-teal-300 text-teal-950 font-black px-3 py-2 rounded-xl text-xs sm:text-sm shadow-md transition-all cursor-pointer"
               >
                 <LogIn className="w-4 h-4" />
-                <span>Entrar / Cadastrar</span>
+                <span>{isEn ? "Sign In / Register" : "Entrar / Cadastrar"}</span>
               </button>
             )}
 

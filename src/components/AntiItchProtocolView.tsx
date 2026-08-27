@@ -7,7 +7,7 @@ interface AntiItchProtocolViewProps {
 }
 
 export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onClose }) => {
-  const { t } = useApp();
+  const { t, isEn } = useApp();
   const [shampooVolumeMl, setShampooVolumeMl] = useState<number>(500);
 
   // 15 drops per 500ml
@@ -30,16 +30,18 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest bg-white/20 text-purple-100 px-2.5 py-0.5 rounded-md">
-              Dermatologia Canina Natural
+              {isEn ? 'Natural Canine Dermatology' : 'Dermatologia Canina Natural'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Protocolo Anticoceira & Violeta Genciana 1%
+              {isEn ? 'Anti-Itch Protocol & Gentian Violet 1%' : 'Protocolo Anticoceira & Violeta Genciana 1%'}
             </h2>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-purple-100 max-w-3xl leading-relaxed mt-2 font-medium">
-          Fórmula tópica natural antisséptica e antifúngica com proporção exata e segura para banho semanal. Elimina a proliferação da levedura Malassezia e alivia o prurido desesperador sem uso de cortisona.
+          {isEn
+            ? 'Natural antiseptic and antifungal topical formula with safe, exact dilution for weekly baths. Eliminates Malassezia yeast overgrowth and relieves desperate itching without harsh steroids.'
+            : 'Fórmula tópica natural antisséptica e antifúngica com proporção exata e segura para banho semanal. Elimina a proliferação da levedura Malassezia e alivia o prurido desesperador sem uso de cortisona.'}
         </p>
       </div>
 
@@ -49,14 +51,16 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
           <div className="flex items-center gap-2">
             <Droplet className="w-5 h-5 text-purple-700" />
             <h4 className="text-sm font-black text-purple-950">
-              Calculadora de Diluição Segura: Violeta Genciana 1% no Shampoo
+              {isEn
+                ? 'Safe Dilution Calculator: Gentian Violet 1% in Dog Shampoo'
+                : 'Calculadora de Diluição Segura: Violeta Genciana 1% no Shampoo'}
             </h4>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <div className="sm:col-span-2 space-y-2">
               <label className="text-xs font-bold text-slate-700 block">
-                Volume do Frasco de Shampoo Neutro Canino:
+                {isEn ? 'Gentle Dog Shampoo Bottle Volume:' : 'Volume do Frasco de Shampoo Neutro Canino:'}
               </label>
               <input
                 type="range"
@@ -76,13 +80,13 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
 
             <div className="bg-white p-4 rounded-xl border border-purple-300 text-center shadow-xs">
               <span className="text-[11px] font-bold uppercase text-slate-500 block">
-                Gotas de Violeta Genciana 1%
+                {isEn ? 'Drops of Gentian Violet 1%' : 'Gotas de Violeta Genciana 1%'}
               </span>
               <span className="text-2xl font-black text-purple-700">
-                {calculatedDrops} gotas
+                {calculatedDrops} {isEn ? 'drops' : 'gotas'}
               </span>
               <span className="text-[10px] text-slate-400 block mt-0.5">
-                homogeneizar bem no frasco
+                {isEn ? 'mix & shake well in bottle' : 'homogeneizar bem no frasco'}
               </span>
             </div>
           </div>
@@ -93,20 +97,24 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <h4 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
               <span className="w-6 h-6 rounded-lg bg-purple-700 text-white flex items-center justify-center text-xs font-bold">1</span>
-              Aplicação & Tempo de Pausa
+              {isEn ? 'Application & Lather Time' : 'Aplicação & Tempo de Pausa'}
             </h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Molhe o cão com água morna. Ensaboe o corpo todo com o shampoo medicado preparado, focando nas patas, barriga e axilas. Deixe agir por <strong>7 a 10 minutos</strong> antes do enxágue.
+              {isEn
+                ? 'Wet the dog with warm water. Lather the entire body with the prepared medicated shampoo, focusing on paws, belly, and armpits. Let it sit for 7 to 10 minutes before rinsing thoroughly.'
+                : 'Molhe o cão com água morna. Ensaboe o corpo todo com o shampoo medicado preparado, focando nas patas, barriga e axilas. Deixe agir por 7 a 10 minutos antes do enxágue.'}
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <h4 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
               <span className="w-6 h-6 rounded-lg bg-purple-700 text-white flex items-center justify-center text-xs font-bold">2</span>
-              Frequência de Manutenção
+              {isEn ? 'Maintenance Frequency' : 'Frequência de Manutenção'}
             </h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Durante crises ativas de coceira intensa: 1 banho a cada 5 a 7 dias por 3 semanas. Para manutenção preventiva: 1 banho a cada 15 a 20 dias.
+              {isEn
+                ? 'During active flare-ups with intense scratching: 1 bath every 5 to 7 days for 3 weeks. For preventive maintenance: 1 bath every 15 to 20 days.'
+                : 'Durante crises ativas de coceira intensa: 1 banho a cada 5 a 7 dias por 3 semanas. Para manutenção preventiva: 1 banho a cada 15 a 20 dias.'}
             </p>
           </div>
         </div>
@@ -115,10 +123,12 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
         <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 text-xs text-amber-950 space-y-1">
           <div className="flex items-center gap-1.5 font-black text-amber-900">
             <AlertCircle className="w-4 h-4 text-amber-600" />
-            Precaução Importante:
+            {isEn ? 'Important Precaution:' : 'Precaução Importante:'}
           </div>
           <p className="text-amber-900/90 font-medium">
-            Nunca aplique a Violeta Genciana pura diretamente na pele sem diluição. Em caso de feridas sangrentas profundas, higienize primeiro com soro fisiológico e consulte o veterinário.
+            {isEn
+              ? 'Never apply pure, undiluted Gentian Violet directly to the skin. If there are deep bleeding wounds or open sores, rinse with sterile saline solution first and consult a veterinarian.'
+              : 'Nunca aplique a Violeta Genciana pura diretamente na pele sem diluição. Em caso de feridas sangrentas profundas, higienize primeiro com soro fisiológico e consulte o veterinário.'}
           </p>
         </div>
 
@@ -129,7 +139,7 @@ export const AntiItchProtocolView: React.FC<AntiItchProtocolViewProps> = ({ onCl
             className="flex items-center gap-1.5 bg-purple-700 hover:bg-purple-800 text-white font-black px-4 py-2 rounded-xl text-xs shadow-md cursor-pointer"
           >
             <Printer className="w-4 h-4" />
-            Imprimir / Baixar Guia Anticoceira PDF
+            {isEn ? 'Print / Download Anti-Itch Guide PDF' : 'Imprimir / Baixar Guia Anticoceira PDF'}
           </button>
         </div>
       </div>

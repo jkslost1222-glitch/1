@@ -89,16 +89,16 @@ export const UpsellModal: React.FC = () => {
           <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200 flex items-center justify-between gap-4">
             <div>
               <span className="text-xs text-slate-500 line-through font-bold block">
-                De {regularPrice}
+                {isEn ? `From ${regularPrice}` : `De ${regularPrice}`}
               </span>
               <div className="flex items-baseline gap-1">
-                <span className="text-xs font-bold text-slate-600">Por apenas</span>
+                <span className="text-xs font-bold text-slate-600">{isEn ? "For only" : "Por apenas"}</span>
                 <span className="text-2xl sm:text-3xl font-black text-emerald-700">
                   {offerPrice}
                 </span>
               </div>
               <span className="text-[10px] text-slate-500 block font-medium">
-                Pagamento único • Sem mensalidades
+                {isEn ? "One-time payment • No recurring fees" : "Pagamento único • Sem mensalidades"}
               </span>
             </div>
 
@@ -110,7 +110,7 @@ export const UpsellModal: React.FC = () => {
           {/* Included Benefits List */}
           <div className="space-y-2">
             <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">
-              O que você recebe hoje:
+              {isEn ? "What you receive today:" : "O que você recebe hoje:"}
             </h4>
             <div className="space-y-2">
               {benefits.map((b, i) => (
@@ -125,7 +125,7 @@ export const UpsellModal: React.FC = () => {
           {/* Guarantee Pill */}
           <div className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-600">
             <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
-            <span>Garantia incondicional de 7 dias com devolução integral.</span>
+            <span>{isEn ? "100% unconditional 7-day money-back guarantee." : "Garantia incondicional de 7 dias com devolução integral."}</span>
           </div>
 
           {/* Buttons: Official Checkout CTA & Presentation Page */}
@@ -137,7 +137,7 @@ export const UpsellModal: React.FC = () => {
               rel="noopener noreferrer"
               className="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black py-3.5 px-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/20 transition-all hover:scale-[1.01] text-center cursor-pointer"
             >
-              <span>Desbloquear no Checkout Kiwify por {offerPrice}</span>
+              <span>{isEn ? `Unlock at Official Checkout for ${offerPrice}` : `Desbloquear no Checkout Kiwify por ${offerPrice}`}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
 
@@ -149,7 +149,7 @@ export const UpsellModal: React.FC = () => {
                 rel="noopener noreferrer"
                 className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors text-center"
               >
-                <span>Conhecer todos os detalhes na Página Oficial</span>
+                <span>{isEn ? "View Details on Presentation Page" : "Conhecer todos os detalhes na Página Oficial"}</span>
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
               </a>
             )}

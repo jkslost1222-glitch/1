@@ -7,47 +7,87 @@ interface LiveClassesViewProps {
 }
 
 export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => {
+  const { isEn, t } = useApp();
   const [selectedClassIndex, setSelectedClassIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const classes = [
-    {
-      title: 'Como Cessar Latidos Excessivos na Campainha, Portão e Janela',
-      date: 'Mentoria Gravada',
-      duration: '45:10',
-      instructor: 'Especialista em Adestramento Positivo',
-      summary: 'Método prático de contracondicionamento para o cão associar a campainha a ir para a caminha em vez de latir compulsivamente.',
-      steps: [
-        'Gravação do som da campainha no celular em volume baixo.',
-        'Oferecimento de petisco de alto valor na caminha ao tocar o som suave.',
-        'Aumento gradual do volume até neutralizar a reatividade.'
+  const classes = isEn
+    ? [
+        {
+          title: 'How to Stop Excessive Barking at the Doorbell, Gate & Window',
+          date: 'Recorded Mentorship',
+          duration: '45:10',
+          instructor: 'Positive Reinforcement Dog Trainer',
+          summary: 'Practical counterconditioning method to train your dog to go to their bed calmly when the doorbell rings instead of barking frantically.',
+          steps: [
+            'Record the doorbell sound on your phone at low initial volume.',
+            'Reward with high-value treats on their mat while playing the soft sound.',
+            'Gradually raise the volume over days until reactivity is fully neutralized.'
+          ]
+        },
+        {
+          title: 'Calm Walks Without Leash Pulling & Healthy Socialization',
+          date: 'Recorded Mentorship',
+          duration: '52:40',
+          instructor: 'Canine Behaviorist',
+          summary: 'How to transform daily walks into relaxing, mentally stimulating adventures without straining your arms or your dog’s neck.',
+          steps: [
+            'Proper fitting of a no-pull Y-shaped chest harness.',
+            'The "Tree/Statue" Rule: stop walking immediately whenever tension occurs on the leash.',
+            'Reward warmly whenever the dog voluntarily checks in and looks at you.'
+          ]
+        },
+        {
+          title: 'Daily Protocol for Separation Anxiety (Staying Home Alone)',
+          date: 'Recorded Mentorship',
+          duration: '60:00',
+          instructor: 'Integrative Veterinarian',
+          summary: 'Micro-departure training, frozen food puzzles, and gentle protocols to reduce hyper-attachment.',
+          steps: [
+            'Desensitize departure triggers (grabbing keys, putting on sneakers).',
+            'Provide frozen enrichment toys stuffed with bone broth puree before leaving.',
+            'Practice 30-second calm departures and build up time incrementally.'
+          ]
+        }
       ]
-    },
-    {
-      title: 'Passeio Calmo Sem Puxar a Guia e Socialização Saudável',
-      date: 'Mentoria Gravada',
-      duration: '52:40',
-      instructor: 'Comportamentalista Canino',
-      summary: 'Como transformar a caminhada em momento de relaxamento e gasto de energia mental sem dor nos braços e na traqueia do cão.',
-      steps: [
-        'Uso correto de peitoral em Y (anti-puxão) sem estrangulamento.',
-        'Regra da Estátua: parar imediatamente quando a guia esticar.',
-        'Recompensar quando o cão olhar voluntariamente nos olhos do tutor.'
-      ]
-    },
-    {
-      title: 'Protocolo Diário para Ansiedade de Separação (Ficar Sozinho)',
-      date: 'Mentoria Gravada',
-      duration: '60:00',
-      instructor: 'Médica Veterinária Integrativa',
-      summary: 'Treino de micro-saídas, enriquecimento alimentar congelado e como diminuir a dependência excessiva do cão.',
-      steps: [
-        'Dessensibilização dos gatilhos de saída (pegar chave, colocar tênis).',
-        'Brinquedos recheáveis congelados com pasta de caldo de ossos.',
-        'Saídas curtas de 30 segundos evoluindo progressivamente.'
-      ]
-    }
-  ];
+    : [
+        {
+          title: 'Como Cessar Latidos Excessivos na Campainha, Portão e Janela',
+          date: 'Mentoria Gravada',
+          duration: '45:10',
+          instructor: 'Especialista em Adestramento Positivo',
+          summary: 'Método prático de contracondicionamento para o cão associar a campainha a ir para a caminha em vez de latir compulsivamente.',
+          steps: [
+            'Gravação do som da campainha no celular em volume baixo.',
+            'Oferecimento de petisco de alto valor na caminha ao tocar o som suave.',
+            'Aumento gradual do volume até neutralizar a reatividade.'
+          ]
+        },
+        {
+          title: 'Passeio Calmo Sem Puxar a Guia e Socialização Saudável',
+          date: 'Mentoria Gravada',
+          duration: '52:40',
+          instructor: 'Comportamentalista Canino',
+          summary: 'Como transformar a caminhada em momento de relaxamento e gasto de energia mental sem dor nos braços e na traqueia do cão.',
+          steps: [
+            'Uso correto de peitoral em Y (anti-puxão) sem estrangulamento.',
+            'Regra da Estátua: parar imediatamente quando a guia esticar.',
+            'Recompensar quando o cão olhar voluntariamente nos olhos do tutor.'
+          ]
+        },
+        {
+          title: 'Protocolo Diário para Ansiedade de Separação (Ficar Sozinho)',
+          date: 'Mentoria Gravada',
+          duration: '60:00',
+          instructor: 'Médica Veterinária Integrativa',
+          summary: 'Treino de micro-saídas, enriquecimento alimentar congelado e como diminuir a dependência excessiva do cão.',
+          steps: [
+            'Dessensibilização dos gatilhos de saída (pegar chave, colocar tênis).',
+            'Brinquedos recheáveis congelados com pasta de caldo de ossos.',
+            'Saídas curtas de 30 segundos evoluindo progressivamente.'
+          ]
+        }
+      ];
 
   const activeClass = classes[selectedClassIndex];
 
@@ -66,15 +106,17 @@ export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => 
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest bg-white/20 text-blue-100 px-2.5 py-0.5 rounded-md">
-              Treinamento & Workshops
+              {isEn ? 'Training & Masterclasses' : 'Treinamento & Workshops'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Aulas ao Vivo & Gravações de Especialistas
+              {isEn ? 'Live Classes & Specialist Recordings' : 'Aulas ao Vivo & Gravações de Especialistas'}
             </h2>
           </div>
         </div>
         <p className="text-xs sm:text-sm text-blue-100 max-w-3xl leading-relaxed mt-2 font-medium">
-          Acesse os workshops práticos com cães reais para solucionar latidos, puxões de guia e ansiedade de separação.
+          {isEn
+            ? 'Access practical step-by-step masterclasses with real dogs to solve excessive barking, leash pulling, and separation anxiety.'
+            : 'Acesse os workshops práticos com cães reais para solucionar latidos, puxões de guia e ansiedade de separação.'}
         </p>
       </div>
 
@@ -87,12 +129,14 @@ export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => 
                 <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-3 bg-gradient-to-b from-blue-950 to-slate-950 p-6 animate-pulse">
                   <Video className="w-12 h-12 text-blue-400" />
                   <h4 className="text-base font-black text-white">{activeClass.title}</h4>
-                  <p className="text-xs text-blue-200">Reproduzindo Workshop • {activeClass.duration}</p>
+                  <p className="text-xs text-blue-200">
+                    {isEn ? `Playing Masterclass • ${activeClass.duration}` : `Reproduzindo Workshop • ${activeClass.duration}`}
+                  </p>
                   <button
                     onClick={() => setIsPlaying(false)}
                     className="bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-4 py-2 rounded-xl mt-3 cursor-pointer"
                   >
-                    Pausar Vídeo
+                    {isEn ? 'Pause Video' : 'Pausar Vídeo'}
                   </button>
                 </div>
               ) : (
@@ -110,7 +154,9 @@ export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => 
             </div>
 
             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-              <h4 className="text-sm font-black text-slate-900">Resumo da Aula & Plano de Ação:</h4>
+              <h4 className="text-sm font-black text-slate-900">
+                {isEn ? 'Class Summary & Action Plan:' : 'Resumo da Aula & Plano de Ação:'}
+              </h4>
               <p className="text-xs sm:text-sm text-slate-700">{activeClass.summary}</p>
               <div className="space-y-1.5 pt-2 border-t border-slate-200">
                 {activeClass.steps.map((st, i) => (
@@ -125,7 +171,9 @@ export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => 
 
           {/* Playlist */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">Aulas Disponíveis:</h4>
+            <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">
+              {isEn ? 'Available Classes:' : 'Aulas Disponíveis:'}
+            </h4>
             {classes.map((cls, idx) => {
               const isSelected = selectedClassIndex === idx;
               return (
@@ -142,7 +190,7 @@ export const LiveClassesView: React.FC<LiveClassesViewProps> = ({ onClose }) => 
                   }`}
                 >
                   <div className="flex items-center justify-between text-[11px] font-bold text-blue-700 mb-1">
-                    <span>Workshop {idx + 1}</span>
+                    <span>{isEn ? `Masterclass ${idx + 1}` : `Workshop ${idx + 1}`}</span>
                     <span className="text-slate-400">{cls.duration}</span>
                   </div>
                   <h5 className="text-xs font-extrabold text-slate-900 leading-snug">{cls.title}</h5>

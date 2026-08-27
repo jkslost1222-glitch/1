@@ -120,12 +120,12 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
           <div>
             <div className="flex items-center gap-1.5">
               <h3 className="text-base font-black text-white">
-                Coach Canino 24h
+                {isEn ? '24/7 Canine Coach' : 'Coach Canino 24h'}
               </h3>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </div>
             <p className="text-[11px] text-sky-100 font-medium">
-              Especialista em Saúde & Comportamento Canino
+              {isEn ? 'Specialist in Canine Health & Positive Behavior' : 'Especialista em Saúde & Comportamento Canino'}
             </p>
           </div>
         </div>
@@ -138,7 +138,7 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
             className="flex items-center gap-1 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer"
           >
             <PhoneCall className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">WhatsApp Oficial</span>
+            <span className="hidden sm:inline">{isEn ? 'Official WhatsApp' : 'WhatsApp Oficial'}</span>
           </a>
           <button
             onClick={onClose}
@@ -197,7 +197,7 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
       {/* Quick Prompts Chips */}
       <div className="px-4 py-2 bg-white border-t border-slate-100 overflow-x-auto scrollbar-none flex items-center gap-2">
         <span className="text-[10px] font-black uppercase text-slate-400 shrink-0">
-          Sugestões:
+          {isEn ? 'Suggestions:' : 'Sugestões:'}
         </span>
         {quickPrompts.map((prompt, idx) => (
           <button

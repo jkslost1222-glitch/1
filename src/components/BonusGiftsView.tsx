@@ -14,25 +14,41 @@ interface FoodItem {
 }
 
 export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
-  const { t } = useApp();
+  const { isEn, t } = useApp();
   const [foodSearch, setFoodSearch] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'safe' | 'toxic' | 'moderate'>('all');
 
-  const foods: FoodItem[] = [
-    { name: 'Cenoura crua ou cozida', category: 'safe', status: 'Seguro & Saudável', notes: 'Excelente para limpar os dentes, rica em betacaroteno e fibras.' },
-    { name: 'Maçã (Sem sementes)', category: 'safe', status: 'Seguro & Saudável', notes: 'Fonte de quercetina e vitamina C. Sempre retire todas as sementes (possuem cianeto).' },
-    { name: 'Abóbora Cabotiá Cozida', category: 'safe', status: 'Superalimento Seguro', notes: 'Excelente regulador intestinal tanto para diarreia quanto para constipação.' },
-    { name: 'Ovo cozido', category: 'safe', status: 'Excelente Proteína', notes: 'Proteína de altíssimo valor biológico, colina e aminoácidos essenciais.' },
-    { name: 'Mirtilo / Blueberry', category: 'safe', status: 'Antioxidante Potente', notes: 'Protege a saúde cerebral em cães idosos e combate radicais livres.' },
-    { name: 'Chocolate & Cacau', category: 'toxic', status: 'ALTAMENTE TÓXICO ⚠️', notes: 'Contém teobromina. Pode causar arritmia, convulsões e óbito.' },
-    { name: 'Uva e Uva Passa', category: 'toxic', status: 'ALTAMENTE TÓXICO ⚠️', notes: 'Causa insuficiência renal aguda mesmo em doses mínimas. Nunca oferecer.' },
-    { name: 'Cebola & Alho em excesso', category: 'toxic', status: 'TÓXICO ⚠️', notes: 'Compostos de tiossulfato que destroem os glóbulos vermelhos causando anemia hemolítica.' },
-    { name: 'Abacate (Casca e Caroço)', category: 'toxic', status: 'TÓXICO ⚠️', notes: 'Contém persina e risco grave de obstrução intestinal mecânica pelo caroço.' },
-    { name: 'Xilitol (Adoçante Artificial)', category: 'toxic', status: 'LETAL ⚠️', notes: 'Provoca liberação maciça de insulina com hipoglicemia fulminante e falência hepática.' },
-    { name: 'Banana', category: 'moderate', status: 'Com Moderação', notes: 'Rica em potássio e triptofano, porém rica em açúcares naturais. Oferecer fatias pequenas.' },
-    { name: 'Melancia (Sem sementes)', category: 'safe', status: 'Seguro & Hidratante', notes: '92% de água, perfeita para dias quentes de verão.' },
-    { name: 'Queijo Branco / Ricota', category: 'moderate', status: 'Com Moderação', notes: 'Apenas para cães sem intolerância à lactose. Evite queijos amarelos gordurosos.' }
-  ];
+  const foods: FoodItem[] = isEn
+    ? [
+        { name: 'Raw or Cooked Carrots', category: 'safe', status: 'Safe & Healthy', notes: 'Great for cleaning teeth, rich in beta-carotene and soluble fiber.' },
+        { name: 'Apple (Seedless)', category: 'safe', status: 'Safe & Healthy', notes: 'Source of quercetin and vitamin C. Always remove all core seeds (contain trace cyanide).' },
+        { name: 'Steamed Kabocha Pumpkin', category: 'safe', status: 'Safe Superfood', notes: 'Excellent bowel regularizer for both loose stools and mild constipation.' },
+        { name: 'Hard Boiled Egg', category: 'safe', status: 'Excellent Protein', notes: 'High biological value protein, choline, lutein, and essential amino acids.' },
+        { name: 'Blueberries', category: 'safe', status: 'Potent Antioxidant', notes: 'Protects cognitive brain health in senior dogs and fights cellular oxidative stress.' },
+        { name: 'Chocolate & Cocoa', category: 'toxic', status: 'HIGHLY TOXIC ⚠️', notes: 'Contains theobromine. Causes cardiac arrhythmias, seizures, and fatal toxicity.' },
+        { name: 'Grapes & Raisins', category: 'toxic', status: 'HIGHLY TOXIC ⚠️', notes: 'Can induce acute kidney failure even in minute amounts. Never feed.' },
+        { name: 'Onion & Garlic (excess)', category: 'toxic', status: 'TOXIC ⚠️', notes: 'Thiosulfate compounds destroy red blood cells causing hemolytic anemia.' },
+        { name: 'Avocado (Skin & Pit)', category: 'toxic', status: 'TOXIC ⚠️', notes: 'Contains persin; the large pit poses a lethal intestinal blockage hazard.' },
+        { name: 'Xylitol (Artificial Sweetener)', category: 'toxic', status: 'LETHAL ⚠️', notes: 'Triggers massive insulin release, fulminant hypoglycemia, and liver collapse.' },
+        { name: 'Banana', category: 'moderate', status: 'In Moderation', notes: 'High in potassium and tryptophan, but contains natural fruit sugars. Feed in small slices.' },
+        { name: 'Watermelon (Seedless)', category: 'safe', status: 'Safe & Hydrating', notes: '92% water content with lycopene, perfect for hot summer days.' },
+        { name: 'Cottage Cheese / Ricotta', category: 'moderate', status: 'In Moderation', notes: 'Only for dogs without lactose intolerance. Avoid high-fat yellow cheeses.' }
+      ]
+    : [
+        { name: 'Cenoura crua ou cozida', category: 'safe', status: 'Seguro & Saudável', notes: 'Excelente para limpar os dentes, rica em betacaroteno e fibras.' },
+        { name: 'Maçã (Sem sementes)', category: 'safe', status: 'Seguro & Saudável', notes: 'Fonte de quercetina e vitamina C. Sempre retire todas as sementes (possuem cianeto).' },
+        { name: 'Abóbora Cabotiá Cozida', category: 'safe', status: 'Superalimento Seguro', notes: 'Excelente regulador intestinal tanto para diarreia quanto para constipação.' },
+        { name: 'Ovo cozido', category: 'safe', status: 'Excelente Proteína', notes: 'Proteína de altíssimo valor biológico, colina e aminoácidos essenciais.' },
+        { name: 'Mirtilo / Blueberry', category: 'safe', status: 'Antioxidante Potente', notes: 'Protege a saúde cerebral em cães idosos e combate radicais livres.' },
+        { name: 'Chocolate & Cacau', category: 'toxic', status: 'ALTAMENTE TÓXICO ⚠️', notes: 'Contém teobromina. Pode causar arritmia, convulsões e óbito.' },
+        { name: 'Uva e Uva Passa', category: 'toxic', status: 'ALTAMENTE TÓXICO ⚠️', notes: 'Causa insuficiência renal aguda mesmo em doses mínimas. Nunca oferecer.' },
+        { name: 'Cebola & Alho em excesso', category: 'toxic', status: 'TÓXICO ⚠️', notes: 'Compostos de tiossulfato que destroem os glóbulos vermelhos causando anemia hemolítica.' },
+        { name: 'Abacate (Casca e Caroço)', category: 'toxic', status: 'TÓXICO ⚠️', notes: 'Contém persina e risco grave de obstrução intestinal mecânica pelo caroço.' },
+        { name: 'Xilitol (Adoçante Artificial)', category: 'toxic', status: 'LETAL ⚠️', notes: 'Provoca liberação maciça de insulina com hipoglicemia fulminante e falência hepática.' },
+        { name: 'Banana', category: 'moderate', status: 'Com Moderação', notes: 'Rica em potássio e triptofano, porém rica em açúcares naturais. Oferecer fatias pequenas.' },
+        { name: 'Melancia (Sem sementes)', category: 'safe', status: 'Seguro & Hidratante', notes: '92% de água, perfeita para dias quentes de verão.' },
+        { name: 'Queijo Branco / Ricota', category: 'moderate', status: 'Com Moderação', notes: 'Apenas para cães sem intolerância à lactose. Evite queijos amarelos gordurosos.' }
+      ];
 
   const filteredFoods = foods.filter(f => {
     const matchesSearch = f.name.toLowerCase().includes(foodSearch.toLowerCase()) || f.notes.toLowerCase().includes(foodSearch.toLowerCase());
@@ -57,16 +73,18 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest bg-white/20 text-amber-100 px-2.5 py-0.5 rounded-md">
-              Bônus VIP & Segurança
+              {isEn ? 'VIP Bonus & Safety' : 'Bônus VIP & Segurança'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-0.5">
-              Guia Mestre: Alimentos Permitidos vs. Proibidos
+              {isEn ? 'Master Guide: Safe vs. Toxic Foods' : 'Guia Mestre: Alimentos Permitidos vs. Proibidos'}
             </h2>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-amber-100 max-w-3xl leading-relaxed mt-2 font-medium">
-          Consulte rapidamente quais alimentos humanos são benéficos e quais são perigosos para a saúde do seu pet.
+          {isEn
+            ? 'Quickly check which everyday human foods provide health benefits and which are dangerous or toxic for your pet.'
+            : 'Consulte rapidamente quais alimentos humanos são benéficos e quais são perigosos para a saúde do seu pet.'}
         </p>
       </div>
 
@@ -79,7 +97,7 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
               type="text"
               value={foodSearch}
               onChange={e => setFoodSearch(e.target.value)}
-              placeholder="Pesquisar alimento (ex: maçã, chocolate, ovo)..."
+              placeholder={isEn ? 'Search food (e.g. apple, chocolate, egg)...' : 'Pesquisar alimento (ex: maçã, chocolate, ovo)...'}
               className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50"
             />
           </div>
@@ -91,7 +109,7 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
                 filterType === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
               }`}
             >
-              Todos
+              {isEn ? 'All' : 'Todos'}
             </button>
             <button
               onClick={() => setFilterType('safe')}
@@ -99,7 +117,7 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
                 filterType === 'safe' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-500'
               }`}
             >
-              Seguros ✓
+              {isEn ? 'Safe ✓' : 'Seguros ✓'}
             </button>
             <button
               onClick={() => setFilterType('toxic')}
@@ -107,7 +125,7 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
                 filterType === 'toxic' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-500'
               }`}
             >
-              Tóxicos ⚠️
+              {isEn ? 'Toxic ⚠️' : 'Tóxicos ⚠️'}
             </button>
           </div>
         </div>
@@ -155,7 +173,7 @@ export const BonusGiftsView: React.FC<BonusGiftsViewProps> = ({ onClose }) => {
             className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white font-black px-4 py-2 rounded-xl text-xs shadow-md cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            Imprimir Tabela para a Geladeira (PDF)
+            {isEn ? 'Print Fridge Poster Table (PDF)' : 'Imprimir Tabela para a Geladeira (PDF)'}
           </button>
         </div>
       </div>

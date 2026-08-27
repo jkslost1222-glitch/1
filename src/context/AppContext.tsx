@@ -17,11 +17,10 @@ interface AppContextType {
   logout: () => void;
   activeModuleId: DeliverableType | null;
   setActiveModuleId: (id: DeliverableType | null) => void;
-  activeModal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | 'oto' | null;
-  setActiveModal: (modal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | 'oto' | null) => void;
+  activeModal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | null;
+  setActiveModal: (modal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | null) => void;
   currentUpsell: UpsellConfigItem | null;
   openUpsellModal: (keyOrId: string) => void;
-  openOtoModal: () => void;
   entitlements: Record<string, boolean>;
   hasEntitlement: (id: string) => boolean;
   unlockModule: (id: string) => void;
@@ -44,8 +43,7 @@ const DEFAULT_USER: UserProfile = {
     'cao-blindado': true,
     'antiotite': true,
     'coach-canino': true,
-    'anticoceira': false,
-    'xixi-coco': false,
+    'anticoceira': true,
     'mobilidade': true,
     'frequencias': true,
     'aulas-ao-vivo': true,
@@ -195,7 +193,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       'antiotite': true,
       'coach-canino': true,
       'anticoceira': true,
-      'xixi-coco': true,
       'mobilidade': true,
       'frequencias': true,
       'aulas-ao-vivo': true,
@@ -222,7 +219,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       'antiotite': true,
       'coach-canino': true,
       'anticoceira': false,
-      'xixi-coco': false,
       'mobilidade': false,
       'frequencias': true,
       'aulas-ao-vivo': true,
@@ -241,10 +237,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       upsellConfig.caoBlindado;
     setCurrentUpsell(item);
     setActiveModal('upsell');
-  };
-
-  const openOtoModal = () => {
-    setActiveModal('oto');
   };
 
   const t = translations[language] || translations.pt;
@@ -274,7 +266,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setActiveModal,
         currentUpsell,
         openUpsellModal,
-        openOtoModal,
         entitlements,
         hasEntitlement,
         unlockModule,
