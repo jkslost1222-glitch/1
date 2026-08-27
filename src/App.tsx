@@ -3,6 +3,7 @@ import { AppProvider, useApp } from './context/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Dashboard } from './components/Dashboard';
+import { LoginPage } from './components/LoginPage';
 import { UpsellModal } from './components/UpsellModal';
 import { InstallModal } from './components/InstallModal';
 import { PurchaseSimulatorModal } from './components/PurchaseSimulatorModal';
@@ -11,10 +12,15 @@ import { CanineCoachModal } from './components/CanineCoachModal';
 import { MessageSquare, Headphones, ShieldCheck, Heart, Sparkles, Menu } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { setActiveModuleId, activeModal, setActiveModal, t, isEn } = useApp();
+  const { isAuthenticated, setActiveModuleId, activeModal, setActiveModal, t, isEn } = useApp();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // If not logged in, display the dedicated Login Page
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="min-h-screen bg-[#00bfa5] text-slate-900 flex font-sans selection:bg-teal-200 selection:text-teal-950">

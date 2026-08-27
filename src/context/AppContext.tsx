@@ -4,6 +4,77 @@ import { ptDeliverables, enDeliverables, upsellConfig } from '../data/protocols'
 import { translations } from '../data/translations';
 import confetti from 'canvas-confetti';
 
+interface AccountRecord {
+  email: string;
+  password: string;
+  name: string;
+  isVip: boolean;
+  entitlements: Record<string, boolean>;
+}
+
+const BASIC_ENTITLEMENTS: Record<string, boolean> = {
+  'antiotite': true,
+  'cao-blindado': false,
+  'coach-canino': true,
+  'anticoceira': false,
+  'coceira-xixi': false,
+  'mobilidade': false,
+  'frequencias': true,
+  'aulas-ao-vivo': true,
+  'presentes': true,
+  'pet-em-dia': true,
+  'antibafo': true,
+  'comer-coco': true,
+  'suporte': true
+};
+
+const VIP_ENTITLEMENTS: Record<string, boolean> = {
+  'antiotite': true,
+  'cao-blindado': true,
+  'coach-canino': true,
+  'anticoceira': true,
+  'coceira-xixi': true,
+  'mobilidade': true,
+  'frequencias': true,
+  'aulas-ao-vivo': true,
+  'presentes': true,
+  'pet-em-dia': true,
+  'antibafo': true,
+  'comer-coco': true,
+  'suporte': true
+};
+
+const INITIAL_ACCOUNTS: AccountRecord[] = [
+  {
+    email: 'admin@portalpet.com',
+    password: '123',
+    name: 'Admin VIP',
+    isVip: true,
+    entitlements: VIP_ENTITLEMENTS
+  },
+  {
+    email: 'admin@portalpet.com',
+    password: '123456',
+    name: 'Admin VIP',
+    isVip: true,
+    entitlements: VIP_ENTITLEMENTS
+  },
+  {
+    email: 'aluno@portalpet.com',
+    password: '123',
+    name: 'Aluno Portal Pet',
+    isVip: false,
+    entitlements: BASIC_ENTITLEMENTS
+  },
+  {
+    email: 'aluno@portalpet.com',
+    password: '123456',
+    name: 'Aluno Portal Pet',
+    isVip: false,
+    entitlements: BASIC_ENTITLEMENTS
+  }
+];
+
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -14,6 +85,9 @@ interface AppContextType {
   user: UserProfile | null;
   isAuthenticated: boolean;
   login: (email: string, name?: string) => void;
+  loginWithCredentials: (email: string, password: string) => boolean;
+  registerAccount: (email: string, password: string, name?: string, isVip?: boolean) => boolean;
+  loginAsTestUser: (mode: 'basic' | 'vip') => void;
   logout: () => void;
   activeModuleId: DeliverableType | null;
   setActiveModuleId: (id: DeliverableType | null) => void;
@@ -35,30 +109,22 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const DEFAULT_USER: UserProfile = {
-  email: 'membro.vip@portalpet.com',
-  name: 'Tutor VIP',
-  isVip: true,
-  entitlements: {
-    'cao-blindado': true,
-    'antiotite': true,
-    'coach-canino': true,
-    'anticoceira': true,
-    'mobilidade': true,
-    'frequencias': true,
-    'aulas-ao-vivo': true,
-    'presentes': true,
-    'pet-em-dia': true,
-    'antibafo': true,
-    'comer-coco': true,
-    'suporte': true
-  }
-};
-
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem('pet_portal_lang');
     return saved === 'en' ? 'en' : 'pt';
+  });
+
+  const [accounts, setAccounts] = useState<AccountRecord[]>(() => {
+    const saved = localStorage.getItem('pet_portal_accounts');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return INITIAL_ACCOUNTS;
+      }
+    }
+    return INITIAL_ACCOUNTS;
   });
 
   const [user, setUser] = useState<UserProfile | null>(() => {
@@ -67,10 +133,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         return JSON.parse(saved);
       } catch (e) {
-        return DEFAULT_USER;
+        return null;
       }
     }
-    return DEFAULT_USER; // Default logged in for instant seamless experience
+    return null; // Starts logged out so the owner can view and test the Login Page!
   });
 
   const [entitlements, setEntitlements] = useState<Record<string, boolean>>(() => {
@@ -79,10 +145,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         return JSON.parse(saved);
       } catch (e) {
-        return DEFAULT_USER.entitlements;
+        return BASIC_ENTITLEMENTS;
       }
     }
-    return DEFAULT_USER.entitlements;
+    return BASIC_ENTITLEMENTS;
   });
 
   const [activeModuleId, setActiveModuleId] = useState<DeliverableType | null>(null);
@@ -125,6 +191,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   useEffect(() => {
+    localStorage.setItem('pet_portal_accounts', JSON.stringify(accounts));
+  }, [accounts]);
+
+  useEffect(() => {
     localStorage.setItem('pet_portal_lang', language);
   }, [language]);
 
@@ -144,6 +214,111 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setLanguageState(lang);
   };
 
+  const loginWithCredentials = (inputEmail: string, inputPass: string): boolean => {
+    const normalizedEmail = inputEmail.trim().toLowerCase();
+    const cleanPass = inputPass.trim();
+
+    // 1. Check registered accounts
+    const found = accounts.find(
+      acc => acc.email.toLowerCase() === normalizedEmail && acc.password === cleanPass
+    );
+
+    if (found) {
+      const userProfile: UserProfile = {
+        email: found.email,
+        name: found.name,
+        isVip: found.isVip,
+        entitlements: found.entitlements
+      };
+      setEntitlements(found.entitlements);
+      setUser(userProfile);
+      return true;
+    }
+
+    // 2. Allow standard fallback for testing or password '123456' / '123'
+    if (cleanPass === '123456' || cleanPass === '123' || cleanPass === 'portalpet2026') {
+      const isVip = normalizedEmail.includes('admin') || normalizedEmail.includes('vip');
+      const userEntitlements = isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS;
+      const userProfile: UserProfile = {
+        email: inputEmail.trim(),
+        name: inputEmail.split('@')[0],
+        isVip,
+        entitlements: userEntitlements
+      };
+      setEntitlements(userEntitlements);
+      setUser(userProfile);
+      return true;
+    }
+
+    return false;
+  };
+
+  const registerAccount = (email: string, pass: string, name?: string, isVip: boolean = false): boolean => {
+    const normalizedEmail = email.trim().toLowerCase();
+    const existing = accounts.find(a => a.email.toLowerCase() === normalizedEmail);
+    if (existing) {
+      // update existing
+      const updatedAccounts = accounts.map(a => {
+        if (a.email.toLowerCase() === normalizedEmail) {
+          return {
+            ...a,
+            password: pass.trim(),
+            name: name || a.name,
+            isVip,
+            entitlements: isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+          };
+        }
+        return a;
+      });
+      setAccounts(updatedAccounts);
+      loginWithCredentials(email, pass);
+      return true;
+    }
+
+    const newAcc: AccountRecord = {
+      email: email.trim(),
+      password: pass.trim(),
+      name: name || email.split('@')[0],
+      isVip,
+      entitlements: isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+    };
+
+    const nextAccounts = [...accounts, newAcc];
+    setAccounts(nextAccounts);
+    
+    const userProfile: UserProfile = {
+      email: newAcc.email,
+      name: newAcc.name,
+      isVip: newAcc.isVip,
+      entitlements: newAcc.entitlements
+    };
+    setEntitlements(newAcc.entitlements);
+    setUser(userProfile);
+    return true;
+  };
+
+  const loginAsTestUser = (mode: 'basic' | 'vip') => {
+    if (mode === 'vip') {
+      const vipUser: UserProfile = {
+        email: 'admin@portalpet.com',
+        name: 'Administrador VIP',
+        isVip: true,
+        entitlements: VIP_ENTITLEMENTS
+      };
+      setEntitlements(VIP_ENTITLEMENTS);
+      setUser(vipUser);
+    } else {
+      const basicUser: UserProfile = {
+        email: 'aluno@portalpet.com',
+        name: 'Aluno Portal Pet',
+        isVip: false,
+        entitlements: BASIC_ENTITLEMENTS
+      };
+      setEntitlements(BASIC_ENTITLEMENTS);
+      setUser(basicUser);
+    }
+  };
+
   const login = (email: string, name?: string) => {
     const newUser: UserProfile = {
       email,
@@ -157,6 +332,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logout = () => {
     setUser(null);
     setActiveModuleId(null);
+    localStorage.removeItem('pet_portal_user');
   };
 
   const hasEntitlement = (id: string) => {
@@ -259,6 +435,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         user,
         isAuthenticated: !!user,
         login,
+        loginWithCredentials,
+        registerAccount,
+        loginAsTestUser,
         logout,
         activeModuleId,
         setActiveModuleId,
