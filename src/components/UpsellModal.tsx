@@ -47,8 +47,8 @@ export const UpsellModal: React.FC = () => {
 
   const offerPrice = currentUpsell.price || 'R$ 14,90';
   const regularPrice = currentUpsell.originalPrice || 'R$ 97,00';
-  const checkoutUrl = currentUpsell.checkoutUrl || 'https://pay.cakto.com.br/h3eWTwps_1036773';
-  const salesPageUrl = currentUpsell.salesPageUrl || 'https://petnatural.vercel.app';
+  const checkoutUrl = currentUpsell.checkoutUrl || 'https://pay.kiwify.com.br/OAXrNvm';
+  const salesPageUrl = currentUpsell.salesPageUrl || 'https://pay.kiwify.com.br/OAXrNvm';
 
   const benefits = isEn
     ? currentUpsell.id === 'cao-blindado'
