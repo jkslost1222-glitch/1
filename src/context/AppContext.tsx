@@ -1,16 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { DeliverableItem, DeliverableType, Language, UpsellConfigItem, UserProfile } from '../types';
+import { DeliverableItem, DeliverableType, Language, UpsellConfigItem, UserProfile, AccountRecord } from '../types';
 import { ptDeliverables, enDeliverables, upsellConfig } from '../data/protocols';
 import { translations } from '../data/translations';
 import confetti from 'canvas-confetti';
-
-interface AccountRecord {
-  email: string;
-  password: string;
-  name: string;
-  isVip: boolean;
-  entitlements: Record<string, boolean>;
-}
 
 const BASIC_ENTITLEMENTS: Record<string, boolean> = {
   'antiotite': true,
@@ -48,30 +40,26 @@ const INITIAL_ACCOUNTS: AccountRecord[] = [
   {
     email: 'admin@portalpet.com',
     password: '123',
-    name: 'Admin VIP',
+    name: 'Admin Portal Pet',
     isVip: true,
-    entitlements: VIP_ENTITLEMENTS
-  },
-  {
-    email: 'admin@portalpet.com',
-    password: '123456',
-    name: 'Admin VIP',
-    isVip: true,
+    createdAt: '15/01/2026',
     entitlements: VIP_ENTITLEMENTS
   },
   {
     email: 'aluno@portalpet.com',
     password: '123',
-    name: 'Aluno Portal Pet',
+    name: 'Maria Silva & Rex',
     isVip: false,
+    createdAt: '10/02/2026',
     entitlements: BASIC_ENTITLEMENTS
   },
   {
-    email: 'aluno@portalpet.com',
-    password: '123456',
-    name: 'Aluno Portal Pet',
-    isVip: false,
-    entitlements: BASIC_ENTITLEMENTS
+    email: 'cliente.vip@exemplo.com',
+    password: '123',
+    name: 'Carlos Oliveira & Thor',
+    isVip: true,
+    createdAt: '20/02/2026',
+    entitlements: VIP_ENTITLEMENTS
   }
 ];
 
@@ -84,6 +72,12 @@ interface AppContextType {
   deliverables: DeliverableItem[];
   user: UserProfile | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  accounts: AccountRecord[];
+  deleteAccount: (email: string) => void;
+  toggleAccountVip: (email: string) => void;
+  createStudentByAdmin: (data: { name: string; email: string; password: string; isVip: boolean }) => boolean;
+  updateAccountPassword: (email: string, newPass: string) => void;
   login: (email: string, name?: string) => void;
   loginWithCredentials: (email: string, password: string) => boolean;
   registerAccount: (email: string, password: string, name?: string, isVip?: boolean) => boolean;
@@ -91,8 +85,8 @@ interface AppContextType {
   logout: () => void;
   activeModuleId: DeliverableType | null;
   setActiveModuleId: (id: DeliverableType | null) => void;
-  activeModal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | null;
-  setActiveModal: (modal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | null) => void;
+  activeModal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | 'admin' | null;
+  setActiveModal: (modal: 'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | 'admin' | null) => void;
   currentUpsell: UpsellConfigItem | null;
   openUpsellModal: (keyOrId: string) => void;
   entitlements: Record<string, boolean>;
@@ -152,10 +146,95 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [activeModuleId, setActiveModuleId] = useState<DeliverableType | null>(null);
-  const [activeModal, setActiveModal] = useState<'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | null>(null);
+  const [activeModal, setActiveModal] = useState<'install' | 'nonClient' | 'upsell' | 'simulator' | 'coachChat' | 'admin' | null>(null);
   const [currentUpsell, setCurrentUpsell] = useState<UpsellConfigItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const isAdmin = Boolean(
+    user?.email?.toLowerCase().includes('admin') ||
+    user?.email?.toLowerCase() === 'admin@portalpet.com' ||
+    user?.isAdmin
+  );
+
+  const deleteAccount = (emailToDelete: string) => {
+    const normalized = emailToDelete.trim().toLowerCase();
+    setAccounts(prev => prev.filter(acc => acc.email.toLowerCase() !== normalized));
+  };
+
+  const toggleAccountVip = (emailToToggle: string) => {
+    const normalized = emailToToggle.trim().toLowerCase();
+    setAccounts(prev =>
+      prev.map(acc => {
+        if (acc.email.toLowerCase() === normalized) {
+          const nextVip = !acc.isVip;
+          return {
+            ...acc,
+            isVip: nextVip,
+            entitlements: nextVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+          };
+        }
+        return acc;
+      })
+    );
+
+    // If current logged in user is the one modified, update state
+    if (user && user.email.toLowerCase() === normalized) {
+      const nextVip = !user.isVip;
+      const nextEntitlements = nextVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS;
+      setUser(prev => prev ? { ...prev, isVip: nextVip, entitlements: nextEntitlements } : null);
+      setEntitlements(nextEntitlements);
+    }
+  };
+
+  const createStudentByAdmin = (data: { name: string; email: string; password: string; isVip: boolean }): boolean => {
+    const normalizedEmail = data.email.trim().toLowerCase();
+    if (!normalizedEmail || !data.password.trim()) return false;
+
+    const existingIndex = accounts.findIndex(a => a.email.toLowerCase() === normalizedEmail);
+    const dateFormatted = new Date().toLocaleDateString('pt-BR');
+
+    if (existingIndex >= 0) {
+      // update
+      setAccounts(prev =>
+        prev.map((acc, idx) =>
+          idx === existingIndex
+            ? {
+                ...acc,
+                name: data.name.trim() || acc.name,
+                password: data.password.trim(),
+                isVip: data.isVip,
+                entitlements: data.isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+              }
+            : acc
+        )
+      );
+      return true;
+    }
+
+    const newStudent: AccountRecord = {
+      name: data.name.trim() || normalizedEmail.split('@')[0],
+      email: data.email.trim(),
+      password: data.password.trim(),
+      isVip: data.isVip,
+      createdAt: dateFormatted,
+      entitlements: data.isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+    };
+
+    setAccounts(prev => [...prev, newStudent]);
+    return true;
+  };
+
+  const updateAccountPassword = (targetEmail: string, newPass: string) => {
+    const normalized = targetEmail.trim().toLowerCase();
+    setAccounts(prev =>
+      prev.map(acc =>
+        acc.email.toLowerCase() === normalized
+          ? { ...acc, password: newPass.trim() }
+          : acc
+      )
+    );
+  };
 
   // Automatic Kiwify purchase return parameter detector
   useEffect(() => {
@@ -434,6 +513,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deliverables,
         user,
         isAuthenticated: !!user,
+        isAdmin,
+        accounts,
+        deleteAccount,
+        toggleAccountVip,
+        createStudentByAdmin,
+        updateAccountPassword,
         login,
         loginWithCredentials,
         registerAccount,

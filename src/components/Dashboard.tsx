@@ -155,46 +155,46 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchOpen, onCloseSearch 
         )}
 
         {/* View Mode Switcher Header Pill */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-black/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase text-teal-100 tracking-wider">
-              {isEn ? 'View Layout:' : 'Modo de Visualização:'}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-black/15 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl border border-white/20 text-white">
+          <div className="flex items-center justify-between sm:justify-start gap-2">
+            <span className="text-[11px] sm:text-xs font-black uppercase text-teal-100 tracking-wider">
+              {isEn ? 'View:' : 'Visualização:'}
             </span>
-            <div className="flex items-center bg-black/30 p-1 rounded-xl border border-white/10">
+            <div className="flex items-center bg-black/30 p-0.5 sm:p-1 rounded-xl border border-white/10">
               <button
                 id="btn-view-circles"
                 onClick={() => setViewMode('circles')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
                   viewMode === 'circles'
                     ? 'bg-white text-teal-950 shadow-md'
                     : 'text-white/80 hover:text-white'
                 }`}
               >
                 <CircleDot className="w-3.5 h-3.5" />
-                <span>{isEn ? 'Circular Bubbles' : 'Círculos Originais'}</span>
+                <span>{isEn ? 'Bubbles' : 'Círculos'}</span>
               </button>
               <button
                 id="btn-view-grid"
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-white text-teal-950 shadow-md'
                     : 'text-white/80 hover:text-white'
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                <span>{isEn ? 'Detailed Cards' : 'Cards Detalhados'}</span>
+                <span>{isEn ? 'Cards' : 'Cards'}</span>
               </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="text-xs text-white/90 font-bold hidden sm:block">
-              {unlockedCount} / {totalCount} {isEn ? 'Protocols Unlocked' : 'Protocolos Liberados'}
+          <div className="flex items-center justify-between sm:justify-end gap-2 pt-1 sm:pt-0 border-t sm:border-t-0 border-white/10">
+            <div className="text-[11px] sm:text-xs text-white/90 font-bold">
+              {unlockedCount} / {totalCount} {isEn ? 'Unlocked' : 'Liberados'}
             </div>
             <button
               onClick={() => setIsSupportOpen(true)}
-              className="bg-white/20 hover:bg-white/30 text-white text-xs font-black px-3 py-1.5 rounded-xl border border-white/30 transition-all cursor-pointer"
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] sm:text-xs font-black px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-white/30 transition-all cursor-pointer"
             >
               {isEn ? 'Help & FAQ' : 'Ajuda & FAQ'}
             </button>

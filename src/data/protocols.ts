@@ -749,7 +749,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🥣',
     accentColor: '#0f4c5c',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 14,90',
     originalPrice: 'R$ 97,00'
@@ -773,7 +775,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🌸',
     accentColor: '#9333ea',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 19,90',
     originalPrice: 'R$ 39,00'
@@ -797,7 +801,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🌸',
     accentColor: '#9333ea',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 19,90',
     originalPrice: 'R$ 39,00'
@@ -821,7 +827,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🎯',
     accentColor: '#7e22ce',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 19,90',
     originalPrice: 'R$ 67,00'
@@ -845,7 +853,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🎯',
     accentColor: '#7e22ce',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 19,90',
     originalPrice: 'R$ 67,00'
@@ -870,7 +880,9 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     icon: '🦴',
     accentColor: '#ea580c',
     checkoutUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    checkoutUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     salesPageUrl: 'https://pay.kiwify.com.br/OAXrNvm',
+    salesPageUrlEn: 'https://pay.kiwify.com/1MAymAQ',
     guaranteeDays: 7,
     price: 'R$ 14,90',
     originalPrice: 'R$ 97,00'

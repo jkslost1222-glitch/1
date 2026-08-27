@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Lock, Mail, Key, Eye, EyeOff, ShieldCheck, Sparkles, LogIn, UserPlus, HelpCircle, ExternalLink, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Lock, Mail, Key, Eye, EyeOff, LogIn, UserPlus, ExternalLink, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
+import { AdminModal } from './AdminModal';
 
 export const LoginPage: React.FC = () => {
-  const { loginWithCredentials, registerAccount, loginAsTestUser, isEn, setLanguage, t } = useApp();
+  const { loginWithCredentials, registerAccount, isEn, setLanguage, activeModal, setActiveModal } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -40,8 +41,8 @@ export const LoginPage: React.FC = () => {
       if (!success) {
         setErrorMessage(
           isEn
-            ? 'Incorrect email or password. Use test accounts below or register your access.'
-            : 'E-mail ou senha incorretos. Use as contas de teste abaixo ou cadastre seu acesso.'
+            ? 'Incorrect email or password. Please check your credentials or create an access account.'
+            : 'E-mail ou senha incorretos. Verifique suas credenciais de acesso ou cadastre seu login.'
         );
       }
     }
@@ -177,14 +178,9 @@ export const LoginPage: React.FC = () => {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-bold text-teal-200">
-                  {isEn ? 'Password:' : 'Senha:'}
-                </label>
-                <span className="text-[10px] text-teal-400/80">
-                  {isEn ? 'Test default: 123456' : 'Padrão de teste: 123456'}
-                </span>
-              </div>
+              <label className="block text-xs font-bold text-teal-200 mb-1">
+                {isEn ? 'Password:' : 'Senha:'}
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-teal-500">
                   <Key className="w-4 h-4" />
@@ -283,7 +279,7 @@ export const LoginPage: React.FC = () => {
             </span>
             <a
               id="link-buy-kiwify-login"
-              href="https://pay.kiwify.com.br/OAXrNvm"
+              href={isEn ? "https://pay.kiwify.com/gdEZvLD" : "https://pay.kiwify.com.br/kYdtxLl"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-1.5 text-xs font-black text-amber-300 hover:text-amber-200 underline transition-colors cursor-pointer"
@@ -295,49 +291,26 @@ export const LoginPage: React.FC = () => {
 
         </div>
 
-        {/* 1-Click Fast Access Test Box for the App Owner & Testers */}
-        <div className="mt-6 bg-[#031412]/80 border border-teal-700/40 rounded-2xl p-4 text-center space-y-2.5">
-          <div className="flex items-center justify-center gap-1.5 text-amber-300 text-xs font-black uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{isEn ? 'Quick Testing Access (1-Click Simulators)' : 'Atalhos de Teste Rápido (1 Clique)'}</span>
-          </div>
-
-          <p className="text-[11px] text-teal-300 font-medium max-w-sm mx-auto">
-            {isEn
-              ? 'Test how the app appears for a basic customer with locked upsells, or test full VIP mode:'
-              : 'Teste como o aplicativo aparece para um cliente básico (com travas de upsell da Kiwify) ou em modo VIP:'}
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-            <button
-              id="btn-test-basic-student"
-              onClick={() => loginAsTestUser('basic')}
-              className="py-2.5 px-3 bg-teal-800/80 hover:bg-teal-700 text-white font-bold text-xs rounded-xl border border-teal-500/40 transition-all cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>🔒</span>
-              <span>{isEn ? 'Test as Basic Student (Locked)' : 'Testar Aluno Base (Com Travas)'}</span>
-            </button>
-
-            <button
-              id="btn-test-vip-student"
-              onClick={() => loginAsTestUser('vip')}
-              className="py-2.5 px-3 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>👑</span>
-              <span>{isEn ? 'Test as Full VIP (All Unlocked)' : 'Testar VIP Completo (Liberado)'}</span>
-            </button>
-          </div>
-
-          <div className="pt-2 border-t border-teal-900/60 text-[10px] text-teal-400">
-            {isEn ? 'Admin login: admin@portalpet.com | Pass: 123456' : 'Login de Admin: admin@portalpet.com | Senha: 123456'}
-          </div>
-        </div>
-
       </main>
 
-      {/* Footer */}
-      <footer className="text-center text-[11px] text-teal-400 py-3">
-        © {new Date().getFullYear()} Portal Pet • Adeus Otite • {isEn ? 'Secure Protected Area' : 'Área Segura e Protegida'}
+      {/* Admin Panel Modal if opened */}
+      {activeModal === 'admin' && <AdminModal />}
+
+      {/* Footer with discreet Admin Link */}
+      <footer className="text-center text-[11px] text-teal-400 py-3 space-y-1.5">
+        <div>
+          © {new Date().getFullYear()} Portal Pet • Adeus Otite • {isEn ? 'Secure Protected Area' : 'Área Segura e Protegida'}
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => setActiveModal('admin')}
+            className="inline-flex items-center gap-1.5 text-teal-400/70 hover:text-amber-300 transition-colors cursor-pointer text-[11px] font-bold underline"
+          >
+            <Shield className="w-3 h-3 text-amber-400" />
+            <span>{isEn ? 'Admin Access & Student Management' : 'Painel do Administrador (Cadastrar / Ver Alunos)'}</span>
+          </button>
+        </div>
       </footer>
 
     </div>

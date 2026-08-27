@@ -45,10 +45,14 @@ export const UpsellModal: React.FC = () => {
       : currentUpsell.subtitle
     : currentUpsell.subtitle;
 
-  const offerPrice = currentUpsell.price || 'R$ 14,90';
-  const regularPrice = currentUpsell.originalPrice || 'R$ 97,00';
-  const checkoutUrl = currentUpsell.checkoutUrl || 'https://pay.kiwify.com.br/OAXrNvm';
-  const salesPageUrl = currentUpsell.salesPageUrl || 'https://pay.kiwify.com.br/OAXrNvm';
+  const offerPrice = isEn ? (currentUpsell.price ? '$ 4.90' : '$ 4.90') : (currentUpsell.price || 'R$ 19,90');
+  const regularPrice = isEn ? '$ 19.00' : (currentUpsell.originalPrice || 'R$ 67,00');
+  const checkoutUrl = isEn
+    ? (currentUpsell.checkoutUrlEn || 'https://pay.kiwify.com/1MAymAQ')
+    : (currentUpsell.checkoutUrl || 'https://pay.kiwify.com.br/OAXrNvm');
+  const salesPageUrl = isEn
+    ? (currentUpsell.salesPageUrlEn || currentUpsell.checkoutUrlEn || 'https://pay.kiwify.com/1MAymAQ')
+    : (currentUpsell.salesPageUrl || currentUpsell.checkoutUrl || 'https://pay.kiwify.com.br/OAXrNvm');
 
   const benefits = isEn
     ? currentUpsell.id === 'cao-blindado'

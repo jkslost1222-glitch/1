@@ -115,15 +115,27 @@ export interface UpsellConfigItem {
   icon: string;
   accentColor: string;
   checkoutUrl: string;
+  checkoutUrlEn?: string;
   salesPageUrl?: string;
+  salesPageUrlEn?: string;
   guaranteeDays: number;
   price?: string;
   originalPrice?: string;
+}
+
+export interface AccountRecord {
+  email: string;
+  password: string;
+  name: string;
+  isVip: boolean;
+  createdAt?: string;
+  entitlements: Record<string, boolean>;
 }
 
 export interface UserProfile {
   email: string;
   name: string;
   isVip: boolean;
+  isAdmin?: boolean;
   entitlements: Record<string, boolean>;
 }

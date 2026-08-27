@@ -9,7 +9,8 @@ import { InstallModal } from './components/InstallModal';
 import { PurchaseSimulatorModal } from './components/PurchaseSimulatorModal';
 import { NonClientModal } from './components/NonClientModal';
 import { CanineCoachModal } from './components/CanineCoachModal';
-import { MessageSquare, Headphones, ShieldCheck, Heart, Sparkles, Menu } from 'lucide-react';
+import { AdminModal } from './components/AdminModal';
+import { MessageSquare, Headphones, ShieldCheck, Heart, Sparkles, Menu, Shield } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, setActiveModuleId, activeModal, setActiveModal, t, isEn } = useApp();
@@ -62,35 +63,57 @@ const AppContent: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-gradient-to-br from-[#00dfca] via-[#00c5b3] to-[#00a89a]">
         
         {/* Mobile Header Bar with Hamburger Toggle */}
-        <div className="md:hidden flex items-center justify-between p-3.5 bg-white/20 backdrop-blur-md border-b border-white/20 text-white">
-          <button
-            onClick={() => setMobileSidebarOpen(true)}
-            className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white cursor-pointer"
-            title="Menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          
+        <div className="md:hidden sticky top-0 z-50 flex items-center justify-between px-3 py-2.5 bg-[#0f4c5c] border-b border-teal-800/60 text-white shadow-md">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-base shadow-sm">
-              🐶
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white cursor-pointer transition-transform"
+              title="Menu Lateral"
+              aria-label="Abrir Menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            
+            <div className="flex items-center gap-1.5">
+              <span className="text-xl">🐶</span>
+              <span className="font-black text-sm text-white tracking-tight">
+                PORTAL<span className="text-teal-300 ml-0.5">PET</span>
+              </span>
             </div>
-            <span className="font-black text-sm text-white tracking-tight">
-              Adeus Otite
-            </span>
           </div>
 
-          <button
-            onClick={() => setActiveModal('coachChat')}
-            className="flex items-center gap-1 bg-[#0f4c5c] text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-md cursor-pointer"
-          >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Coach</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setActiveModal('admin')}
+              className="flex items-center gap-1 bg-amber-400 text-slate-950 text-[11px] font-black px-2 py-1.5 rounded-xl shadow-xs active:scale-95 cursor-pointer"
+              title="Painel Admin"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Admin</span>
+            </button>
+
+            <button
+              onClick={() => setActiveModal('install')}
+              className="flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-[11px] font-black px-2 py-1.5 rounded-xl active:scale-95 cursor-pointer"
+            >
+              <span>📲</span>
+              <span>{isEn ? 'App' : 'Baixar'}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveModal('coachChat')}
+              className="flex items-center gap-1 bg-teal-800 text-teal-100 border border-teal-600 text-[11px] font-black px-2 py-1.5 rounded-xl shadow-md active:scale-95 cursor-pointer"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Coach</span>
+            </button>
+          </div>
         </div>
 
-        {/* Top Navbar / Header Bar */}
-        <Navbar />
+        {/* Top Navbar / Header Bar (Desktop & Tablet) */}
+        <div className="hidden md:block">
+          <Navbar />
+        </div>
 
         {/* Main Interactive Stage */}
         <main className="flex-1 w-full px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl mx-auto">
@@ -136,6 +159,7 @@ const AppContent: React.FC = () => {
         <InstallModal />
         <NonClientModal />
         <PurchaseSimulatorModal />
+        {activeModal === 'admin' && <AdminModal />}
         <CanineCoachModal
           isOpen={activeModal === 'coachChat'}
           onClose={() => setActiveModal(null)}

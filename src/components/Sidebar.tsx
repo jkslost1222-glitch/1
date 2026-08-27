@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Home, Download, Search, LogOut, LogIn, ChevronLeft, ChevronRight, Globe, ShieldCheck, Sparkles, Smartphone } from 'lucide-react';
+import { Home, Download, Search, LogOut, LogIn, ChevronLeft, ChevronRight, Globe, ShieldCheck, Sparkles, Smartphone, Shield } from 'lucide-react';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -9,7 +9,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse, onSearchClick }) => {
-  const { isEn, language, setLanguage, user, logout, setActiveModal, openNonClientModal, setActiveModuleId } = useApp();
+  const { isEn, language, setLanguage, user, logout, setActiveModal, openNonClientModal, setActiveModuleId, isAdmin } = useApp();
 
   return (
     <aside
@@ -77,7 +77,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
           {!isCollapsed && <span>{isEn ? 'Home' : 'Lar'}</span>}
         </button>
 
-        {/* 2. Install App / Instalar aplicativo */}
+        {/* 2. Admin Panel / Gestão de Alunos */}
+        <button
+          id="sidebar-link-admin"
+          onClick={() => setActiveModal('admin')}
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-800 bg-amber-50 hover:bg-amber-100 border border-amber-300/60 transition-all cursor-pointer shadow-xs"
+          title={isEn ? "Admin Panel" : "Painel Admin (Alunos)"}
+        >
+          <Shield className="w-5 h-5 shrink-0 text-amber-600" />
+          {!isCollapsed && <span className="text-amber-950">{isEn ? 'Admin Panel' : 'Painel Admin'}</span>}
+        </button>
+
+        {/* 3. Install App / Instalar aplicativo */}
         <button
           id="sidebar-link-install"
           onClick={() => setActiveModal('install')}
@@ -88,7 +99,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
           {!isCollapsed && <span>{isEn ? 'Install App' : 'Instalar aplicativo'}</span>}
         </button>
 
-        {/* 3. Search / Procurar */}
+        {/* 4. Search / Procurar */}
         <button
           id="sidebar-link-search"
           onClick={onSearchClick}
@@ -99,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
           {!isCollapsed && <span>{isEn ? 'Search' : 'Procurar'}</span>}
         </button>
 
-        {/* 4. Log Out / Sair (or Sign In / Entrar) */}
+        {/* 5. Log Out / Sair (or Sign In / Entrar) */}
         {user ? (
           <button
             id="sidebar-link-logout"

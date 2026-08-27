@@ -198,7 +198,7 @@ export const NonClientModal: React.FC = () => {
             <div className="pt-2 space-y-2">
               <a
                 id="btn-register-checkout"
-                href="https://pay.kiwify.com.br/kYdtxLl"
+                href={isEn ? "https://pay.kiwify.com/gdEZvLD" : "https://pay.kiwify.com.br/kYdtxLl"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-[#0f4c5c] hover:bg-teal-800 text-white font-black py-3 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all text-center"

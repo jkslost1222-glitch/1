@@ -1,9 +1,9 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Download, Globe, LogOut, LogIn, User, ShieldCheck, Sparkles, Smartphone, Settings } from 'lucide-react';
+import { Download, Globe, LogOut, LogIn, User, ShieldCheck, Sparkles, Smartphone, Settings, Shield } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { language, setLanguage, t, isEn, user, logout, setActiveModal, openNonClientModal } = useApp();
+  const { language, setLanguage, t, isEn, user, logout, setActiveModal, openNonClientModal, isAdmin } = useApp();
 
   return (
     <header className="sticky top-0 z-40 bg-[#0f4c5c] text-white shadow-lg border-b border-teal-800/40">
@@ -34,6 +34,17 @@ export const Navbar: React.FC = () => {
           {/* Quick Actions & Header Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3">
             
+            {/* Admin Management Button */}
+            <button
+              id="btn-admin-panel-header"
+              onClick={() => setActiveModal('admin')}
+              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md hover:scale-102 cursor-pointer"
+              title={isEn ? "Admin Dashboard (Manage Students)" : "Painel do Admin (Gerenciar Alunos)"}
+            >
+              <Shield className="w-4 h-4 text-slate-950" />
+              <span>{isEn ? 'Admin Panel' : 'Painel Admin'}</span>
+            </button>
+
             {/* Install App (PWA) Button */}
             <button
               id="btn-install-app-header"
