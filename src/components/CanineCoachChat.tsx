@@ -327,9 +327,9 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
         };
   };
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = async (textToSend?: string) => {
     const query = textToSend || input;
-    if (!query.trim()) return;
+    if (!query.trim() || isTyping) return;
 
     const userMsg: Message = {
       id: `user-${Date.now()}`,
@@ -341,6 +341,38 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
     setMessages(prev => [...prev, userMsg]);
     if (!textToSend) setInput('');
     setIsTyping(true);
+
+    try {
+      const response = await fetch('/api/coach/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          history: messages.map(m => ({ sender: m.sender, text: m.text })),
+          isEn: isEn
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.answer) {
+          const coachMsg: Message = {
+            id: `coach-${Date.now()}`,
+            sender: 'coach',
+            text: data.answer,
+            bullets: data.bullets && data.bullets.length > 0 ? data.bullets : undefined,
+            warning: data.warning || undefined,
+            recipe: data.recipe || undefined,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages(prev => [...prev, coachMsg]);
+          setIsTyping(false);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('API chat offline, using rich veterinary knowledge engine:', err);
+    }
 
     setTimeout(() => {
       const replyData = generateIntelligentAnswer(query);
@@ -355,7 +387,7 @@ export const CanineCoachChat: React.FC<CanineCoachChatProps> = ({ onClose }) => 
       };
       setMessages(prev => [...prev, coachMsg]);
       setIsTyping(false);
-    }, 700);
+    }, 450);
   };
 
   return (
