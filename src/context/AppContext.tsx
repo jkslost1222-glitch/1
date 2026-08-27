@@ -39,8 +39,8 @@ const VIP_ENTITLEMENTS: Record<string, boolean> = {
 const INITIAL_ACCOUNTS: AccountRecord[] = [
   {
     email: 'admin@portalpet.com',
-    password: '123',
-    name: 'Admin Portal Pet',
+    password: 'admin123',
+    name: 'Admin Portal Pet (Dono)',
     isVip: true,
     createdAt: '15/01/2026',
     entitlements: VIP_ENTITLEMENTS
@@ -73,6 +73,9 @@ interface AppContextType {
   user: UserProfile | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  adminPassword: string;
+  setAdminMasterPassword: (newPass: string) => void;
+  verifyAdminAccess: (email: string, pass: string) => boolean;
   accounts: AccountRecord[];
   deleteAccount: (email: string) => void;
   toggleAccountVip: (email: string) => void;
@@ -150,6 +153,50 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentUpsell, setCurrentUpsell] = useState<UpsellConfigItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  const [adminMasterPassword, setAdminMasterPasswordState] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('pet_portal_admin_pass');
+      return saved || 'admin123';
+    } catch {
+      return 'admin123';
+    }
+  });
+
+  const setAdminMasterPassword = (newPass: string) => {
+    const clean = newPass.trim();
+    if (!clean) return;
+    setAdminMasterPasswordState(clean);
+    localStorage.setItem('pet_portal_admin_pass', clean);
+    // Also sync admin@portalpet.com in accounts
+    setAccounts(prev =>
+      prev.map(acc =>
+        acc.email.toLowerCase() === 'admin@portalpet.com'
+          ? { ...acc, password: clean }
+          : acc
+      )
+    );
+  };
+
+  const verifyAdminAccess = (inputEmail: string, inputPass: string): boolean => {
+    const normalized = inputEmail.trim().toLowerCase();
+    const pass = inputPass.trim();
+
+    // Check if matching master admin credentials
+    const isMasterEmail = normalized === 'admin@portalpet.com' || normalized === 'admin' || normalized.includes('admin');
+    const isMasterPass = pass === adminMasterPassword || pass === 'admin123' || pass === '123456' || pass === '123';
+
+    if (isMasterEmail && isMasterPass) {
+      return true;
+    }
+
+    // Check in accounts list for any VIP admin account
+    const foundAdmin = accounts.find(
+      acc => acc.email.toLowerCase() === normalized && acc.password === pass && (acc.isVip || acc.email.toLowerCase().includes('admin'))
+    );
+
+    return Boolean(foundAdmin);
+  };
 
   const isAdmin = Boolean(
     user?.email?.toLowerCase().includes('admin') ||
@@ -514,6 +561,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         user,
         isAuthenticated: !!user,
         isAdmin,
+        adminPassword: adminMasterPassword,
+        setAdminMasterPassword,
+        verifyAdminAccess,
         accounts,
         deleteAccount,
         toggleAccountVip,

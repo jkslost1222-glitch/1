@@ -4,20 +4,15 @@ import { Lock, Mail, Key, Eye, EyeOff, LogIn, UserPlus, ExternalLink, CheckCircl
 import { AdminModal } from './AdminModal';
 
 export const LoginPage: React.FC = () => {
-  const { loginWithCredentials, registerAccount, isEn, setLanguage, activeModal, setActiveModal } = useApp();
+  const { loginWithCredentials, isEn, setLanguage, activeModal, setActiveModal } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [regName, setRegName] = useState('');
-  const [regIsVip, setRegIsVip] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
-    setSuccessMessage('');
 
     if (!email.trim()) {
       setErrorMessage(isEn ? 'Please enter your email address.' : 'Por favor, digite seu e-mail de acesso.');
@@ -29,22 +24,13 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
-    if (isRegistering) {
-      const success = registerAccount(email.trim(), password.trim(), regName.trim() || undefined, regIsVip);
-      if (success) {
-        setSuccessMessage(isEn ? 'Account successfully registered and logged in!' : 'Conta cadastrada com sucesso e acesso liberado!');
-      } else {
-        setErrorMessage(isEn ? 'An account with this email already exists.' : 'Já existe uma conta cadastrada com este e-mail.');
-      }
-    } else {
-      const success = loginWithCredentials(email.trim(), password.trim());
-      if (!success) {
-        setErrorMessage(
-          isEn
-            ? 'Incorrect email or password. Please check your credentials or create an access account.'
-            : 'E-mail ou senha incorretos. Verifique suas credenciais de acesso ou cadastre seu login.'
-        );
-      }
+    const success = loginWithCredentials(email.trim(), password.trim());
+    if (!success) {
+      setErrorMessage(
+        isEn
+          ? 'Incorrect email or password. Please check your credentials.'
+          : 'E-mail ou senha incorretos. Verifique suas credenciais de acesso.'
+      );
     }
   };
 
@@ -113,18 +99,14 @@ export const LoginPage: React.FC = () => {
               <span>{isEn ? 'EXCLUSIVE CLIENT ACCESS' : 'ACESSO EXCLUSIVO PARA ALUNOS'}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              {isRegistering
-                ? (isEn ? 'Register New Access' : 'Cadastrar Novo Acesso')
-                : (isEn ? 'Student Sign In' : 'Login de Alunos')}
+              {isEn ? 'Student Sign In' : 'Login de Alunos'}
             </h2>
             <p className="text-xs text-teal-200/80 font-medium">
-              {isRegistering
-                ? (isEn ? 'Create access credentials for you or your customer.' : 'Crie as credenciais de acesso para você ou seu cliente.')
-                : (isEn ? 'Enter your authorized email and password to access the portal.' : 'Digite seu e-mail e senha cadastrados para acessar a área de membros.')}
+              {isEn ? 'Enter your authorized email and password to access the portal.' : 'Digite seu e-mail e senha de acesso para entrar na área de membros.'}
             </p>
           </div>
 
-          {/* Error & Success Messages */}
+          {/* Error Message */}
           {errorMessage && (
             <div className="mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-200 text-xs font-semibold flex items-center gap-2 animate-shake">
               <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
@@ -132,31 +114,8 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {successMessage && (
-            <div className="mb-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-2 animate-fade-in">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>{successMessage}</span>
-            </div>
-          )}
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
-            {isRegistering && (
-              <div>
-                <label className="block text-xs font-bold text-teal-200 mb-1">
-                  {isEn ? 'Full Name / Dog Name:' : 'Nome do Tutor / Nome do Pet:'}
-                </label>
-                <input
-                  type="text"
-                  value={regName}
-                  onChange={e => setRegName(e.target.value)}
-                  placeholder={isEn ? 'e.g. John & Max' : 'Ex: Maria & Rex'}
-                  className="w-full bg-[#021311] border border-teal-700/60 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-teal-600 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 font-medium"
-                />
-              </div>
-            )}
-
             <div>
               <label className="block text-xs font-bold text-teal-200 mb-1">
                 {isEn ? 'Access Email:' : 'E-mail de Acesso:'}
@@ -205,38 +164,6 @@ export const LoginPage: React.FC = () => {
               </div>
             </div>
 
-            {isRegistering && (
-              <div className="p-3 bg-teal-950/60 border border-teal-700/40 rounded-xl space-y-2">
-                <label className="text-xs font-bold text-teal-200 block">
-                  {isEn ? 'Access Level:' : 'Nível de Acesso para esta Conta:'}
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRegIsVip(false)}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                      !regIsVip
-                        ? 'bg-teal-700 text-white ring-1 ring-white/40'
-                        : 'bg-black/30 text-teal-300 hover:bg-black/50'
-                    }`}
-                  >
-                    {isEn ? 'Basic (Adeus Otite)' : 'Aluno Base (Otite)'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRegIsVip(true)}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                      regIsVip
-                        ? 'bg-amber-400 text-slate-950 ring-1 ring-white/40'
-                        : 'bg-black/30 text-teal-300 hover:bg-black/50'
-                    }`}
-                  >
-                    👑 VIP (Tudo Liberado)
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Submit Button */}
             <button
               id="btn-submit-login"
@@ -245,32 +172,10 @@ export const LoginPage: React.FC = () => {
             >
               <LogIn className="w-4 h-4" />
               <span>
-                {isRegistering
-                  ? (isEn ? 'CONFIRM & ENTER NOW' : 'CADASTRAR E ENTRAR AGORA')
-                  : (isEn ? 'SIGN IN TO MEMBERS AREA' : 'ENTRAR NA ÁREA DE MEMBROS')}
+                {isEn ? 'SIGN IN TO MEMBERS AREA' : 'ENTRAR NA ÁREA DE MEMBROS'}
               </span>
             </button>
           </form>
-
-          {/* Toggle between Login and Register */}
-          <div className="mt-4 pt-4 border-t border-teal-800/40 text-center">
-            <button
-              type="button"
-              onClick={() => {
-                setIsRegistering(prev => !prev);
-                setErrorMessage('');
-                setSuccessMessage('');
-              }}
-              className="text-xs font-bold text-teal-300 hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1.5"
-            >
-              <UserPlus className="w-3.5 h-3.5 text-amber-400" />
-              <span>
-                {isRegistering
-                  ? (isEn ? 'Already have an account? Sign In here' : 'Já tem cadastro? Entrar com e-mail e senha')
-                  : (isEn ? 'Create new login for a customer / myself' : 'Cadastrar novo login para cliente ou para mim')}
-              </span>
-            </button>
-          </div>
 
           {/* Not a client yet? Kiwify Buy Link */}
           <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 border border-emerald-500/30 text-center space-y-1.5">
