@@ -23,7 +23,7 @@ export const AdminModal: React.FC = () => {
 
   // Admin authentication gate state
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [adminInputEmail, setAdminInputEmail] = useState('admin@portalpet.com');
+  const [adminInputEmail, setAdminInputEmail] = useState('');
   const [adminInputPass, setAdminInputPass] = useState('');
   const [showAdminPass, setShowAdminPass] = useState(false);
   const [adminGateError, setAdminGateError] = useState('');
@@ -73,8 +73,8 @@ export const AdminModal: React.FC = () => {
     } else {
       setAdminGateError(
         isEn
-          ? 'Invalid admin credentials. Default password is "admin123" or "123456".'
-          : 'Login ou senha de administrador incorretos. A senha padrão é "admin123" ou "123456".'
+          ? 'Invalid admin email or password. Access denied.'
+          : 'E-mail ou senha de administrador incorretos. Acesso não autorizado.'
       );
     }
   };
@@ -295,22 +295,10 @@ export const AdminModal: React.FC = () => {
                 </div>
               </div>
 
-              {/* Master Credential Reminder Box */}
-              <div className="p-3 bg-amber-400/10 border border-amber-400/30 rounded-xl text-left space-y-1">
-                <div className="text-[11px] font-black text-amber-300 flex items-center gap-1.5">
-                  <Key className="w-3 h-3 text-amber-400" />
-                  <span>{isEn ? 'Master Admin Credentials:' : 'Credenciais Padrão do Dono:'}</span>
-                </div>
-                <div className="text-[11px] font-mono text-amber-100/90 flex flex-col gap-0.5">
-                  <div>👤 <strong>Login:</strong> <span className="text-white">admin@portalpet.com</span></div>
-                  <div>🔑 <strong>Senha:</strong> <span className="text-white">admin123</span> <span className="text-[10px] text-amber-300">(ou 123456)</span></div>
-                </div>
-              </div>
-
               <button
                 id="btn-admin-gate-submit"
                 type="submit"
-                className="w-full bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-sm py-3 px-4 rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black text-sm py-3 px-4 rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 mt-2"
               >
                 <Unlock className="w-4 h-4" />
                 <span>{isEn ? 'UNLOCK ADMIN DASHBOARD' : 'ACESSAR PAINEL ADMINISTRATIVO'}</span>
