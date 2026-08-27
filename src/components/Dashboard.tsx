@@ -202,6 +202,47 @@ export const Dashboard: React.FC = () => {
         <CategoryFilter />
       </div>
 
+      {/* Featured Primary Product Spotlight Banner: Cuidados com os Ouvidos (Adeus Otite) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-teal-700 to-[#0f4c5c] rounded-3xl p-5 sm:p-7 text-white shadow-xl border-2 border-emerald-400/40">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shrink-0 shadow-inner border border-white/30">
+              👂
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="bg-yellow-400 text-slate-950 font-black text-[10px] sm:text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                  ★ PRODUTO PRINCIPAL OFICIAL
+                </span>
+                <span className="text-teal-200 text-xs font-bold hidden sm:inline">
+                  Calculadora Personalizada por Peso
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Cuidados com os Ouvidos Canino (Adeus Otite)
+              </h2>
+              <p className="text-xs sm:text-sm text-teal-100 max-w-xl font-medium leading-relaxed">
+                Receita do Bifinho do Lyndor, Spray Calmante Auricular de Camomila, Modo de Preparo e Técnica de Higiene sem Dor em 4 etapas.
+              </p>
+            </div>
+          </div>
+
+          <button
+            id="btn-open-otite-featured"
+            onClick={() => {
+              setActiveModuleId('antiotite');
+              setTimeout(() => {
+                document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
+            className="w-full md:w-auto bg-white hover:bg-teal-50 text-teal-950 font-black px-6 py-3.5 rounded-2xl text-xs sm:text-sm shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
+          >
+            <span>Acessar Protocolo & Calculadora</span>
+            <ArrowRight className="w-4 h-4 text-teal-700" />
+          </button>
+        </div>
+      </div>
+
       {/* Deliverables Cards Grid */}
       <div>
         <div className="flex items-center justify-between mb-4">

@@ -56,7 +56,6 @@ const AppContent: React.FC = () => {
       {/* Global Modals */}
       <UpsellModal />
       <InstallModal />
-      <PurchaseSimulatorModal />
       <NonClientModal />
 
       {/* Footer */}

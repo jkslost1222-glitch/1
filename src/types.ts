@@ -114,6 +114,7 @@ export interface UpsellConfigItem {
   icon: string;
   accentColor: string;
   checkoutUrl: string;
+  salesPageUrl?: string;
   guaranteeDays: number;
   price?: string;
   originalPrice?: string;

@@ -32,9 +32,10 @@ export const UpsellModal: React.FC = () => {
   const cfg = upsellConfig[upsellTargetModuleId];
   const title = cfg?.title || targetItem?.title || 'Protocolo Especial';
   const headline = cfg?.tagline || cfg?.subtitle || 'Desbloqueie o Acesso Imediato ao Protocolo Completo';
-  const regularPrice = cfg?.originalPrice || 'R$ 67,00';
-  const offerPrice = cfg?.price || 'R$ 19,90';
-  const checkoutUrl = cfg?.checkoutUrl || 'https://pay.kiwify.com.br/sample';
+  const regularPrice = cfg?.originalPrice || 'R$ 97,00';
+  const offerPrice = cfg?.price || 'R$ 27,90';
+  const checkoutUrl = cfg?.checkoutUrl || 'https://pay.kiwify.com.br/kYdtxLl';
+  const salesPageUrl = cfg?.salesPageUrl || 'https://kiwify.app/t3u1lYm';
   const benefits = cfg?.fullBenefits || [
     'Acesso vitalício ao guia digital e videoaulas',
     'Calculadora automática de dosagem por peso',
@@ -127,30 +128,31 @@ export const UpsellModal: React.FC = () => {
             <span>Garantia incondicional de 7 dias com devolução integral.</span>
           </div>
 
-          {/* Buttons: 1-Click Instant Unlock (Simulator) & Official Checkout */}
+          {/* Buttons: Official Checkout CTA & Presentation Page */}
           <div className="space-y-2.5 pt-2">
-            <button
-              id="btn-simulate-instant-unlock"
-              onClick={handleSimulateUnlock}
-              disabled={simulating}
-              className="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black py-3 px-4 rounded-2xl text-sm shadow-lg shadow-emerald-700/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] cursor-pointer"
-            >
-              <Zap className="w-4 h-4 text-yellow-300" />
-              <span>
-                {simulating ? 'Desbloqueando...' : 'Liberar Agora (Simulador Instantâneo)'}
-              </span>
-            </button>
-
             <a
               id="link-official-checkout"
               href={checkoutUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-1.5 transition-colors text-center"
+              className="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black py-3.5 px-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/20 transition-all hover:scale-[1.01] text-center cursor-pointer"
             >
-              <span>Ir para Checkout Oficial (Kiwify)</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Desbloquear no Checkout Kiwify por {offerPrice}</span>
+              <ExternalLink className="w-4 h-4" />
             </a>
+
+            {salesPageUrl && (
+              <a
+                id="link-official-sales-page"
+                href={salesPageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors text-center"
+              >
+                <span>Conhecer todos os detalhes na Página Oficial</span>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+              </a>
+            )}
           </div>
 
         </div>

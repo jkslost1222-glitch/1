@@ -1,9 +1,9 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Download, Globe, LogOut, ShieldCheck, Sparkles, Smartphone, Settings } from 'lucide-react';
+import { Download, Globe, LogOut, LogIn, User, ShieldCheck, Sparkles, Smartphone, Settings } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { language, setLanguage, t, isEn, user, logout, setActiveModal } = useApp();
+  const { language, setLanguage, t, isEn, user, logout, setActiveModal, openNonClientModal } = useApp();
 
   return (
     <header className="sticky top-0 z-40 bg-[#0f4c5c] text-white shadow-lg border-b border-teal-800/40">
@@ -72,28 +72,27 @@ export const Navbar: React.FC = () => {
               </button>
             </div>
 
-            {/* Admin / Access Simulator Button */}
-            <button
-              id="btn-open-simulator-header"
-              onClick={() => setActiveModal('simulator')}
-              className="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/30 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
-              title="Simulador de Acesso & Checkout"
-            >
-              <Settings className="w-3.5 h-3.5 text-amber-300" />
-              <span className="hidden lg:inline">{t.dashboard.adminSimulator}</span>
-            </button>
-
-            {/* User Profile & Logout */}
-            {user && (
+            {/* User Profile / Login & Cadastro Button */}
+            {user ? (
               <div className="flex items-center gap-2 pl-1 sm:pl-2 border-l border-teal-700/50">
-                <div className="hidden md:flex flex-col text-right">
-                  <span className="text-xs font-bold text-white truncate max-w-[120px]">
-                    {user.name}
-                  </span>
-                  <span className="text-[10px] text-teal-300 font-semibold">
-                    {t.nav.unlimitedAccess}
-                  </span>
-                </div>
+                <button
+                  id="btn-user-profile"
+                  onClick={openNonClientModal}
+                  className="flex items-center gap-1.5 bg-teal-900/60 hover:bg-teal-800/80 px-2.5 py-1.5 rounded-xl border border-teal-700/50 transition-all cursor-pointer text-left"
+                  title="Clique para gerenciar seu e-mail de acesso"
+                >
+                  <div className="w-6 h-6 rounded-full bg-teal-500/30 flex items-center justify-center text-xs text-teal-200">
+                    <User className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="hidden md:flex flex-col">
+                    <span className="text-xs font-bold text-white truncate max-w-[110px]">
+                      {user.email || user.name}
+                    </span>
+                    <span className="text-[10px] text-teal-300 font-semibold">
+                      {t.nav.unlimitedAccess}
+                    </span>
+                  </div>
+                </button>
                 <button
                   id="btn-logout"
                   onClick={logout}
@@ -103,6 +102,15 @@ export const Navbar: React.FC = () => {
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
+            ) : (
+              <button
+                id="btn-open-login"
+                onClick={openNonClientModal}
+                className="flex items-center gap-1.5 bg-[#00c5b3] hover:bg-teal-300 text-teal-950 font-black px-3 py-2 rounded-xl text-xs sm:text-sm shadow-md transition-all cursor-pointer"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Entrar / Cadastrar</span>
+              </button>
             )}
 
           </div>

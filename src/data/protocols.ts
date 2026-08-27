@@ -2,43 +2,19 @@ import { DeliverableItem, RecipeItem, UpsellConfigItem } from '../types';
 
 export const ptDeliverables: DeliverableItem[] = [
   {
-    id: 'cao-blindado',
-    title: 'Cão Blindado',
-    subtitle: 'Combo da Longevidade Canina',
-    type: 'cao-blindado',
-    isLocked: false,
-    category: 'Suplementos Naturais & Longevidade',
-    badge: 'PREMIUM',
-    tagline: '5 Fórmulas Naturais para Proteger a Saúde do seu Cão de Dentro para Fora',
-    description: '5 Fórmulas Funcionais Caseiras com Leitor Digital Interativo, Calculadora Proporcional de Gramas por Peso do Pet e Download de PDFs.',
-    icon: '🥣',
-    color: '#0f4c5c',
-    content: {
-      overview: 'O Cão Blindado é o combo definitivo de nutrição preventiva e longevidade canina. Desenvolvido para proteger a imunidade celular, articulações, digestão, estresse oxidativo e controle saudável de peso.',
-      materials: [
-        { name: 'Ebook_Cao_Bem_Nutrido_Receita1.pdf', size: '2.8 MB', type: 'PDF' },
-        { name: 'Ebook_Articulacoes_Flexiveis_Receita2.pdf', size: '3.1 MB', type: 'PDF' },
-        { name: 'Ebook_Calmante_Natural_Receita3.pdf', size: '2.5 MB', type: 'PDF' },
-        { name: 'Ebook_Controle_de_Odores_Receita4.pdf', size: '2.4 MB', type: 'PDF' },
-        { name: 'Ebook_Controle_de_Peso_Receita5.pdf', size: '2.9 MB', type: 'PDF' },
-        { name: 'Tabela_Completa_Dosagens_Por_Quilo.pdf', size: '1.2 MB', type: 'PDF' }
-      ]
-    }
-  },
-  {
     id: 'antiotite',
-    title: 'Protocolo Adeus Otite',
-    subtitle: 'Higiene & Prevenção Auditiva',
+    title: 'Cuidados com os Ouvidos Canino',
+    subtitle: 'Protocolo Oficial Adeus Otite',
     type: 'antiotite',
     isLocked: false,
     category: 'Saúde & Prevenção Auditiva',
-    badge: 'CONTEÚDO OFICIAL',
+    badge: 'PRODUTO PRINCIPAL',
     tagline: 'Elimine a Otite Canina, Mau Cheiro, Coceira e Inflamação no Canal Auditivo Sem Dor',
-    description: 'Método passo a passo para higienizar o conduto auditivo em formato de "L", desinflamar com própolis e calêndula e acabar com as recidivas.',
+    description: 'Calculadora personalizada com nome, sexo, idade e peso do seu cão. Inclui Receita do Bifinho Protetor, Spray Calmante Auricular, Modo de Preparo e Dicas de Prevenção.',
     icon: '👂',
     color: '#00c5b3',
     content: {
-      overview: 'O conduto auditivo dos cães possui formato em "L" anatômico, o que retém umidade, cera e prolifera bactérias e leveduras (Malassezia). Neste protocolo, aprenda a limpar com segurança sem cotonete profundo e a preparar gotas naturais calmantes.',
+      overview: 'O conduto auditivo dos cães possui formato em "L" anatômico, o que retém umidade, cera e prolifera bactérias e leveduras (Malassezia). Neste protocolo personalizado por peso, tenha a receita do Bifinho protetor, o Spray Auricular natural de Camomila, o Guia de Higiene indolor e as 4 videoaulas completas.',
       lessons: [
         {
           id: 'otite-1',
@@ -68,7 +44,31 @@ export const ptDeliverables: DeliverableItem[] = [
       materials: [
         { name: 'Guia_Oficial_Adeus_Otite_Canina.pdf', size: '3.8 MB', type: 'PDF' },
         { name: 'Checklist_Inspecao_Semanal_Ouvidos.pdf', size: '1.1 MB', type: 'PDF' },
-        { name: 'Receita_Gotas_Naturais_Calmantes.pdf', size: '1.4 MB', type: 'PDF' }
+        { name: 'Receita_Bifinho_e_Spray_Auricular.pdf', size: '1.4 MB', type: 'PDF' }
+      ]
+    }
+  },
+  {
+    id: 'cao-blindado',
+    title: 'Cão Blindado',
+    subtitle: 'Combo da Longevidade Canina',
+    type: 'cao-blindado',
+    isLocked: false,
+    category: 'Suplementos Naturais & Longevidade',
+    badge: 'PREMIUM',
+    tagline: '5 Fórmulas Naturais para Proteger a Saúde do seu Cão de Dentro para Fora',
+    description: '5 Fórmulas Funcionais Caseiras com Leitor Digital Interativo, Calculadora Proporcional de Gramas por Peso do Pet e Download de PDFs.',
+    icon: '🥣',
+    color: '#0f4c5c',
+    content: {
+      overview: 'O Cão Blindado é o combo definitivo de nutrição preventiva e longevidade canina. Desenvolvido para proteger a imunidade celular, articulações, digestão, estresse oxidativo e controle saudável de peso.',
+      materials: [
+        { name: 'Ebook_Cao_Bem_Nutrido_Receita1.pdf', size: '2.8 MB', type: 'PDF' },
+        { name: 'Ebook_Articulacoes_Flexiveis_Receita2.pdf', size: '3.1 MB', type: 'PDF' },
+        { name: 'Ebook_Calmante_Natural_Receita3.pdf', size: '2.5 MB', type: 'PDF' },
+        { name: 'Ebook_Controle_de_Odores_Receita4.pdf', size: '2.4 MB', type: 'PDF' },
+        { name: 'Ebook_Controle_de_Peso_Receita5.pdf', size: '2.9 MB', type: 'PDF' },
+        { name: 'Tabela_Completa_Dosagens_Por_Quilo.pdf', size: '1.2 MB', type: 'PDF' }
       ]
     }
   },
@@ -642,6 +642,30 @@ export const recipesData: RecipeItem[] = [
 ];
 
 export const upsellConfig: Record<string, UpsellConfigItem> = {
+  antiOtite: {
+    key: 'antiOtite',
+    id: 'antiotite',
+    title: 'Protocolo Adeus Otite',
+    subtitle: 'Higiene & Prevenção Auditiva Sem Dor',
+    category: 'Saúde & Prevenção Auditiva',
+    tagline: 'Elimine a Otite Canina, Mau Cheiro, Coceira e Inflamação no Canal Auditivo Sem Dor',
+    badgeText: 'PROTOCOLO OFICIAL',
+    shortDescription: 'Método passo a passo para higienizar o conduto auditivo em "L", desinflamar com própolis e calêndula e acabar com as recidivas.',
+    fullBenefits: [
+      '4 Videoaulas práticas de anatomia e técnica de limpeza sem dor',
+      'Fórmula calmante natural de Gotas de Própolis Verde & Calêndula',
+      'Protocolo de prevenção pós-banho para cães de orelhas caídas',
+      'Checklist de inspeção semanal e guia em PDF de alta resolução',
+      'Garantia incondicional de 7 dias com reembolso total'
+    ],
+    icon: '👂',
+    accentColor: '#00c5b3',
+    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
+    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    guaranteeDays: 7,
+    price: 'R$ 27,90',
+    originalPrice: 'R$ 97,00'
+  },
   caoBlindado: {
     key: 'caoBlindado',
     id: 'cao-blindado',
@@ -662,9 +686,10 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     ],
     icon: '🥣',
     accentColor: '#0f4c5c',
-    checkoutUrl: 'https://petnatural.vercel.app/',
+    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
+    salesPageUrl: 'https://kiwify.app/t3u1lYm',
     guaranteeDays: 7,
-    price: 'R$ 47,00',
+    price: 'R$ 27,90',
     originalPrice: 'R$ 147,00'
   },
   antiCoceira: {
@@ -685,9 +710,10 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     ],
     icon: '🌸',
     accentColor: '#9333ea',
-    checkoutUrl: 'https://adeusotite.directpages.com.br/',
+    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
+    salesPageUrl: 'https://kiwify.app/t3u1lYm',
     guaranteeDays: 7,
-    price: 'R$ 37,00',
+    price: 'R$ 27,90',
     originalPrice: 'R$ 97,00'
   },
   mobilidade: {
@@ -709,9 +735,10 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     ],
     icon: '🦴',
     accentColor: '#ea580c',
-    checkoutUrl: 'https://caosaudavel.vercel.app/',
+    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
+    salesPageUrl: 'https://kiwify.app/t3u1lYm',
     guaranteeDays: 7,
-    price: 'R$ 37,00',
+    price: 'R$ 27,90',
     originalPrice: 'R$ 97,00'
   }
 };

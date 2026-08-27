@@ -91,6 +91,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
+  // Automatic Kiwify purchase return parameter detector
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const email = params.get('email') || params.get('customer_email');
+      const status = params.get('status');
+      const product = params.get('product') || params.get('unlocked');
+
+      if (email || status === 'success' || status === 'approved') {
+        const buyerEmail = email || 'cliente@kiwify.com';
+        login(buyerEmail);
+        
+        if (product) {
+          unlockModule(product);
+        } else {
+          unlockAll();
+        }
+
+        try {
+          confetti({
+            particleCount: 120,
+            spread: 100,
+            origin: { y: 0.4 }
+          });
+        } catch (e) {
+          // ignore
+        }
+      }
+    } catch (e) {
+      // URL parsing fallback
+    }
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('pet_portal_lang', language);
   }, [language]);
