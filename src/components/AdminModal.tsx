@@ -18,11 +18,13 @@ export const AdminModal: React.FC = () => {
     setAdminMasterPassword,
     verifyAdminAccess,
     setActiveModal, 
+    isAdmin,
+    user,
     isEn 
   } = useApp();
 
-  // Admin authentication gate state
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  // Admin authentication gate state (auto-unlocked if user is already logged in as Admin)
+  const [isUnlocked, setIsUnlocked] = useState(() => Boolean(isAdmin));
   const [adminInputEmail, setAdminInputEmail] = useState('');
   const [adminInputPass, setAdminInputPass] = useState('');
   const [showAdminPass, setShowAdminPass] = useState(false);

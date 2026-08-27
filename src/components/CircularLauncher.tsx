@@ -15,6 +15,13 @@ export const CircularLauncher: React.FC<CircularLauncherProps> = ({ onOpenSuppor
   const isMobilityLocked = !hasEntitlement('mobilidade');
 
   const handleCircleClick = (moduleId: string, isLocked: boolean) => {
+    if (moduleId === 'coceira-xixi') {
+      setActiveModuleId('coceira-xixi');
+      setTimeout(() => {
+        document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
     if (isLocked) {
       openUpsellModal(moduleId);
     } else {

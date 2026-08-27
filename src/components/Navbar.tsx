@@ -20,10 +20,22 @@ export const Navbar: React.FC = () => {
                 <span className="text-xl sm:text-2xl font-black tracking-tight text-white font-sans drop-shadow-sm">
                   PORTAL<span className="text-teal-300 ml-1">PET</span>
                 </span>
-                <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider bg-teal-500/20 text-teal-200 px-2 py-0.5 rounded-full border border-teal-400/30">
-                  <ShieldCheck className="w-3 h-3 text-teal-300" />
-                  {t.nav.vipMember}
-                </span>
+                {(user?.isVip || isAdmin) ? (
+                  <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full border border-amber-300 shadow-xs">
+                    <Sparkles className="w-3 h-3 text-slate-950" />
+                    {t.nav.vipMember}
+                  </span>
+                ) : user ? (
+                  <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider bg-teal-500/20 text-teal-200 px-2 py-0.5 rounded-full border border-teal-400/30">
+                    <ShieldCheck className="w-3 h-3 text-teal-300" />
+                    {isEn ? 'OFFICIAL STUDENT' : 'ALUNO OFICIAL'}
+                  </span>
+                ) : (
+                  <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-wider bg-teal-500/20 text-teal-200 px-2 py-0.5 rounded-full border border-teal-400/30">
+                    <ShieldCheck className="w-3 h-3 text-teal-300" />
+                    {isEn ? 'OFFICIAL' : 'MÉTODO OFICIAL'}
+                  </span>
+                )}
               </div>
               <p className="text-[11px] sm:text-xs text-teal-100/80 hidden sm:block font-medium">
                 {t.nav.membersArea}
@@ -34,16 +46,18 @@ export const Navbar: React.FC = () => {
           {/* Quick Actions & Header Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3">
             
-            {/* Admin Management Button */}
-            <button
-              id="btn-admin-panel-header"
-              onClick={() => setActiveModal('admin')}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md hover:scale-102 cursor-pointer"
-              title={isEn ? "Admin Dashboard (Manage Students)" : "Painel do Admin (Gerenciar Alunos)"}
-            >
-              <Shield className="w-4 h-4 text-slate-950" />
-              <span>{isEn ? 'Admin Panel' : 'Painel Admin'}</span>
-            </button>
+            {/* Admin Management Button - ONLY for Administrator Accounts */}
+            {isAdmin && (
+              <button
+                id="btn-admin-panel-header"
+                onClick={() => setActiveModal('admin')}
+                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md hover:scale-102 cursor-pointer"
+                title={isEn ? "Admin Dashboard (Manage Students)" : "Painel do Admin (Gerenciar Alunos)"}
+              >
+                <Shield className="w-4 h-4 text-slate-950" />
+                <span>{isEn ? 'Admin Panel' : 'Painel Admin'}</span>
+              </button>
+            )}
 
             {/* Install App (PWA) Button */}
             <button

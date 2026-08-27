@@ -12,6 +12,10 @@ export const DeliverableCard: React.FC<DeliverableCardProps> = ({ item, onOpen }
   const { t, isEn, openUpsellModal } = useApp();
 
   const handleCardClick = () => {
+    if (item.type === 'coceira-xixi') {
+      onOpen();
+      return;
+    }
     if (item.isLocked) {
       openUpsellModal(item.id);
     } else {

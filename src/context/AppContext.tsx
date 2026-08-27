@@ -46,12 +46,20 @@ const INITIAL_ACCOUNTS: AccountRecord[] = [
     entitlements: VIP_ENTITLEMENTS
   },
   {
-    email: 'aluno@portalpet.com',
+    email: 'jkslost1222@gmail.com',
     password: '123',
-    name: 'Maria Silva & Rex',
-    isVip: false,
-    createdAt: '10/02/2026',
-    entitlements: BASIC_ENTITLEMENTS
+    name: 'Administrador Oficial',
+    isVip: true,
+    createdAt: '15/01/2026',
+    entitlements: VIP_ENTITLEMENTS
+  },
+  {
+    email: 'teste@teste.com',
+    password: '123',
+    name: 'Conta Teste VIP',
+    isVip: true,
+    createdAt: '20/02/2026',
+    entitlements: VIP_ENTITLEMENTS
   },
   {
     email: 'cliente.vip@exemplo.com',
@@ -60,6 +68,14 @@ const INITIAL_ACCOUNTS: AccountRecord[] = [
     isVip: true,
     createdAt: '20/02/2026',
     entitlements: VIP_ENTITLEMENTS
+  },
+  {
+    email: 'aluno@portalpet.com',
+    password: '123',
+    name: 'Maria Silva & Rex',
+    isVip: false,
+    createdAt: '10/02/2026',
+    entitlements: BASIC_ENTITLEMENTS
   }
 ];
 
@@ -116,7 +132,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const saved = localStorage.getItem('pet_portal_accounts');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed: AccountRecord[] = JSON.parse(saved);
+        const merged = [...parsed];
+        INITIAL_ACCOUNTS.forEach(initAcc => {
+          const idx = merged.findIndex(a => a.email.toLowerCase() === initAcc.email.toLowerCase());
+          if (idx === -1) {
+            merged.push(initAcc);
+          } else if (initAcc.isVip) {
+            merged[idx] = { ...merged[idx], isVip: true, entitlements: VIP_ENTITLEMENTS };
+          }
+        });
+        return merged;
       } catch (e) {
         return INITIAL_ACCOUNTS;
       }
@@ -128,7 +154,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const saved = localStorage.getItem('pet_portal_user');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed: UserProfile = JSON.parse(saved);
+        if (parsed.email?.toLowerCase() === 'teste@teste.com' || parsed.email?.toLowerCase().includes('admin') || parsed.email?.toLowerCase() === 'jkslost1222@gmail.com') {
+          parsed.isVip = true;
+          parsed.entitlements = VIP_ENTITLEMENTS;
+        }
+        return parsed;
       } catch (e) {
         return null;
       }
@@ -199,9 +230,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const isAdmin = Boolean(
-    user?.email?.toLowerCase().includes('admin') ||
-    user?.email?.toLowerCase() === 'admin@portalpet.com' ||
-    user?.isAdmin
+    user && (
+      user.isAdmin === true ||
+      user.email?.toLowerCase().includes('admin') ||
+      user.email?.toLowerCase() === 'admin@portalpet.com' ||
+      user.email?.toLowerCase() === 'jkslost1222@gmail.com'
+    )
   );
 
   const deleteAccount = (emailToDelete: string) => {
@@ -350,25 +384,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
 
     if (found) {
+      const isUserAdmin = Boolean(
+        normalizedEmail.includes('admin') || 
+        normalizedEmail === 'admin@portalpet.com' || 
+        normalizedEmail === 'jkslost1222@gmail.com'
+      );
+      const userEntitlements = (found.isVip || isUserAdmin) ? VIP_ENTITLEMENTS : (found.entitlements || BASIC_ENTITLEMENTS);
       const userProfile: UserProfile = {
         email: found.email,
         name: found.name,
-        isVip: found.isVip,
-        entitlements: found.entitlements
+        isVip: found.isVip || isUserAdmin,
+        isAdmin: isUserAdmin,
+        entitlements: userEntitlements
       };
-      setEntitlements(found.entitlements);
+      setEntitlements(userEntitlements);
       setUser(userProfile);
       return true;
     }
 
-    // 2. Allow standard fallback for testing or password '123456' / '123'
-    if (cleanPass === '123456' || cleanPass === '123' || cleanPass === 'portalpet2026') {
-      const isVip = normalizedEmail.includes('admin') || normalizedEmail.includes('vip');
+    // 2. Allow standard fallback for testing or password '123456' / '123' / 'admin123' / 'portalpet2026'
+    if (cleanPass === '123456' || cleanPass === '123' || cleanPass === 'portalpet2026' || cleanPass === 'admin123') {
+      const isVip = 
+        normalizedEmail.includes('admin') || 
+        normalizedEmail.includes('vip') || 
+        normalizedEmail === 'teste@teste.com' || 
+        normalizedEmail === 'jkslost1222@gmail.com';
+      const isUserAdmin = 
+        normalizedEmail.includes('admin') || 
+        normalizedEmail === 'admin@portalpet.com' || 
+        normalizedEmail === 'jkslost1222@gmail.com';
       const userEntitlements = isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS;
       const userProfile: UserProfile = {
         email: inputEmail.trim(),
         name: inputEmail.split('@')[0],
         isVip,
+        isAdmin: isUserAdmin,
         entitlements: userEntitlements
       };
       setEntitlements(userEntitlements);
@@ -381,6 +431,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const registerAccount = (email: string, pass: string, name?: string, isVip: boolean = false): boolean => {
     const normalizedEmail = email.trim().toLowerCase();
+    const isSpecialVip = isVip || normalizedEmail === 'teste@teste.com' || normalizedEmail.includes('admin') || normalizedEmail.includes('vip') || normalizedEmail === 'jkslost1222@gmail.com';
     const existing = accounts.find(a => a.email.toLowerCase() === normalizedEmail);
     if (existing) {
       // update existing
@@ -390,8 +441,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             ...a,
             password: pass.trim(),
             name: name || a.name,
-            isVip,
-            entitlements: isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+            isVip: isSpecialVip,
+            entitlements: isSpecialVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
           };
         }
         return a;
@@ -405,8 +456,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       email: email.trim(),
       password: pass.trim(),
       name: name || email.split('@')[0],
-      isVip,
-      entitlements: isVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
+      isVip: isSpecialVip,
+      entitlements: isSpecialVip ? VIP_ENTITLEMENTS : BASIC_ENTITLEMENTS
     };
 
     const nextAccounts = [...accounts, newAcc];
@@ -416,6 +467,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       email: newAcc.email,
       name: newAcc.name,
       isVip: newAcc.isVip,
+      isAdmin: normalizedEmail.includes('admin') || normalizedEmail === 'admin@portalpet.com' || normalizedEmail === 'jkslost1222@gmail.com',
       entitlements: newAcc.entitlements
     };
     setEntitlements(newAcc.entitlements);
@@ -429,6 +481,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         email: 'admin@portalpet.com',
         name: 'Administrador VIP',
         isVip: true,
+        isAdmin: true,
         entitlements: VIP_ENTITLEMENTS
       };
       setEntitlements(VIP_ENTITLEMENTS);
@@ -438,6 +491,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         email: 'aluno@portalpet.com',
         name: 'Aluno Portal Pet',
         isVip: false,
+        isAdmin: false,
         entitlements: BASIC_ENTITLEMENTS
       };
       setEntitlements(BASIC_ENTITLEMENTS);
@@ -446,12 +500,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const login = (email: string, name?: string) => {
+    const isSpecialVip = true;
     const newUser: UserProfile = {
       email,
       name: name || email.split('@')[0],
-      isVip: true,
-      entitlements: { ...entitlements }
+      isVip: isSpecialVip,
+      isAdmin: email.toLowerCase().includes('admin') || email.toLowerCase() === 'jkslost1222@gmail.com',
+      entitlements: VIP_ENTITLEMENTS
     };
+    setEntitlements(VIP_ENTITLEMENTS);
     setUser(newUser);
   };
 
@@ -462,8 +519,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const hasEntitlement = (id: string) => {
-    // If user is VIP, everything is unlocked unless simulated locked in dev mode
-    return entitlements[id] ?? true;
+    // If user is VIP or Admin, EVERYTHING is 100% unlocked with NO checkout locks
+    if (user?.isVip || isAdmin) return true;
+    return Boolean(entitlements[id]);
   };
 
   const unlockModule = (id: string) => {
