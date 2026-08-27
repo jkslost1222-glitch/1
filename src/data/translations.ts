@@ -24,7 +24,7 @@ export const translations = {
       footerCopyright: '© 2026 Plataforma Oficial de Treinamento Canino • Todos os direitos reservados',
       installAppBtnTop: 'Instalar',
       installAppBtnBottom: 'Aplicativo',
-      demoLogin: 'Entrar como Membro VIP (Demonstração)',
+      demoLogin: 'Entrar como Membro VIP',
       appName: 'PORTAL PET',
       appSub: 'Saúde Canina & Protocolos Naturais'
     },
@@ -49,7 +49,7 @@ export const translations = {
       cardPremium: 'PREMIUM',
       cardBonus: 'BÔNUS',
       officialContent: 'Conteúdo Oficial',
-      adminSimulator: 'Simulador de Acesso (Teste)',
+      adminSimulator: 'Painel do Administrador Online',
       viewProtocol: 'ACESSAR PROTOCOLO',
       unlockProtocol: 'DESBLOQUEAR PROTOCOLO',
       badgeVerified: 'Método Verificado',
@@ -123,9 +123,9 @@ export const translations = {
       guaranteeText: 'Garantia blindada de 7 dias com ativação instantânea no seu e-mail.',
       btnDismiss: 'Talvez mais tarde',
       btnUnlockNow: 'DESBLOQUEAR ACESSO AGORA',
-      devTitle: '⚙️ Simulador de Pagamento & Ativação:',
-      devDesc: 'Ambiente de demonstração interativo.',
-      devBtnSimulate: 'Simular Pagamento e Liberar Conteúdo ✨',
+      devTitle: '⚡ Liberação Imediata:',
+      devDesc: 'Acesso instantâneo e vitalício ativado no seu e-mail.',
+      devBtnSimulate: 'Ativar Acesso Oficial ✨',
       devBtnGotIt: 'Entendi'
     },
     moduleDetail: {
@@ -193,7 +193,7 @@ export const translations = {
       footerCopyright: '© 2026 Official Canine Health & Training Platform • All rights reserved',
       installAppBtnTop: 'Install',
       installAppBtnBottom: 'App',
-      demoLogin: 'Sign in as VIP Member (Demo)',
+      demoLogin: 'Sign in as VIP Member',
       appName: 'PORTAL PET',
       appSub: 'Canine Health & Natural Protocols'
     },
@@ -218,7 +218,7 @@ export const translations = {
       cardPremium: 'PREMIUM',
       cardBonus: 'BONUS',
       officialContent: 'Official Content',
-      adminSimulator: 'Access Simulator (Dev Mode)',
+      adminSimulator: 'Online Admin Panel',
       viewProtocol: 'ACCESS PROTOCOL',
       unlockProtocol: 'UNLOCK PROTOCOL',
       badgeVerified: 'Verified Method',
@@ -292,9 +292,9 @@ export const translations = {
       guaranteeText: '100% 7-day money-back guarantee & instant activation to your email.',
       btnDismiss: 'Not now',
       btnUnlockNow: 'UNLOCK ACCESS NOW',
-      devTitle: '⚙️ Payment & Activation Simulator:',
-      devDesc: 'Interactive preview environment.',
-      devBtnSimulate: 'Simulate Purchase & Unlock Access ✨',
+      devTitle: '⚡ Instant Activation:',
+      devDesc: 'Instant and lifetime access activated in your email.',
+      devBtnSimulate: 'Activate Official Access ✨',
       devBtnGotIt: 'Got it'
     },
     moduleDetail: {
