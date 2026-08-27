@@ -95,21 +95,43 @@ export const ptDeliverables: DeliverableItem[] = [
   },
   {
     id: 'anticoceira',
-    title: 'Protocolo Anticoceira Canina',
-    subtitle: 'Alívio Imediato com Violeta Genciana 1%',
+    title: 'Protocolo Coceira Zero',
+    subtitle: 'Alívio Imediato & Dermatites Caninas',
     type: 'anticoceira',
-    isLocked: false,
+    isLocked: true,
     category: 'Dermatologia & Alívio Tópico',
     badge: 'PREMIUM',
     tagline: 'Elimine a Coceira Desesperadora, Dermatites e Fungos da Pele sem Corticoide',
-    description: 'Fórmula tópica antisséptica e antifúngica natural com dosagem segura de Violeta Genciana 1% para banho semanal e alívio rápido da coceira.',
+    description: 'Fórmula tópica antisséptica e antifúngica natural com banho de Violeta Genciana 1% e Spray Calmante de Camomila para alívio imediato.',
     icon: '🌸',
     color: '#9333ea',
     content: {
-      overview: 'Alívio comprovado para cães que lambem as patas compulsivamente, coçam a pele até ferir ou apresentam odor fúngico (Malassezia). Proporção exata e segura: 15 gotas de Violeta Genciana 1% em 500ml de shampoo neutro canino.',
+      overview: 'Alívio comprovado para cães que lambem as patas compulsivamente, coçam a pele até ferir ou apresentam odor fúngico (Malassezia). Proporção exata e segura: 15 gotas de Violeta Genciana 1% em 500ml de shampoo neutro canino + Spray Tópico de Camomila e Vinagre de Maçã.',
       materials: [
-        { name: 'Guia_Oficial_Protocolo_Anticoceira_Canina.pdf', size: '2.9 MB', type: 'PDF' },
-        { name: 'Tabela_Diluicao_Violeta_Genciana_Por_Porte.pdf', size: '1.3 MB', type: 'PDF' }
+        { name: 'Guia_Oficial_Protocolo_Coceira_Zero_Canina.pdf', size: '2.9 MB', type: 'PDF' },
+        { name: 'Tabela_Diluicao_Violeta_Genciana_Por_Porte.pdf', size: '1.3 MB', type: 'PDF' },
+        { name: 'Receita_Spray_Calmante_Topico_Patinhas.pdf', size: '1.5 MB', type: 'PDF' }
+      ]
+    }
+  },
+  {
+    id: 'xixi-coco',
+    title: 'Xixi e Cocô no Lugar Certo',
+    subtitle: 'Educador Sanitário & Sprays Naturais',
+    type: 'xixi-coco',
+    isLocked: true,
+    category: 'Comportamento & Adestramento',
+    badge: 'PREMIUM',
+    tagline: 'Elimine Xixi e Fezes no Tapete e Sofá com Spray Atrativo e Bloqueador Cítrico Natural',
+    description: 'Fórmula caseira do Spray Atrativo para o tapete higiênico, Spray Bloqueador Cítrico para áreas proibidas e técnica de 3 passos sem bronca.',
+    icon: '🚽',
+    color: '#0284c7',
+    content: {
+      overview: 'Método definitivo que combina a neurociência do olfato canino e reforço positivo. Utilize o Spray Atrativo de Capim-Limão no tapete higiênico e o Spray Bloqueador Cítrico nos cantos proibidos da casa.',
+      materials: [
+        { name: 'Guia_Oficial_Xixi_e_Coco_no_Lugar_Certo.pdf', size: '3.2 MB', type: 'PDF' },
+        { name: 'Formula_Spray_Atrativo_e_Bloqueador_Citrico.pdf', size: '1.8 MB', type: 'PDF' },
+        { name: 'Cronograma_Rotina_Higienica_Filhotes_e_Adultos.pdf', size: '1.4 MB', type: 'PDF' }
       ]
     }
   },
@@ -402,12 +424,23 @@ export const enDeliverables: DeliverableItem[] = ptDeliverables.map(item => {
   if (item.id === 'anticoceira') {
     return {
       ...item,
-      title: 'Canine Anti-Itch Protocol',
-      subtitle: 'Instant Relief with Gentian Violet 1%',
+      title: 'Zero-Itch Protocol',
+      subtitle: 'Instant Relief & Canine Dermatology',
       category: 'Dermatology & Topical Relief',
       badge: 'PREMIUM',
-      tagline: 'Eliminate Desperate Scratching, Yeast Infections, and Dermatitis Without Cortisone',
-      description: 'Antiseptic topical formula with safe Gentian Violet 1% dilution for weekly baths and fast itch relief.'
+      tagline: 'Eliminate Desperate Scratching, Yeast Infections, and Hotspots Without Harsh Drugs',
+      description: 'Natural antiseptic bath with Gentian Violet 1% and Soothing Chamomile Spray for fast, lasting relief.'
+    };
+  }
+  if (item.id === 'xixi-coco') {
+    return {
+      ...item,
+      title: 'Potty Training & Spot Marker',
+      subtitle: 'Natural Attractant & Citrus Deterrent Sprays',
+      category: 'Behavior & Training',
+      badge: 'PREMIUM',
+      tagline: 'Stop Accidents on Rugs & Sofas with Scent Marking and Citrus Deterrent',
+      description: 'DIY Lemongrass Attractant Spray for pads, Citrus Deterrent Spray for forbidden zones, and positive habit conditioning.'
     };
   }
   if (item.id === 'mobilidade') {
@@ -695,25 +728,49 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
   antiCoceira: {
     key: 'antiCoceira',
     id: 'anticoceira',
-    title: 'Protocolo Anticoceira Canina',
-    subtitle: 'Alívio Imediato com Violeta Genciana 1%',
+    title: 'Protocolo Coceira Zero',
+    subtitle: 'Alívio Imediato & Dermatites Caninas',
     category: 'Dermatologia & Alívio Tópico',
     tagline: 'Elimine a Coceira Desesperadora, Dermatites e Fungos da Pele sem Corticoide',
     badgeText: 'CONTEÚDO PREMIUM',
-    shortDescription: 'Fórmula tópica antisséptica e antifúngica natural com dosagem segura de Violeta Genciana 1% para banho semanal e alívio rápido da coceira.',
+    shortDescription: 'Fórmula tópica antisséptica e antifúngica natural com dosagem segura de Violeta Genciana 1% para banho semanal e Spray de Camomila calmante.',
     fullBenefits: [
       'Proporção exata e segura: 15 gotas de Violeta Genciana 1% em 500ml de shampoo canino neutro',
-      'Passo a passo de aplicação para alívio imediato no primeiro banho',
-      'Protocolo de segurança para casos com feridas abertas, pele vermelha ou sangramento',
-      'Guia de manutenção preventiva semanal para evitar recidivas',
-      'Download do Guia Oficial em PDF de alta resolução'
+      'Receita do Spray Calmante Tópico de Camomila e Vinagre de Maçã para patinhas e barriga',
+      'Passo a passo de aplicação para alívio imediato no primeiro banho sem ardência',
+      'Protocolo de restauração da barreira lipídica da pele e controle de Malassezia',
+      'Download do Guia Oficial em PDF de alta resolução com dosagens por porte'
     ],
     icon: '🌸',
     accentColor: '#9333ea',
     checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
     salesPageUrl: 'https://kiwify.app/t3u1lYm',
     guaranteeDays: 7,
-    price: 'R$ 27,90',
+    price: 'R$ 19,90',
+    originalPrice: 'R$ 97,00'
+  },
+  xixiCoco: {
+    key: 'xixiCoco',
+    id: 'xixi-coco',
+    title: 'Xixi e Cocô no Lugar Certo',
+    subtitle: 'Educador Sanitário & Sprays Naturais',
+    category: 'Comportamento & Adestramento',
+    tagline: 'Elimine Xixi e Fezes no Tapete e Sofá com Spray Atrativo e Bloqueador Cítrico Natural',
+    badgeText: 'CONTEÚDO PREMIUM',
+    shortDescription: 'Fórmula caseira do Spray Atrativo para o tapete higiênico, Spray Bloqueador Cítrico para áreas proibidas e técnica de 3 passos sem bronca.',
+    fullBenefits: [
+      'Fórmula do Spray Atrativo Natural com infusão de Capim-Limão e Baunilha estimulante',
+      'Fórmula do Spray Bloqueador Cítrico com casca de limão, vinagre e álcool para cantos proibidos',
+      'Método de Condicionamento em 3 Passos: recompensa nos primeiros 3 segundos sem estresse',
+      'Como neutralizar enzimas de odor antigo para o cão não repetir a demarcação',
+      'Download do Guia Oficial Ilustrado em PDF e Tabela de Rotina Sanitária'
+    ],
+    icon: '🚽',
+    accentColor: '#0284c7',
+    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
+    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    guaranteeDays: 7,
+    price: 'R$ 19,90',
     originalPrice: 'R$ 97,00'
   },
   mobilidade: {

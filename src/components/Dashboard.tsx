@@ -12,6 +12,7 @@ import { BonusGiftsView } from './BonusGiftsView';
 import { PetEmDiaView } from './PetEmDiaView';
 import { FreshBreathView } from './FreshBreathView';
 import { StopCoprophagiaView } from './StopCoprophagiaView';
+import { XixiCocoProtocolView } from './XixiCocoProtocolView';
 import { LiveClassesView } from './LiveClassesView';
 import {
   Search,
@@ -61,7 +62,7 @@ export const Dashboard: React.FC = () => {
     if (selectedCategory === 'training' && (item.type === 'aulas-ao-vivo' || item.type === 'coach-canino')) return true;
     if (selectedCategory === 'bonuses' && item.type === 'presentes') return true;
     if (selectedCategory === 'dental' && item.type === 'antibafo') return true;
-    if (selectedCategory === 'behavior' && (item.type === 'comer-coco' || item.type === 'aulas-ao-vivo')) return true;
+    if (selectedCategory === 'behavior' && (item.type === 'comer-coco' || item.type === 'xixi-coco' || item.type === 'aulas-ao-vivo')) return true;
 
     return false;
   });
@@ -89,6 +90,9 @@ export const Dashboard: React.FC = () => {
           )}
           {activeModuleId === 'anticoceira' && (
             <AntiItchProtocolView onClose={() => setActiveModuleId(null)} />
+          )}
+          {activeModuleId === 'xixi-coco' && (
+            <XixiCocoProtocolView onClose={() => setActiveModuleId(null)} />
           )}
           {activeModuleId === 'mobilidade' && (
             <MobilityProtocolView onClose={() => setActiveModuleId(null)} />
@@ -192,7 +196,7 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600"
               >
-                Limpar
+                {t.dashboard.clear}
               </button>
             )}
           </div>
@@ -212,17 +216,17 @@ export const Dashboard: React.FC = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="bg-yellow-400 text-slate-950 font-black text-[10px] sm:text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
-                  ★ PRODUTO PRINCIPAL OFICIAL
+                  {t.dashboard.spotlightBadge}
                 </span>
                 <span className="text-teal-200 text-xs font-bold hidden sm:inline">
-                  Calculadora Personalizada por Peso
+                  {t.dashboard.spotlightSub}
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                Cuidados com os Ouvidos Canino (Adeus Otite)
+                {t.dashboard.spotlightTitle}
               </h2>
               <p className="text-xs sm:text-sm text-teal-100 max-w-xl font-medium leading-relaxed">
-                Receita do Bifinho do Lyndor, Spray Calmante Auricular de Camomila, Modo de Preparo e Técnica de Higiene sem Dor em 4 etapas.
+                {t.dashboard.spotlightDesc}
               </p>
             </div>
           </div>
@@ -237,7 +241,7 @@ export const Dashboard: React.FC = () => {
             }}
             className="w-full md:w-auto bg-white hover:bg-teal-50 text-teal-950 font-black px-6 py-3.5 rounded-2xl text-xs sm:text-sm shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
           >
-            <span>Acessar Protocolo & Calculadora</span>
+            <span>{t.dashboard.spotlightBtn}</span>
             <ArrowRight className="w-4 h-4 text-teal-700" />
           </button>
         </div>

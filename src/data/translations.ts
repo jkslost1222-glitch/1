@@ -53,7 +53,14 @@ export const translations = {
       viewProtocol: 'ACESSAR PROTOCOLO',
       unlockProtocol: 'DESBLOQUEAR PROTOCOLO',
       badgeVerified: 'Método Verificado',
-      allModules: 'Todos os Módulos'
+      allModules: 'Todos os Módulos',
+      protocolsHeading: 'Protocolos & Conteúdos',
+      spotlightBadge: '★ PRODUTO PRINCIPAL OFICIAL',
+      spotlightSub: 'Calculadora Personalizada por Peso',
+      spotlightTitle: 'Cuidados com os Ouvidos Canino (Adeus Otite)',
+      spotlightDesc: 'Receita do Bifinho do Lyndor, Spray Calmante Auricular de Camomila, Modo de Preparo e Técnica de Higiene sem Dor em 4 etapas.',
+      spotlightBtn: 'Acessar Protocolo & Calculadora',
+      clear: 'Limpar'
     },
     categories: {
       all: 'Todos',
@@ -206,7 +213,14 @@ export const translations = {
       viewProtocol: 'ACCESS PROTOCOL',
       unlockProtocol: 'UNLOCK PROTOCOL',
       badgeVerified: 'Verified Method',
-      allModules: 'All Modules'
+      allModules: 'All Modules',
+      protocolsHeading: 'Protocols & Content',
+      spotlightBadge: '★ OFFICIAL PRIMARY PRODUCT',
+      spotlightSub: 'Custom Weight Dosage Calculator',
+      spotlightTitle: 'Canine Ear Care (Goodbye Otitis)',
+      spotlightDesc: 'Lyndor Dog Treat Recipe, Chamomile Calming Ear Spray, Step-by-Step Preparation, and Painless 4-Step Hygiene.',
+      spotlightBtn: 'Access Protocol & Calculator',
+      clear: 'Clear'
     },
     categories: {
       all: 'All',

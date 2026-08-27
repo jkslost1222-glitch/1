@@ -6,10 +6,11 @@ import { UpsellModal } from './components/UpsellModal';
 import { InstallModal } from './components/InstallModal';
 import { PurchaseSimulatorModal } from './components/PurchaseSimulatorModal';
 import { NonClientModal } from './components/NonClientModal';
+import { OtoModal } from './components/OtoModal';
 import { MessageSquare, Headphones, ShieldCheck, Heart, Sparkles } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { setActiveModuleId, t } = useApp();
+  const { setActiveModuleId, activeModal, setActiveModal, t } = useApp();
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-teal-200 selection:text-teal-950">
@@ -57,6 +58,7 @@ const AppContent: React.FC = () => {
       <UpsellModal />
       <InstallModal />
       <NonClientModal />
+      <OtoModal isOpen={activeModal === 'oto'} onClose={() => setActiveModal(null)} />
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 mt-auto py-8 text-center text-xs text-slate-500">

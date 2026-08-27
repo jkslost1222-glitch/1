@@ -6,6 +6,7 @@ export type DeliverableType =
   | 'anticoceira'
   | 'mobilidade'
   | 'antiotite'
+  | 'xixi-coco'
   | 'aulas-ao-vivo'
   | 'frequencias'
   | 'presentes'

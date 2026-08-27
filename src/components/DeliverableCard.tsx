@@ -32,6 +32,7 @@ export const DeliverableCard: React.FC<DeliverableCardProps> = ({ item, onOpen }
     if (item.type === 'pet-em-dia') return 'bg-gradient-to-br from-[#059669] to-[#047857] text-white';
     if (item.type === 'antibafo') return 'bg-gradient-to-br from-[#0891b2] to-[#155e75] text-white';
     if (item.type === 'comer-coco') return 'bg-gradient-to-br from-[#b45309] to-[#78350f] text-white';
+    if (item.type === 'xixi-coco') return 'bg-gradient-to-br from-[#0284c7] to-[#0c4a6e] text-white';
     return 'bg-gradient-to-br from-slate-700 to-slate-900 text-white';
   };
 
