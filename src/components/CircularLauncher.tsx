@@ -7,11 +7,12 @@ interface CircularLauncherProps {
 }
 
 export const CircularLauncher: React.FC<CircularLauncherProps> = ({ onOpenSupport }) => {
-  const { isEn, setActiveModuleId, openUpsellModal, entitlements } = useApp();
+  const { isEn, setActiveModuleId, setActiveModal, openUpsellModal, hasEntitlement } = useApp();
 
-  const isCaoBlindadoLocked = !entitlements.caoBlindado;
-  const isAntiItchLocked = !entitlements.anticoceira;
-  const isMobilityLocked = !entitlements.mobilidade;
+  const isCaoBlindadoLocked = !hasEntitlement('cao-blindado');
+  const isAntiItchLocked = !hasEntitlement('anticoceira');
+  const isCoceiraXixiLocked = !hasEntitlement('coceira-xixi');
+  const isMobilityLocked = !hasEntitlement('mobilidade');
 
   const handleCircleClick = (moduleId: string, isLocked: boolean) => {
     if (isLocked) {
@@ -62,10 +63,7 @@ export const CircularLauncher: React.FC<CircularLauncherProps> = ({ onOpenSuppor
         <button
           id="bubble-coach-canino"
           onClick={() => {
-            setActiveModuleId('coach-canino');
-            setTimeout(() => {
-              document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+            setActiveModal('coachChat');
           }}
           className="group relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full bg-white border-[6px] border-white shadow-2xl hover:scale-108 transition-all duration-300 flex flex-col items-center justify-center p-3 text-center cursor-pointer shadow-teal-950/20"
         >
@@ -104,6 +102,28 @@ export const CircularLauncher: React.FC<CircularLauncherProps> = ({ onOpenSuppor
             {isEn ? 'anti-itch canine' : 'anti-coceira canino'}
           </span>
           <span className="mt-1 bg-yellow-400 text-slate-950 font-black text-[9px] sm:text-[10px] uppercase px-2.5 py-0.5 rounded-full shadow-xs">
+            PREMIUM
+          </span>
+        </button>
+
+        {/* 3.1 Protocol Anti-Itch + Potty Training (Coceira + Xixi no Lugar Certo) */}
+        <button
+          id="bubble-coceira-xixi"
+          onClick={() => handleCircleClick('coceira-xixi', isCoceiraXixiLocked)}
+          className="group relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-full bg-gradient-to-br from-[#a855f7] via-[#9333ea] to-[#7e22ce] border-[6px] border-amber-300/90 shadow-2xl hover:scale-108 hover:border-amber-300 transition-all duration-300 flex flex-col items-center justify-center p-3 text-center cursor-pointer shadow-teal-950/20 text-white"
+        >
+          {isCoceiraXixiLocked && (
+            <div className="w-8 h-8 rounded-full bg-slate-900/90 text-white flex items-center justify-center mb-1 shadow-md border border-white/20">
+              <Lock className="w-4 h-4" />
+            </div>
+          )}
+          <span className="text-[9px] sm:text-[10px] font-black uppercase text-amber-200 tracking-wider">
+            {isEn ? 'COMBO PROTOCOL' : 'PROTOCOLO COMBO'}
+          </span>
+          <span className="text-xs sm:text-sm lg:text-base font-black text-white tracking-tight leading-tight mt-0.5">
+            {isEn ? 'itch + potty pad' : 'coceira + xixi certo'}
+          </span>
+          <span className="mt-1 bg-yellow-400 text-slate-950 font-black text-[9px] sm:text-[10px] uppercase px-2 py-0.5 rounded-full shadow-xs">
             PREMIUM
           </span>
         </button>

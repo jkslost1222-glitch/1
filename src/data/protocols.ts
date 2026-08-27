@@ -330,6 +330,27 @@ export const ptDeliverables: DeliverableItem[] = [
     }
   },
   {
+    id: 'coceira-xixi',
+    title: 'Protocolo Coceira + Xixi e Fezes no Lugar Certo',
+    subtitle: 'Alívio Tópico & Adestramento Higiênico Sem Erros',
+    type: 'coceira-xixi',
+    isLocked: false,
+    category: 'Dermatologia & Comportamento Higiênico',
+    badge: 'COMBO EXCLUSIVO',
+    tagline: 'Elimine a Coceira Desesperadora e Ensine Seu Cão a Fazer Xixi e Cocô no Lugar Certo Sem Broncas',
+    description: 'Protocolo 2 em 1 com Fórmula Anticoceira de Violeta Genciana 1% + Os 4 Momentos de Ouro para Xixi no Tapete e Spray Neutralizador.',
+    icon: '🎯',
+    color: '#7e22ce',
+    content: {
+      overview: 'Resolva os dois maiores desafios do dia a dia com seu cão: elimine a coceira, dermatites e lambedura de patas com a diluição segura de Violeta Genciana 1% + aprenda o método infalível de reforço positivo em 3 segundos para xixi e fezes no tapete higiênico sem estresse.',
+      materials: [
+        { name: 'Guia_Oficial_Coceira_Mais_Xixi_no_Lugar_Certo.pdf', size: '3.6 MB', type: 'PDF' },
+        { name: 'Manual_Adestramento_Higienico_Sem_Broncas.pdf', size: '2.4 MB', type: 'PDF' },
+        { name: 'Tabela_Diluicao_Violeta_Genciana_e_Spray_Caseiro.pdf', size: '1.5 MB', type: 'PDF' }
+      ]
+    }
+  },
+  {
     id: 'suporte',
     title: 'Central de Ajuda & Suporte',
     subtitle: 'FAQ & Atendimento WhatsApp',
@@ -408,6 +429,21 @@ export const enDeliverables: DeliverableItem[] = ptDeliverables.map(item => {
       badge: 'PREMIUM',
       tagline: 'Eliminate Desperate Scratching, Yeast Infections, and Dermatitis Without Cortisone',
       description: 'Antiseptic topical formula with safe Gentian Violet 1% dilution for weekly baths and fast itch relief.'
+    };
+  }
+  if (item.id === 'coceira-xixi') {
+    return {
+      ...item,
+      title: 'Anti-Itch & Potty Training Protocol',
+      subtitle: 'Skin Relief & Error-Free Potty Routine',
+      category: 'Dermatology & Positive Potty Training',
+      badge: 'EXCLUSIVE COMBO',
+      tagline: 'Eliminate Desperate Itching and Train Your Dog to Pee & Poop on the Pad Without Yelling',
+      description: '2-in-1 Protocol with Gentian Violet 1% Anti-Itch Formula + The 4 Golden Potty Moments and Natural Odor Eliminator Spray.',
+      content: {
+        ...item.content,
+        overview: 'Solve two of the biggest canine daily struggles at once: eliminate itching, yeast, and paw licking with safe Gentian Violet 1% + master 3-second positive reinforcement for error-free pee pad habits without yelling or punishment.'
+      }
     };
   }
   if (item.id === 'mobilidade') {
@@ -660,37 +696,87 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     ],
     icon: '👂',
     accentColor: '#00c5b3',
-    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
-    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    checkoutUrl: 'https://pay.cakto.com.br/h3eWTwps_1036773',
+    salesPageUrl: 'https://petnatural.vercel.app',
     guaranteeDays: 7,
-    price: 'R$ 27,90',
+    price: 'R$ 14,90',
+    originalPrice: 'R$ 97,00'
+  },
+  'cao-blindado': {
+    key: 'cao-blindado',
+    id: 'cao-blindado',
+    title: 'Protocolo Cão Blindado',
+    subtitle: 'Combo da Longevidade Canina',
+    category: 'Suplementos Naturais & Longevidade',
+    tagline: '5 Fórmulas Naturais para Proteger a Saúde do seu Cão de Dentro para Fora',
+    badgeText: 'CONTEÚDO PREMIUM',
+    shortDescription: 'O combo definitivo com 5 receitas funcionais caseiras de suplementação, calculadora inteligente de dosagens por peso e 5 e-books ilustrados para download.',
+    fullBenefits: [
+      'Receita 1: Cão Bem Nutrido (Imunidade máxima e anti-inflamatório)',
+      'Receita 2: Articulações Flexíveis (Matriz de colágeno e alívio de cartilagem)',
+      'Receita 3: Calmante Natural (Redução de ansiedade, fobia de ruídos e estresse)',
+      'Receita 4: Controle de Odor e Intestino (Redução de gases, fezes firmes e hálito fresco)',
+      'Receita 5: Controle de Peso Saudável (Saciedade e taxa metabólica equilibrada)',
+      'Calculadora inteligente de dosagens por peso corporal (kg e lb)',
+      'Download do Guia Oficial Ilustrado em PDF completo'
+    ],
+    icon: '🥣',
+    accentColor: '#0f4c5c',
+    checkoutUrl: 'https://pay.cakto.com.br/h3eWTwps_1036773',
+    salesPageUrl: 'https://petnatural.vercel.app',
+    guaranteeDays: 7,
+    price: 'R$ 14,90',
     originalPrice: 'R$ 97,00'
   },
   caoBlindado: {
     key: 'caoBlindado',
     id: 'cao-blindado',
-    title: 'Cão Blindado',
+    title: 'Protocolo Cão Blindado',
     subtitle: 'Combo da Longevidade Canina',
     category: 'Suplementos Naturais & Longevidade',
     tagline: '5 Fórmulas Naturais para Proteger a Saúde do seu Cão de Dentro para Fora',
     badgeText: 'CONTEÚDO PREMIUM',
-    shortDescription: 'Combo definitivo com 5 receitas funcionais de suplementos caseiros, calculadora proporcional de gramas por peso do pet e 5 e-books diagramados.',
+    shortDescription: 'O combo definitivo com 5 receitas funcionais caseiras de suplementação, calculadora inteligente de dosagens por peso e 5 e-books ilustrados para download.',
     fullBenefits: [
-      'Receita 1: Cão Bem Nutrido (Imunidade celular e potente ação anti-inflamatória)',
-      'Receita 2: Articulações Flexíveis (Colágeno, cartilagem e alívio de rigidez)',
-      'Receita 3: Calmante Natural (Redução de ansiedade, medo de barulhos e estresse)',
-      'Receita 4: Controle de Odores (Redução de gases, fezes firmes e hálito fresco)',
-      'Receita 5: Controle de Peso (Saciedade duradoura e metabolismo equilibrado)',
-      'Calculadora inteligente de dosagens exatas por peso corporal em kg e lbs',
-      'Download completo dos 5 e-books diagramados e tabelas de consulta em PDF'
+      'Receita 1: Cão Bem Nutrido (Imunidade máxima e anti-inflamatório)',
+      'Receita 2: Articulações Flexíveis (Matriz de colágeno e alívio de cartilagem)',
+      'Receita 3: Calmante Natural (Redução de ansiedade, fobia de ruídos e estresse)',
+      'Receita 4: Controle de Odor e Intestino (Redução de gases, fezes firmes e hálito fresco)',
+      'Receita 5: Controle de Peso Saudável (Saciedade e taxa metabólica equilibrada)',
+      'Calculadora inteligente de dosagens por peso corporal (kg e lb)',
+      'Download do Guia Oficial Ilustrado em PDF completo'
     ],
     icon: '🥣',
     accentColor: '#0f4c5c',
-    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
-    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    checkoutUrl: 'https://pay.cakto.com.br/h3eWTwps_1036773',
+    salesPageUrl: 'https://petnatural.vercel.app',
     guaranteeDays: 7,
-    price: 'R$ 27,90',
-    originalPrice: 'R$ 147,00'
+    price: 'R$ 14,90',
+    originalPrice: 'R$ 97,00'
+  },
+  'anticoceira': {
+    key: 'anticoceira',
+    id: 'anticoceira',
+    title: 'Protocolo Anticoceira Canina',
+    subtitle: 'Alívio Imediato com Violeta Genciana 1%',
+    category: 'Dermatologia & Alívio Tópico',
+    tagline: 'Elimine a Coceira Desesperadora, Dermatites e Fungos da Pele sem Corticoide',
+    badgeText: 'CONTEÚDO PREMIUM',
+    shortDescription: 'Fórmula tópica natural antisséptica e antifúngica com dosagem segura de Violeta Genciana 1% para banhos periódicos e alívio rápido.',
+    fullBenefits: [
+      'Diluição segura: 15 gotas de Violeta Genciana 1% por 500ml de shampoo canino',
+      'Passo a passo de aplicação para alívio imediato no primeiro banho',
+      'Protocolo de segurança para feridas abertas, manchas vermelhas ou coceira na pele',
+      'Plano de manutenção preventiva semanal',
+      'Download do Guia Oficial em PDF de alta resolução'
+    ],
+    icon: '🌸',
+    accentColor: '#9333ea',
+    checkoutUrl: 'https://pay.cakto.com.br/ien4oy3',
+    salesPageUrl: 'https://adeusotite.diretopages.com.br',
+    guaranteeDays: 7,
+    price: 'R$ 19,90',
+    originalPrice: 'R$ 39,00'
   },
   antiCoceira: {
     key: 'antiCoceira',
@@ -700,45 +786,93 @@ export const upsellConfig: Record<string, UpsellConfigItem> = {
     category: 'Dermatologia & Alívio Tópico',
     tagline: 'Elimine a Coceira Desesperadora, Dermatites e Fungos da Pele sem Corticoide',
     badgeText: 'CONTEÚDO PREMIUM',
-    shortDescription: 'Fórmula tópica antisséptica e antifúngica natural com dosagem segura de Violeta Genciana 1% para banho semanal e alívio rápido da coceira.',
+    shortDescription: 'Fórmula tópica natural antisséptica e antifúngica com dosagem segura de Violeta Genciana 1% para banhos periódicos e alívio rápido.',
     fullBenefits: [
-      'Proporção exata e segura: 15 gotas de Violeta Genciana 1% em 500ml de shampoo canino neutro',
+      'Diluição segura: 15 gotas de Violeta Genciana 1% por 500ml de shampoo canino',
       'Passo a passo de aplicação para alívio imediato no primeiro banho',
-      'Protocolo de segurança para casos com feridas abertas, pele vermelha ou sangramento',
-      'Guia de manutenção preventiva semanal para evitar recidivas',
+      'Protocolo de segurança para feridas abertas, manchas vermelhas ou coceira na pele',
+      'Plano de manutenção preventiva semanal',
       'Download do Guia Oficial em PDF de alta resolução'
     ],
     icon: '🌸',
     accentColor: '#9333ea',
-    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
-    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    checkoutUrl: 'https://pay.cakto.com.br/ien4oy3',
+    salesPageUrl: 'https://adeusotite.diretopages.com.br',
     guaranteeDays: 7,
-    price: 'R$ 27,90',
-    originalPrice: 'R$ 97,00'
+    price: 'R$ 19,90',
+    originalPrice: 'R$ 39,00'
   },
-  mobilidade: {
+  'coceira-xixi': {
+    key: 'coceira-xixi',
+    id: 'coceira-xixi',
+    title: 'Protocolo Coceira + Xixi e Fezes no Lugar Certo',
+    subtitle: 'Combo Duplo Anticoceira & Adestramento Higiênico',
+    category: 'Dermatologia & Comportamento Higiênico',
+    tagline: 'Elimine a Coceira Desesperadora e Ensine Seu Cão a Fazer Xixi e Cocô no Lugar Certo Sem Broncas',
+    badgeText: 'COMBO EXCLUSIVO',
+    shortDescription: 'Protocolo 2 em 1: Fórmula Anticoceira de Violeta Genciana 1% + Os 4 Momentos de Ouro para Xixi no Tapete e Spray Neutralizador de Odores.',
+    fullBenefits: [
+      'Diluição exata de Violeta Genciana 1% em shampoo neutro contra fungos e coceiras',
+      'Método dos 4 Momentos de Ouro biológicos para acerto de 100% no tapete higiênico',
+      'A Regra dos 3 Segundos de reforço positivo com petisco',
+      'Receita do Spray Caseiro Neutralizador de Odor para evitar erros no chão',
+      'Download do Guia Ilustrado em PDF de Alta Resolução'
+    ],
+    icon: '🎯',
+    accentColor: '#7e22ce',
+    checkoutUrl: 'https://pay.cakto.com.br/ien4oy3',
+    salesPageUrl: 'https://adeusotite.diretopages.com.br',
+    guaranteeDays: 7,
+    price: 'R$ 19,90',
+    originalPrice: 'R$ 67,00'
+  },
+  coceiraXixi: {
+    key: 'coceiraXixi',
+    id: 'coceira-xixi',
+    title: 'Protocolo Coceira + Xixi e Fezes no Lugar Certo',
+    subtitle: 'Combo Duplo Anticoceira & Adestramento Higiênico',
+    category: 'Dermatologia & Comportamento Higiênico',
+    tagline: 'Elimine a Coceira Desesperadora e Ensine Seu Cão a Fazer Xixi e Cocô no Lugar Certo Sem Broncas',
+    badgeText: 'COMBO EXCLUSIVO',
+    shortDescription: 'Protocolo 2 em 1: Fórmula Anticoceira de Violeta Genciana 1% + Os 4 Momentos de Ouro para Xixi no Tapete e Spray Neutralizador de Odores.',
+    fullBenefits: [
+      'Diluição exata de Violeta Genciana 1% em shampoo neutro contra fungos e coceiras',
+      'Método dos 4 Momentos de Ouro biológicos para acerto de 100% no tapete higiênico',
+      'A Regra dos 3 Segundos de reforço positivo com petisco',
+      'Receita do Spray Caseiro Neutralizador de Odor para evitar erros no chão',
+      'Download do Guia Ilustrado em PDF de Alta Resolução'
+    ],
+    icon: '🎯',
+    accentColor: '#7e22ce',
+    checkoutUrl: 'https://pay.cakto.com.br/ien4oy3',
+    salesPageUrl: 'https://adeusotite.diretopages.com.br',
+    guaranteeDays: 7,
+    price: 'R$ 19,90',
+    originalPrice: 'R$ 67,00'
+  },
+  'mobilidade': {
     key: 'mobilidade',
     id: 'mobilidade',
     title: 'Protocolo Mobilidade Canina',
-    subtitle: 'Receita Natural Pasta Dourada',
+    subtitle: 'Receita Natural da Pasta Dourada',
     category: 'Ortopedia & Proteção Articular',
     tagline: 'Desinflame as Articulações, Coluna e Cartilagens do seu Cão de Dentro para Fora',
     badgeText: 'CONTEÚDO PREMIUM',
-    shortDescription: 'Receita oficial e segura da Pasta Dourada com cúrcuma culinária e óleo de coco virgem, leitor digital completo de 5 páginas e download do PDF oficial.',
+    shortDescription: 'Receita oficial e segura da Pasta Dourada com cúrcuma culinária e óleo de coco virgem, leitor digital completo de 5 páginas e PDF para download.',
     fullBenefits: [
-      'Receita da Pasta Dourada: 3 colheres de chá de óleo de coco + até 1 colher de cúrcuma + pimenta-preta',
-      'Ação anti-inflamatória dos curcuminoides com absorção 2000% maior',
-      '2 Formas de preparo explicadas: versão direta sem cozimento e versão aquecida',
-      'Cronograma semanal de aplicação consciente e preventiva',
-      'Calculadora de proporções e doses conforme o porte do animal',
-      'Download do Guia Oficial Completo em PDF diagramado'
+      'Receita da Pasta Dourada (óleo de coco virgem + até 1 colher de cúrcuma + pimenta)',
+      'Poderosos compostos anti-inflamatórios que acalmam de dentro para fora',
+      '2 Métodos de preparo rápidos: mistura crua ou versão levemente aquecida',
+      'Cronograma semanal de dosagem (3x por semana)',
+      'Calculadora inteligente de dosagens por peso e porte',
+      'Download do Guia Oficial Completo em PDF ilustrado'
     ],
     icon: '🦴',
     accentColor: '#ea580c',
-    checkoutUrl: 'https://pay.kiwify.com.br/kYdtxLl',
-    salesPageUrl: 'https://kiwify.app/t3u1lYm',
+    checkoutUrl: 'https://pay.cakto.com.br/sconbvxL_1048734',
+    salesPageUrl: 'https://caosaudavel.vercel.app',
     guaranteeDays: 7,
-    price: 'R$ 27,90',
+    price: 'R$ 14,90',
     originalPrice: 'R$ 97,00'
   }
 };

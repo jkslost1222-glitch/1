@@ -8,6 +8,7 @@ import { CaoBlindadoReader } from './CaoBlindadoReader';
 import { AudioSynthesizerPlayer } from './AudioSynthesizerPlayer';
 import { CanineCoachChat } from './CanineCoachChat';
 import { AntiItchProtocolView } from './AntiItchProtocolView';
+import { CoceiraXixiProtocolView } from './CoceiraXixiProtocolView';
 import { MobilityProtocolView } from './MobilityProtocolView';
 import { BonusGiftsView } from './BonusGiftsView';
 import { PetEmDiaView } from './PetEmDiaView';
@@ -128,6 +129,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchOpen, onCloseSearch 
             )}
             {activeModuleId === 'anticoceira' && (
               <AntiItchProtocolView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'coceira-xixi' && (
+              <CoceiraXixiProtocolView onClose={() => setActiveModuleId(null)} />
             )}
             {activeModuleId === 'mobilidade' && (
               <MobilityProtocolView onClose={() => setActiveModuleId(null)} />

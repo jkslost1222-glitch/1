@@ -4,6 +4,7 @@ export type DeliverableType =
   | 'cao-blindado'
   | 'coach-canino'
   | 'anticoceira'
+  | 'coceira-xixi'
   | 'mobilidade'
   | 'antiotite'
   | 'aulas-ao-vivo'

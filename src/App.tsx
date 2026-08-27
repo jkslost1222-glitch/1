@@ -7,10 +7,11 @@ import { UpsellModal } from './components/UpsellModal';
 import { InstallModal } from './components/InstallModal';
 import { PurchaseSimulatorModal } from './components/PurchaseSimulatorModal';
 import { NonClientModal } from './components/NonClientModal';
+import { CanineCoachModal } from './components/CanineCoachModal';
 import { MessageSquare, Headphones, ShieldCheck, Heart, Sparkles, Menu } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { setActiveModuleId, t, isEn } = useApp();
+  const { setActiveModuleId, activeModal, setActiveModal, t, isEn } = useApp();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -74,7 +75,7 @@ const AppContent: React.FC = () => {
           </div>
 
           <button
-            onClick={() => setActiveModuleId('coach-canino')}
+            onClick={() => setActiveModal('coachChat')}
             className="flex items-center gap-1 bg-[#0f4c5c] text-white text-xs font-black px-3 py-1.5 rounded-xl shadow-md cursor-pointer"
           >
             <MessageSquare className="w-3.5 h-3.5" />
@@ -111,8 +112,7 @@ const AppContent: React.FC = () => {
           <button
             id="btn-floating-coach-chat"
             onClick={() => {
-              setActiveModuleId('coach-canino');
-              document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
+              setActiveModal('coachChat');
             }}
             className="flex items-center gap-2 bg-[#0f4c5c] hover:bg-teal-900 text-white px-4 py-3 rounded-full shadow-2xl shadow-teal-950/30 hover:scale-105 transition-all text-xs sm:text-sm font-black cursor-pointer border border-white/30"
             title={isEn ? "Open 24/7 Canine Coach" : "Abrir Coach Canino 24h"}
@@ -130,6 +130,10 @@ const AppContent: React.FC = () => {
         <InstallModal />
         <NonClientModal />
         <PurchaseSimulatorModal />
+        <CanineCoachModal
+          isOpen={activeModal === 'coachChat'}
+          onClose={() => setActiveModal(null)}
+        />
 
         {/* Bottom Footer */}
         <footer className="bg-black/15 backdrop-blur-md border-t border-white/20 mt-auto py-8 text-center text-xs text-teal-100">

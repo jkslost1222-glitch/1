@@ -46,30 +46,39 @@ export const Navbar: React.FC = () => {
               <span className="sm:hidden">{t.auth.installAppBtnTop}</span>
             </button>
 
-            {/* Language Switcher */}
-            <div className="flex items-center bg-teal-900/60 p-0.5 rounded-xl border border-teal-700/50">
-              <button
-                id="btn-lang-pt"
-                onClick={() => setLanguage('pt')}
-                className={`px-2 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                  !isEn
-                    ? 'bg-[#00c5b3] text-teal-950 shadow-sm'
-                    : 'text-teal-200 hover:text-white'
-                }`}
-              >
-                PT
-              </button>
-              <button
-                id="btn-lang-en"
-                onClick={() => setLanguage('en')}
-                className={`px-2 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                  isEn
-                    ? 'bg-[#00c5b3] text-teal-950 shadow-sm'
-                    : 'text-teal-200 hover:text-white'
-                }`}
-              >
-                EN
-              </button>
+            {/* Language Switcher with Flags & Prominent High-Contrast Design for 45+ Users */}
+            <div className="flex items-center bg-black/40 p-1 rounded-2xl border-2 border-teal-300/40 shadow-inner">
+              <span className="hidden xl:inline-flex items-center text-[11px] font-black text-teal-200 px-1.5 uppercase tracking-wider">
+                {isEn ? 'Lang:' : 'Idioma:'}
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  id="btn-lang-pt"
+                  onClick={() => setLanguage('pt')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer ${
+                    !isEn
+                      ? 'bg-amber-400 text-slate-950 shadow-md scale-105 ring-2 ring-white/50'
+                      : 'text-teal-100 hover:text-white hover:bg-white/10 opacity-75 hover:opacity-100'
+                  }`}
+                  title="Mudar para Português (Brasil)"
+                >
+                  <span className="text-sm">🇧🇷</span>
+                  <span>PT</span>
+                </button>
+                <button
+                  id="btn-lang-en"
+                  onClick={() => setLanguage('en')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer ${
+                    isEn
+                      ? 'bg-amber-400 text-slate-950 shadow-md scale-105 ring-2 ring-white/50'
+                      : 'text-teal-100 hover:text-white hover:bg-white/10 opacity-75 hover:opacity-100'
+                  }`}
+                  title="Switch to English (USA)"
+                >
+                  <span className="text-sm">🇺🇸</span>
+                  <span>EN</span>
+                </button>
+              </div>
             </div>
 
             {/* User Profile / Login & Cadastro Button */}

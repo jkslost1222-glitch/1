@@ -124,45 +124,48 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse,
       </div>
 
       {/* Bottom Language Selector Box */}
-      <div className="p-3 sm:p-4 border-t border-slate-100">
+      <div className="p-3 sm:p-4 border-t border-slate-100 bg-slate-50/70">
         {!isCollapsed ? (
           <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-500 flex items-center gap-1">
+            <label className="text-[11px] font-black text-slate-600 uppercase tracking-wider flex items-center gap-1">
               <Globe className="w-3.5 h-3.5 text-teal-600" />
-              <span>{isEn ? 'Language:' : 'Linguagem:'}</span>
+              <span>{isEn ? 'Language / Idioma:' : 'Idioma / Language:'}</span>
             </label>
-            <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl">
+            <div className="grid grid-cols-2 gap-1.5 bg-slate-200/80 p-1 rounded-xl">
               <button
                 id="sidebar-lang-pt"
                 onClick={() => setLanguage('pt')}
-                className={`py-1.5 px-2 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
+                className={`py-2 px-2 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   !isEn
-                    ? 'bg-[#00c5b3] text-teal-950 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-amber-400 text-slate-950 shadow-sm ring-1 ring-black/10'
+                    : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
                 }`}
               >
-                Português
+                <span>🇧🇷</span>
+                <span>Português</span>
               </button>
               <button
                 id="sidebar-lang-en"
                 onClick={() => setLanguage('en')}
-                className={`py-1.5 px-2 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
+                className={`py-2 px-2 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   isEn
-                    ? 'bg-[#00c5b3] text-teal-950 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-amber-400 text-slate-950 shadow-sm ring-1 ring-black/10'
+                    : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
                 }`}
               >
-                English
+                <span>🇺🇸</span>
+                <span>English</span>
               </button>
             </div>
           </div>
         ) : (
           <button
             onClick={() => setLanguage(isEn ? 'pt' : 'en')}
-            className="w-full py-2 bg-slate-100 hover:bg-teal-50 rounded-xl text-xs font-black text-teal-900 text-center transition-colors cursor-pointer"
+            className="w-full py-2 bg-amber-400 text-slate-950 hover:bg-amber-300 rounded-xl text-xs font-black text-center transition-all cursor-pointer shadow-xs flex items-center justify-center gap-1"
             title={isEn ? "Switch to Portuguese" : "Mudar para Inglês"}
           >
-            {isEn ? 'EN' : 'PT'}
+            <span>{isEn ? '🇺🇸' : '🇧🇷'}</span>
+            <span>{isEn ? 'EN' : 'PT'}</span>
           </button>
         )}
       </div>
