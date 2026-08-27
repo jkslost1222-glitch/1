@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { CircularLauncher } from './CircularLauncher';
 import { CategoryFilter } from './CategoryFilter';
 import { DeliverableCard } from './DeliverableCard';
 import { OtiteProtocolView } from './OtiteProtocolView';
@@ -13,6 +14,7 @@ import { PetEmDiaView } from './PetEmDiaView';
 import { FreshBreathView } from './FreshBreathView';
 import { StopCoprophagiaView } from './StopCoprophagiaView';
 import { LiveClassesView } from './LiveClassesView';
+import { SupportFaqModal } from './SupportFaqModal';
 import {
   Search,
   Sparkles,
@@ -24,10 +26,17 @@ import {
   Volume2,
   BookOpen,
   ArrowRight,
-  Headphones
+  Headphones,
+  LayoutGrid,
+  CircleDot
 } from 'lucide-react';
 
-export const Dashboard: React.FC = () => {
+interface DashboardProps {
+  searchOpen?: boolean;
+  onCloseSearch?: () => void;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ searchOpen, onCloseSearch }) => {
   const {
     t,
     isEn,
@@ -41,6 +50,9 @@ export const Dashboard: React.FC = () => {
     openUpsellModal,
     entitlements
   } = useApp();
+
+  const [viewMode, setViewMode] = useState<'circles' | 'grid'>('circles');
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
 
   // Filter deliverables according to search and selected category
   const filteredDeliverables = deliverables.filter(item => {
@@ -71,228 +83,213 @@ export const Dashboard: React.FC = () => {
   const totalCount = deliverables.length;
 
   return (
-    <div className="w-full space-y-6 pb-16">
+    <div className="w-full relative min-h-screen">
       
-      {/* Dynamic Active Module Detail View (if selected) */}
-      {activeModuleId && (
-        <div id="active-module-view" className="animate-fade-in mb-8">
-          {activeModuleId === 'antiotite' && (
-            <OtiteProtocolView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'cao-blindado' && (
-            <CaoBlindadoReader onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'frequencias' && (
-            <AudioSynthesizerPlayer onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'coach-canino' && (
-            <CanineCoachChat onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'anticoceira' && (
-            <AntiItchProtocolView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'mobilidade' && (
-            <MobilityProtocolView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'presentes' && (
-            <BonusGiftsView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'pet-em-dia' && (
-            <PetEmDiaView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'antibafo' && (
-            <FreshBreathView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'comer-coco' && (
-            <StopCoprophagiaView onClose={() => setActiveModuleId(null)} />
-          )}
-          {activeModuleId === 'aulas-ao-vivo' && (
-            <LiveClassesView onClose={() => setActiveModuleId(null)} />
-          )}
-        </div>
-      )}
-
-      {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0f4c5c] via-[#0f766e] to-[#00c5b3] rounded-3xl p-6 sm:p-8 text-white shadow-xl">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black tracking-wide text-teal-100 border border-white/20">
-              <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-              <span>{t.dashboard.badgeOfficial}</span>
-            </div>
-            
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
-              {t.dashboard.heroTitle}
-            </h1>
-            
-            <p className="text-xs sm:text-sm text-teal-50 font-medium leading-relaxed">
-              {t.dashboard.heroSubtitle}
-            </p>
-
-            {/* Quick Metrics Bar */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <div className="flex items-center gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold border border-white/10">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                <span>{unlockedCount} {isEn ? 'of' : 'de'} {totalCount} {t.dashboard.metricsUnlocked}</span>
-              </div>
-
-              <button
-                id="btn-quick-coach-banner"
-                onClick={() => setActiveModuleId('coach-canino')}
-                className="flex items-center gap-1.5 bg-white text-teal-950 hover:bg-teal-50 px-3 py-1.5 rounded-xl text-xs font-black shadow-md transition-all cursor-pointer"
-              >
-                <MessageSquare className="w-3.5 h-3.5 text-teal-700" />
-                <span>{t.dashboard.quickCoach}</span>
-              </button>
-
-              <button
-                id="btn-quick-frequencies-banner"
-                onClick={() => setActiveModuleId('frequencias')}
-                className="flex items-center gap-1.5 bg-black/20 hover:bg-black/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold border border-white/20 transition-all cursor-pointer"
-              >
-                <Headphones className="w-3.5 h-3.5 text-cyan-300" />
-                <span>{t.dashboard.quickAudio}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Quick CTA Card */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-center sm:text-left space-y-2 shrink-0 md:max-w-xs">
-            <span className="text-[11px] font-black uppercase text-amber-300 tracking-wider block">
-              {t.dashboard.vetTipBadge}
-            </span>
-            <p className="text-xs text-white/95 leading-relaxed font-medium">
-              {t.dashboard.vetTipQuote}
-            </p>
-            <button
-              onClick={() => setActiveModuleId('antiotite')}
-              className="text-xs font-black text-white hover:text-amber-300 inline-flex items-center gap-1 underline cursor-pointer"
-            >
-              {t.dashboard.vetTipLink} <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
+      {/* Background Decorative SVG Waves for the vibrant turquoise aesthetic */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 select-none -z-10">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 1440 900"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M-100 200 C 300 100, 600 350, 1000 220 C 1200 150, 1400 280, 1600 200 L 1600 900 L -100 900 Z"
+            fill="rgba(255, 255, 255, 0.15)"
+          />
+          <path
+            d="M-50 450 C 250 350, 700 600, 1100 480 C 1300 420, 1500 520, 1650 460 L 1650 900 L -50 900 Z"
+            fill="rgba(255, 255, 255, 0.12)"
+          />
+          <path
+            d="M-80 650 C 350 580, 800 780, 1200 670 C 1400 620, 1550 710, 1700 680 L 1700 900 L -80 900 Z"
+            fill="rgba(255, 255, 255, 0.08)"
+          />
+        </svg>
       </div>
 
-      {/* Search & Category Filter Section */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Search Box */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              id="input-search-protocols"
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder={t.dashboard.searchPlaceholder}
-              className="w-full bg-white border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:border-teal-500 shadow-xs font-medium"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600"
-              >
-                {t.dashboard.clear}
-              </button>
+      <div className="space-y-6">
+        
+        {/* Dynamic Active Module Detail View (when user opens a protocol or reader) */}
+        {activeModuleId && (
+          <div id="active-module-view" className="animate-fade-in mb-8">
+            {activeModuleId === 'antiotite' && (
+              <OtiteProtocolView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'cao-blindado' && (
+              <CaoBlindadoReader onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'frequencias' && (
+              <AudioSynthesizerPlayer onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'coach-canino' && (
+              <CanineCoachChat onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'anticoceira' && (
+              <AntiItchProtocolView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'mobilidade' && (
+              <MobilityProtocolView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'presentes' && (
+              <BonusGiftsView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'pet-em-dia' && (
+              <PetEmDiaView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'antibafo' && (
+              <FreshBreathView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'comer-coco' && (
+              <StopCoprophagiaView onClose={() => setActiveModuleId(null)} />
+            )}
+            {activeModuleId === 'aulas-ao-vivo' && (
+              <LiveClassesView onClose={() => setActiveModuleId(null)} />
             )}
           </div>
-        </div>
+        )}
 
-        {/* Category Pills Filter */}
-        <CategoryFilter />
-      </div>
-
-      {/* Featured Primary Product Spotlight Banner: Cuidados com os Ouvidos (Adeus Otite) */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-teal-700 to-[#0f4c5c] rounded-3xl p-5 sm:p-7 text-white shadow-xl border-2 border-emerald-400/40">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shrink-0 shadow-inner border border-white/30">
-              👂
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="bg-yellow-400 text-slate-950 font-black text-[10px] sm:text-[11px] uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
-                  {t.dashboard.spotlightBadge}
-                </span>
-                <span className="text-teal-200 text-xs font-bold hidden sm:inline">
-                  {t.dashboard.spotlightSub}
-                </span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                {t.dashboard.spotlightTitle}
-              </h2>
-              <p className="text-xs sm:text-sm text-teal-100 max-w-xl font-medium leading-relaxed">
-                {t.dashboard.spotlightDesc}
-              </p>
+        {/* View Mode Switcher Header Pill */}
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-black/15 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-black uppercase text-teal-100 tracking-wider">
+              {isEn ? 'View Layout:' : 'Modo de Visualização:'}
+            </span>
+            <div className="flex items-center bg-black/30 p-1 rounded-xl border border-white/10">
+              <button
+                id="btn-view-circles"
+                onClick={() => setViewMode('circles')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                  viewMode === 'circles'
+                    ? 'bg-white text-teal-950 shadow-md'
+                    : 'text-white/80 hover:text-white'
+                }`}
+              >
+                <CircleDot className="w-3.5 h-3.5" />
+                <span>{isEn ? 'Circular Bubbles' : 'Círculos Originais'}</span>
+              </button>
+              <button
+                id="btn-view-grid"
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-white text-teal-950 shadow-md'
+                    : 'text-white/80 hover:text-white'
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span>{isEn ? 'Detailed Cards' : 'Cards Detalhados'}</span>
+              </button>
             </div>
           </div>
 
-          <button
-            id="btn-open-otite-featured"
-            onClick={() => {
-              setActiveModuleId('antiotite');
-              setTimeout(() => {
-                document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-            }}
-            className="w-full md:w-auto bg-white hover:bg-teal-50 text-teal-950 font-black px-6 py-3.5 rounded-2xl text-xs sm:text-sm shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
-          >
-            <span>{t.dashboard.spotlightBtn}</span>
-            <ArrowRight className="w-4 h-4 text-teal-700" />
-          </button>
-        </div>
-      </div>
-
-      {/* Deliverables Cards Grid */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-            {t.dashboard.protocolsHeading} ({filteredDeliverables.length})
-          </h2>
-          <span className="text-xs text-slate-500 font-bold">
-            Portal Oficial PWA
-          </span>
-        </div>
-
-        {filteredDeliverables.length === 0 ? (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-xs space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-2xl">
-              🔍
+          <div className="flex items-center gap-3">
+            <div className="text-xs text-white/90 font-bold hidden sm:block">
+              {unlockedCount} / {totalCount} {isEn ? 'Protocols Unlocked' : 'Protocolos Liberados'}
             </div>
-            <h3 className="text-base font-black text-slate-800">
-              {t.dashboard.noResults}
-            </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Tente buscar por "otite", "coceira", "cão blindado", "frequência" ou limpe os filtros de categoria.
-            </p>
             <button
-              onClick={() => {
-                setSearchQuery('');
-              }}
-              className="bg-teal-600 hover:bg-teal-700 text-white text-xs font-black px-4 py-2 rounded-xl transition-colors cursor-pointer"
+              onClick={() => setIsSupportOpen(true)}
+              className="bg-white/20 hover:bg-white/30 text-white text-xs font-black px-3 py-1.5 rounded-xl border border-white/30 transition-all cursor-pointer"
             >
-              Ver Todos os Protocolos
+              {isEn ? 'Help & FAQ' : 'Ajuda & FAQ'}
             </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {filteredDeliverables.map(item => (
-              <DeliverableCard
-                key={item.id}
-                item={item}
-                onOpen={() => {
-                  setActiveModuleId(item.id);
-                  // Scroll smoothly to active module container
-                  setTimeout(() => {
-                    document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
+        </div>
+
+        {/* Search & Filter Bar (shown if opened or in grid mode) */}
+        {(searchOpen || viewMode === 'grid' || searchQuery) && (
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 border border-white/40 shadow-xl space-y-3 animate-fade-in">
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                id="input-search-protocols"
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder={t.dashboard.searchPlaceholder}
+                className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:border-teal-500 font-medium text-slate-800"
               />
-            ))}
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600"
+                >
+                  {t.dashboard.clear}
+                </button>
+              )}
+            </div>
+
+            {/* Category Filter Pills */}
+            <CategoryFilter />
           </div>
         )}
+
+        {/* PRIMARY VIEW 1: Iconic Circular Launcher (Exact layout from user's screenshots) */}
+        {viewMode === 'circles' && !searchQuery && (
+          <div className="py-2 animate-fade-in">
+            <CircularLauncher onOpenSupport={() => setIsSupportOpen(true)} />
+          </div>
+        )}
+
+        {/* PRIMARY VIEW 2: Detailed Cards Grid */}
+        {(viewMode === 'grid' || searchQuery) && (
+          <div className="space-y-4 animate-fade-in">
+            <div className="flex items-center justify-between text-white">
+              <h2 className="text-lg sm:text-xl font-black tracking-tight drop-shadow-xs">
+                {t.dashboard.protocolsHeading} ({filteredDeliverables.length})
+              </h2>
+              <span className="text-xs text-white/80 font-bold bg-white/20 px-3 py-1 rounded-full border border-white/20">
+                PWA Offline-Ready
+              </span>
+            </div>
+
+            {filteredDeliverables.length === 0 ? (
+              <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-xl space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-2xl">
+                  🔍
+                </div>
+                <h3 className="text-base font-black text-slate-800">
+                  {t.dashboard.noResults}
+                </h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  {isEn
+                    ? 'Try searching for "otitis", "itching", "armored dog", "frequencies" or clear your filters.'
+                    : 'Tente buscar por "otite", "coceira", "cão blindado", "frequência" ou limpe os filtros de categoria.'}
+                </p>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="bg-teal-600 hover:bg-teal-700 text-white text-xs font-black px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                >
+                  {isEn ? 'View All Protocols' : 'Ver Todos os Protocolos'}
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                {filteredDeliverables.map(item => (
+                  <DeliverableCard
+                    key={item.id}
+                    item={item}
+                    onOpen={() => {
+                      setActiveModuleId(item.id);
+                      setTimeout(() => {
+                        document.getElementById('active-module-view')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
+
+      {/* Support FAQ Modal */}
+      <SupportFaqModal
+        isOpen={isSupportOpen}
+        onClose={() => setIsSupportOpen(false)}
+      />
 
     </div>
   );
