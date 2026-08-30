@@ -1,6 +1,6 @@
 {
-  "name": "Portal Pet - Adeus Otite & Protocolos Caninos",
-  "description": "Plataforma completa de saúde canina, protocolo Adeus Otite, receitas caseiras funcionais, frequências calmantes e orientações veterinárias naturais.",
+  "name": "Gelatina Bariátrica - Protocolo Oficial",
+  "description": "Aplicación y portal oficial del Truco de la Gelatina Bariátrica. Recetas exclusivas, cronograma de consumo, calculadora de dosis, menús y guía de resultados.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

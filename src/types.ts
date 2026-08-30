@@ -1,141 +1,93 @@
-export type Language = 'pt' | 'en';
+export type Language = 'es' | 'pt' | 'en';
 
-export type DeliverableType =
-  | 'cao-blindado'
-  | 'coach-canino'
-  | 'anticoceira'
-  | 'coceira-xixi'
-  | 'mobilidade'
-  | 'antiotite'
-  | 'aulas-ao-vivo'
-  | 'frequencias'
-  | 'presentes'
-  | 'pet-em-dia'
-  | 'antibafo'
-  | 'comer-coco'
-  | 'suporte';
-
-export interface MaterialItem {
+export interface UserProfile {
   name: string;
-  size: string;
-  type: 'PDF' | 'AUDIO' | 'VIDEO' | 'DOC';
-  downloadUrl?: string;
+  email: string;
+  isVip: boolean;
+  startDate: string;
+  targetWeightLossKg: number;
+  currentWeightKg: number;
+  completedDays: number[];
+  unlockedModules: string[];
 }
 
-export interface LessonItem {
-  id?: string;
-  title: string;
-  duration: string;
-  description?: string;
-  videoThumbnail?: string;
-  completed?: boolean;
-}
+export type ModuleCategory = 'protocolo' | 'recetas' | 'herramientas' | 'bonus' | 'soporte';
 
-export interface AudioTrack {
-  id: string;
+export interface RecipeStep {
+  stepNumber: number;
   title: string;
-  freq: string;
-  hz: number;
-  duration: string;
   description: string;
-  color: string;
+  durationMinutes?: number;
+  tip?: string;
 }
 
-export interface NewsArticle {
+export interface RecipeIngredient {
+  name: string;
+  amount: string;
+  importance?: string;
+  substitute?: string;
+}
+
+export interface BariatricRecipe {
   id: string;
   title: string;
-  date: string;
   category: string;
-  readTime: string;
-  summary: string;
-  content: string;
-  image?: string;
+  badge: string;
+  prepTime: string;
+  calories: string;
+  satietyIndex: string; // e.g. "98% Saciedad"
+  description: string;
+  imageUrl: string;
+  ingredients: RecipeIngredient[];
+  steps: RecipeStep[];
+  goldenRule: string;
+  consumptionSchedule: string;
+}
+
+export interface DailyPlanDay {
+  day: number;
+  phase: string;
+  phaseNumber: number;
+  title: string;
+  focus: string;
+  morningShot: string;
+  gelatinDoseMorning: string;
+  gelatinDoseAfternoon: string;
+  drainTea: string;
+  sosTip: string;
+  actionChecklist: string[];
+}
+
+export interface ShotRecipe {
+  id: string;
+  name: string;
+  time: string;
+  benefits: string[];
+  ingredients: string[];
+  preparation: string;
+}
+
+export interface TeaRecipe {
+  id: string;
+  name: string;
+  effect: string;
+  ingredients: string[];
+  instructions: string;
+  bestTime: string;
 }
 
 export interface FaqItem {
   question: string;
   answer: string;
-}
-
-export interface DeliverableItem {
-  id: DeliverableType;
-  title: string;
-  subtitle: string;
-  type: DeliverableType;
-  isLocked: boolean;
   category: string;
-  badge?: string;
-  tagline?: string;
-  description: string;
-  icon?: string;
-  color?: string;
-  content: {
-    overview: string;
-    lessons?: LessonItem[];
-    materials?: MaterialItem[];
-    audioTracks?: AudioTrack[];
-    newsArticles?: NewsArticle[];
-    faqs?: FaqItem[];
-    steps?: string[];
-  };
 }
 
-export interface RecipeItem {
-  id: number;
-  number: number;
-  name: string;
-  categoryName: string;
-  badge: string;
-  icon: string;
-  accentColor: string;
-  targetBenefit: string;
-  baseDosageGramsPer10kg: number;
-  ingredients: {
-    name: string;
-    amountPer10kg: string;
-    rawAmount: number;
-    unit: string;
-    purpose: string;
-  }[];
-  instructions: string[];
-  tips: string[];
-  warning: string;
+export interface ShoppingItem {
+  id: string;
+  item: string;
+  category: 'esenciales' | 'frutas_y_sabores' | 'activadores' | 'opcionales';
+  estimatedCost: string;
+  notes: string;
 }
 
-export interface UpsellConfigItem {
-  key: string;
-  id: DeliverableType;
-  title: string;
-  subtitle: string;
-  category: string;
-  tagline: string;
-  badgeText: string;
-  shortDescription: string;
-  fullBenefits: string[];
-  icon: string;
-  accentColor: string;
-  checkoutUrl: string;
-  checkoutUrlEn?: string;
-  salesPageUrl?: string;
-  salesPageUrlEn?: string;
-  guaranteeDays: number;
-  price?: string;
-  originalPrice?: string;
-}
-
-export interface AccountRecord {
-  email: string;
-  password: string;
-  name: string;
-  isVip: boolean;
-  createdAt?: string;
-  entitlements: Record<string, boolean>;
-}
-
-export interface UserProfile {
-  email: string;
-  name: string;
-  isVip: boolean;
-  isAdmin?: boolean;
-  entitlements: Record<string, boolean>;
-}
+export type ActiveModalType = 'install' | 'nutriChat' | 'admin' | 'support' | 'dosageCalc' | 'shoppingList' | null;

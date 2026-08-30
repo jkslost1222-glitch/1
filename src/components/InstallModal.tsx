@@ -1,159 +1,159 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Smartphone, Share, PlusSquare, MoreVertical, Check, Sparkles, X } from 'lucide-react';
+import { Download, X, Smartphone, Apple, Monitor, CheckCircle2, Sparkles } from 'lucide-react';
 
 export const InstallModal: React.FC = () => {
-  const { isInstallOpen, closeInstallModal, t, isEn } = useApp();
-  const [activeTab, setActiveTab] = useState<'ios' | 'android'>('ios');
+  const { activeModal, setActiveModal, t, isPt, isEn } = useApp();
+  const [activeTab, setActiveTab] = useState<'android' | 'ios' | 'pc'>('android');
+  const [installed, setInstalled] = useState(false);
 
-  if (!isInstallOpen) return null;
+  if (activeModal !== 'install') return null;
+
+  const handleInstallClick = () => {
+    setInstalled(true);
+    setTimeout(() => {
+      setInstalled(false);
+      setActiveModal(null);
+    }, 2000);
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in">
-      <div
-        id="install-modal-container"
-        className="relative w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl border border-teal-200 animate-scale-up"
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in text-white">
+      <div className="bg-slate-900 border-2 border-emerald-500/50 rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        {/* Close Button */}
+        <button
+          onClick={() => setActiveModal(null)}
+          className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#0f4c5c] via-[#0f766e] to-[#00c5b3] p-6 text-white text-center relative">
-          <button
-            id="btn-close-install-modal"
-            onClick={closeInstallModal}
-            className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-all cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-
-          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl mx-auto mb-2 shadow-inner border border-white/20">
-            📱
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-black">
+            <Download className="w-6 h-6" />
           </div>
-
-          <h3 className="text-xl font-black text-white">
-            {t.modals.installTitle}
-          </h3>
-          <p className="text-xs text-teal-100 mt-1 font-medium">
-            {t.modals.installSubtitle}
-          </p>
-
-          {/* OS Tab Switcher */}
-          <div className="flex items-center justify-center gap-2 mt-4 bg-black/20 p-1 rounded-xl">
-            <button
-              onClick={() => setActiveTab('ios')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                activeTab === 'ios'
-                  ? 'bg-white text-teal-950 shadow-sm'
-                  : 'text-white/80 hover:text-white'
-              }`}
-            >
-              {t.modals.installIosTab}
-            </button>
-            <button
-              onClick={() => setActiveTab('android')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                activeTab === 'android'
-                  ? 'bg-white text-teal-950 shadow-sm'
-                  : 'text-white/80 hover:text-white'
-              }`}
-            >
-              {t.modals.installAndroidTab}
-            </button>
+          <div>
+            <h3 className="text-lg sm:text-xl font-black text-white">
+              {t.installModal.title}
+            </h3>
+            <p className="text-xs text-emerald-300">
+              {t.installModal.subtitle}
+            </p>
           </div>
         </div>
 
-        {/* Steps Content */}
-        <div className="p-6 space-y-4">
-          {activeTab === 'ios' ? (
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  1
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>In Safari, tap the <strong>Share</strong> icon (<Share className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) in the bottom toolbar.</>
-                  ) : (
-                    <>No Safari, toque no ícone de <strong>Compartilhar</strong> (<Share className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) na barra inferior.</>
-                  )}
-                </div>
-              </div>
+        {/* Platform tabs */}
+        <div className="grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-slate-950 border border-slate-800 mb-5">
+          <button
+            onClick={() => setActiveTab('android')}
+            className={`py-2 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'android'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>{t.installModal.tabAndroid}</span>
+          </button>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  2
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>Scroll down and tap <strong>Add to Home Screen</strong> (<PlusSquare className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />).</>
-                  ) : (
-                    <>Role a lista para baixo e selecione <strong>Adicionar à Tela de Início</strong> (<PlusSquare className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />).</>
-                  )}
-                </div>
-              </div>
+          <button
+            onClick={() => setActiveTab('ios')}
+            className={`py-2 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'ios'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Apple className="w-3.5 h-3.5" />
+            <span>{t.installModal.tabIos}</span>
+          </button>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  3
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>Tap <strong>Add</strong> in the top right corner. Done! The official icon is now on your home screen.</>
-                  ) : (
-                    <>Toque em <strong>Adicionar</strong> no canto superior direito. Pronto! O ícone oficial aparecerá na tela do seu iPhone.</>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  1
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>In Google Chrome, tap the <strong>3 dots menu</strong> (<MoreVertical className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) in the top right corner.</>
-                  ) : (
-                    <>No Google Chrome, toque no menu de <strong>3 pontinhos</strong> (<MoreVertical className="w-3.5 h-3.5 inline text-teal-700 mx-0.5" />) no canto superior direito.</>
-                  )}
-                </div>
-              </div>
+          <button
+            onClick={() => setActiveTab('pc')}
+            className={`py-2 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'pc'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Monitor className="w-3.5 h-3.5" />
+            <span>{t.installModal.tabPc}</span>
+          </button>
+        </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  2
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>Select <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</>
-                  ) : (
-                    <>Toque na opção <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</>
-                  )}
-                </div>
+        {/* Instructions by Platform */}
+        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+          {activeTab === 'android' && (
+            <>
+              <div className="font-bold text-white mb-1">{t.installModal.androidHeading}</div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">1</span>
+                <span>{t.installModal.androidStep1}</span>
               </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
-                  3
-                </div>
-                <div className="text-xs text-slate-700 leading-relaxed">
-                  {isEn ? (
-                    <>Confirm installation. The app will be ready to use even offline!</>
-                  ) : (
-                    <>Confirme a instalação. O aplicativo estará pronto para ser usado mesmo offline!</>
-                  )}
-                </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">2</span>
+                <span>{t.installModal.androidStep2}</span>
               </div>
-            </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">3</span>
+                <span>{t.installModal.androidStep3}</span>
+              </div>
+            </>
           )}
 
-          <button
-            id="btn-understand-install"
-            onClick={closeInstallModal}
-            className="w-full bg-[#0f4c5c] hover:bg-teal-700 text-white font-black py-3 rounded-2xl text-xs transition-colors cursor-pointer"
-          >
-            {t.common.understood}
-          </button>
+          {activeTab === 'ios' && (
+            <>
+              <div className="font-bold text-white mb-1">{t.installModal.iosHeading}</div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">1</span>
+                <span>{t.installModal.iosStep1}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">2</span>
+                <span>{t.installModal.iosStep2}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">3</span>
+                <span>{t.installModal.iosStep3}</span>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'pc' && (
+            <>
+              <div className="font-bold text-white mb-1">{t.installModal.pcHeading}</div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">1</span>
+                <span>{t.installModal.pcStep1}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">2</span>
+                <span>{t.installModal.pcStep2}</span>
+              </div>
+            </>
+          )}
         </div>
+
+        {/* Action button */}
+        <button
+          onClick={handleInstallClick}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-emerald-950/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+        >
+          {installed ? (
+            <>
+              <CheckCircle2 className="w-5 h-5" />
+              <span>{t.installModal.installSuccessTitle}</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-5 h-5" />
+              <span>{t.installModal.btnInstallNow}</span>
+            </>
+          )}
+        </button>
+
       </div>
     </div>
   );

@@ -1,185 +1,244 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Home, Download, Search, LogOut, LogIn, ChevronLeft, ChevronRight, Globe, ShieldCheck, Sparkles, Smartphone, Shield } from 'lucide-react';
+import { 
+  Flame, 
+  Sparkles, 
+  Calendar, 
+  Calculator, 
+  Coffee, 
+  Utensils, 
+  AlertTriangle, 
+  ShoppingCart, 
+  Music, 
+  HelpCircle, 
+  ChevronRight, 
+  Download, 
+  ShieldCheck,
+  Award,
+  ChevronLeft
+} from 'lucide-react';
 
 interface SidebarProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
-  onSearchClick: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse, onSearchClick }) => {
-  const { isEn, language, setLanguage, user, logout, setActiveModal, openNonClientModal, setActiveModuleId, isAdmin } = useApp();
+export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse }) => {
+  const { 
+    activeTab, 
+    setActiveTab, 
+    setActiveModal, 
+    isEn, 
+    isPt, 
+    isEs,
+    user 
+  } = useApp();
+
+  const menuItems = [
+    {
+      id: 'receta-original',
+      label: isPt ? 'A Fórmula Original' : isEn ? 'The Original Formula' : 'La Fórmula Original',
+      sub: isPt ? 'Efeito Balão Gástrico' : isEn ? 'Gastric Balloon Effect' : 'Efecto Balón Gástrico',
+      icon: Flame,
+      badge: 'OFICIAL',
+      badgeColor: 'bg-rose-500 text-white'
+    },
+    {
+      id: 'sabores',
+      label: isPt ? '6 Sabores Redutores' : isEn ? '6 Satiating Flavors' : '6 Sabores Reductores',
+      sub: isPt ? 'Frutas, Café & Maracujá' : isEn ? 'Berries, Coffee & Passionfruit' : 'Frutos Rojos, Café y Piña',
+      icon: Sparkles,
+      badge: 'TOP',
+      badgeColor: 'bg-amber-500 text-slate-950'
+    },
+    {
+      id: 'cronograma',
+      label: isPt ? 'Cronograma 21 Dias' : isEn ? '21-Day Schedule' : 'Cronograma 21 Días',
+      sub: isPt ? 'Fases 1, 2 e 3 Guiadas' : isEn ? 'Guided Phases 1, 2 & 3' : 'Fases 1, 2 y 3 Guiadas',
+      icon: Calendar,
+      badge: '21D',
+      badgeColor: 'bg-emerald-500 text-slate-950'
+    },
+    {
+      id: 'calculadora',
+      label: isPt ? 'Calculadora de Doses' : isEn ? 'Dosage Calculator' : 'Calculadora de Dosis',
+      sub: isPt ? 'Personalizada por Peso' : isEn ? 'Custom by Weight' : 'Personalizada por Peso',
+      icon: Calculator,
+      badge: 'AUTO',
+      badgeColor: 'bg-sky-500 text-white'
+    },
+    {
+      id: 'shots-tes',
+      label: isPt ? 'Shots & Chás Drenantes' : isEn ? 'Shots & Drainage Teas' : 'Shots & Tés Drenantes',
+      sub: isPt ? 'Ativação & Anti-Inchaço' : isEn ? 'Metabolic Boost & Detox' : 'Activación & Desinflamación',
+      icon: Coffee,
+      badge: 'BÔNUS',
+      badgeColor: 'bg-purple-500 text-white'
+    },
+    {
+      id: 'menu-saciante',
+      label: isPt ? 'Guia do Prato Saciante' : isEn ? 'Satiety Meal Guide' : 'Guía del Plato Saciante',
+      sub: isPt ? 'Combinações que Queimam' : isEn ? 'Fat-Burning Combos' : 'Combinaciones que Queman',
+      icon: Utensils,
+      badge: 'GUÍA',
+      badgeColor: 'bg-teal-500 text-slate-950'
+    },
+    {
+      id: 'sos-antojos',
+      label: isPt ? 'SOS Compulsão Noturna' : isEn ? 'SOS Night Cravings' : 'SOS Antojos Nocturnos',
+      sub: isPt ? 'Apagar Vontade de Doces' : isEn ? 'Crush Sugar Urges' : 'Apagar Ganas de Azúcar',
+      icon: AlertTriangle,
+      badge: '3 MIN',
+      badgeColor: 'bg-rose-600 text-white'
+    },
+    {
+      id: 'lista-compras',
+      label: isPt ? 'Lista de Supermercado' : isEn ? 'Smart Shopping List' : 'Lista de Supermercado',
+      sub: isPt ? 'Ingredientes Baratos' : isEn ? 'Budget Ingredients' : 'Ingredientes Económicos',
+      icon: ShoppingCart,
+      badge: 'PDF',
+      badgeColor: 'bg-amber-400 text-slate-950'
+    },
+    {
+      id: 'audio-frecuencias',
+      label: isPt ? 'Frequências 528Hz' : isEn ? '528Hz Relax Audio' : 'Frecuencias 528Hz',
+      sub: isPt ? 'Redução de Cortisol' : isEn ? 'Anti-Stress Waves' : 'Reducción de Cortisol',
+      icon: Music,
+      badge: 'AUDIO',
+      badgeColor: 'bg-indigo-500 text-white'
+    },
+    {
+      id: 'faq-soporte',
+      label: isPt ? 'Dúvidas & Garantia' : isEn ? 'FAQ & Guarantee' : 'Dudas & Garantía',
+      sub: isPt ? 'Suporte VIP 24h' : isEn ? 'VIP 24/7 Support' : 'Soporte VIP 24h',
+      icon: HelpCircle,
+      badge: 'VIP',
+      badgeColor: 'bg-slate-700 text-slate-200'
+    }
+  ];
 
   return (
     <aside
-      className={`relative bg-white border-r border-slate-200/80 shadow-md transition-all duration-300 flex flex-col justify-between z-30 shrink-0 select-none ${
-        isCollapsed ? 'w-16 sm:w-20' : 'w-60 sm:w-64'
+      className={`h-screen bg-slate-950 border-r border-rose-500/20 text-slate-200 flex flex-col justify-between transition-all duration-300 z-30 sticky top-0 ${
+        isCollapsed ? 'w-20' : 'w-72'
       }`}
     >
-      {/* Collapse / Expand circular toggle button attached to right border */}
-      <button
-        id="btn-toggle-sidebar"
-        onClick={onToggleCollapse}
-        className="absolute -right-3.5 top-20 w-7 h-7 rounded-full bg-white border border-slate-300 shadow-md text-slate-600 hover:text-teal-700 hover:scale-110 flex items-center justify-center transition-all z-40 cursor-pointer"
-        title={isCollapsed ? (isEn ? "Expand sidebar" : "Expandir menu") : (isEn ? "Collapse sidebar" : "Recolher menu")}
-      >
-        {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-      </button>
-
-      {/* Top Brand Logo: Adeus Otite mascot badge */}
-      <div className="p-4 sm:p-5 flex flex-col items-center border-b border-slate-100">
-        <button
-          onClick={() => {
-            setActiveModuleId(null);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className="flex flex-col items-center text-center group cursor-pointer"
-        >
-          {/* Mascot Circle Badge */}
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-teal-400 via-[#00c5b3] to-sky-400 p-1 shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform flex items-center justify-center">
-            <div className="w-full h-full rounded-full bg-white flex flex-col items-center justify-center overflow-hidden relative">
-              <span className="text-2xl sm:text-3xl">🐶</span>
-              <span className="absolute bottom-0 text-[8px] sm:text-[9px] font-black text-teal-800 bg-teal-100/90 px-1.5 py-0.2 rounded-t-md">
-                Adeus Otite
-              </span>
-            </div>
-          </div>
-
+      {/* Top Section */}
+      <div className="p-4 flex flex-col gap-4">
+        
+        {/* Brand & Collapse Header */}
+        <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <div className="mt-2.5">
-              <h2 className="text-sm font-black text-teal-950 tracking-tight leading-none">
-                Adeus Otite
-              </h2>
-              <span className="text-[10px] text-teal-600 font-bold uppercase tracking-wider">
-                {isEn ? 'Official Portal' : 'Portal Oficial'}
-              </span>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center text-white shadow-md">
+                <Flame className="w-4 h-4" />
+              </div>
+              <div className="leading-tight">
+                <div className="font-black text-sm text-white tracking-tight">
+                  GELATINA <span className="text-rose-400">BARIÁTRICA</span>
+                </div>
+                <div className="text-[10px] text-amber-300 font-bold">
+                  {isPt ? 'MÉTODO OFICIAL' : isEn ? 'OFFICIAL METHOD' : 'MÉTODO OFICIAL'}
+                </div>
+              </div>
             </div>
           )}
-        </button>
-      </div>
 
-      {/* Navigation Menu Links */}
-      <div className="p-3 sm:p-4 space-y-2 flex-1">
-        {/* 1. Home / Lar */}
-        <button
-          id="sidebar-link-home"
-          onClick={() => {
-            setActiveModuleId(null);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className={`w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-            'bg-[#e6f8f5] text-[#0f766e] shadow-xs'
-          }`}
-          title={isEn ? "Home" : "Lar"}
-        >
-          <Home className="w-5 h-5 shrink-0 text-[#0f766e]" />
-          {!isCollapsed && <span>{isEn ? 'Home' : 'Lar'}</span>}
-        </button>
-
-        {/* 2. Admin Panel / Gestão de Alunos */}
-        <button
-          id="sidebar-link-admin"
-          onClick={() => setActiveModal('admin')}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-800 bg-amber-50 hover:bg-amber-100 border border-amber-300/60 transition-all cursor-pointer shadow-xs"
-          title={isEn ? "Admin Panel" : "Painel Admin (Alunos)"}
-        >
-          <Shield className="w-5 h-5 shrink-0 text-amber-600" />
-          {!isCollapsed && <span className="text-amber-950">{isEn ? 'Admin Panel' : 'Painel Admin'}</span>}
-        </button>
-
-        {/* 3. Install App / Instalar aplicativo */}
-        <button
-          id="sidebar-link-install"
-          onClick={() => setActiveModal('install')}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-bold text-xs sm:text-sm text-slate-700 hover:bg-slate-100 hover:text-teal-900 transition-all cursor-pointer"
-          title={isEn ? "Install App" : "Instalar aplicativo"}
-        >
-          <Download className="w-5 h-5 shrink-0 text-slate-500" />
-          {!isCollapsed && <span>{isEn ? 'Install App' : 'Instalar aplicativo'}</span>}
-        </button>
-
-        {/* 4. Search / Procurar */}
-        <button
-          id="sidebar-link-search"
-          onClick={onSearchClick}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-bold text-xs sm:text-sm text-slate-700 hover:bg-slate-100 hover:text-teal-900 transition-all cursor-pointer"
-          title={isEn ? "Search" : "Procurar"}
-        >
-          <Search className="w-5 h-5 shrink-0 text-slate-500" />
-          {!isCollapsed && <span>{isEn ? 'Search' : 'Procurar'}</span>}
-        </button>
-
-        {/* 5. Log Out / Sair (or Sign In / Entrar) */}
-        {user ? (
           <button
-            id="sidebar-link-logout"
-            onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-bold text-xs sm:text-sm text-slate-700 hover:bg-red-50 hover:text-red-700 transition-all cursor-pointer"
-            title={isEn ? "Log Out" : "Sair"}
+            onClick={onToggleCollapse}
+            className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors mx-auto cursor-pointer"
+            title={isCollapsed ? 'Expandir' : 'Colapsar'}
           >
-            <LogOut className="w-5 h-5 shrink-0 text-slate-500 hover:text-red-600" />
-            {!isCollapsed && <span>{isEn ? 'Log Out' : 'Sair'}</span>}
+            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
-        ) : (
-          <button
-            id="sidebar-link-login"
-            onClick={openNonClientModal}
-            className="w-full flex items-center gap-3 px-3 py-3 rounded-2xl font-bold text-xs sm:text-sm text-teal-800 bg-teal-50 hover:bg-teal-100 transition-all cursor-pointer"
-            title={isEn ? "Sign In" : "Entrar"}
-          >
-            <LogIn className="w-5 h-5 shrink-0 text-teal-700" />
-            {!isCollapsed && <span>{isEn ? 'Sign In' : 'Entrar'}</span>}
-          </button>
-        )}
-      </div>
+        </div>
 
-      {/* Bottom Language Selector Box */}
-      <div className="p-3 sm:p-4 border-t border-slate-100 bg-slate-50/70">
-        {!isCollapsed ? (
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-black text-slate-600 uppercase tracking-wider flex items-center gap-1">
-              <Globe className="w-3.5 h-3.5 text-teal-600" />
-              <span>{isEn ? 'Language / Idioma:' : 'Idioma / Language:'}</span>
-            </label>
-            <div className="grid grid-cols-2 gap-1.5 bg-slate-200/80 p-1 rounded-xl">
-              <button
-                id="sidebar-lang-pt"
-                onClick={() => setLanguage('pt')}
-                className={`py-2 px-2 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                  !isEn
-                    ? 'bg-amber-400 text-slate-950 shadow-sm ring-1 ring-black/10'
-                    : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-                }`}
-              >
-                <span>🇧🇷</span>
-                <span>Português</span>
-              </button>
-              <button
-                id="sidebar-lang-en"
-                onClick={() => setLanguage('en')}
-                className={`py-2 px-2 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                  isEn
-                    ? 'bg-amber-400 text-slate-950 shadow-sm ring-1 ring-black/10'
-                    : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-                }`}
-              >
-                <span>🇺🇸</span>
-                <span>English</span>
-              </button>
+        {/* User Card */}
+        {!isCollapsed && (
+          <div className="p-3 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-850 border border-rose-500/30 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-black text-sm">
+              👑
+            </div>
+            <div className="overflow-hidden">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-black text-white truncate">{user?.name || 'Alumna VIP'}</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              </div>
+              <div className="text-[10px] text-amber-400 font-bold truncate">
+                {isPt ? 'Acesso Vitalício Ativo' : isEn ? 'Lifetime Access Active' : 'Acceso Vitalicio Activo'}
+              </div>
             </div>
           </div>
+        )}
+
+      </div>
+
+      {/* Navigation List */}
+      <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5 custom-scrollbar">
+        {menuItems.map(item => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              title={item.label}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left transition-all cursor-pointer group ${
+                isActive
+                  ? 'bg-gradient-to-r from-rose-600 to-rose-700 text-white font-black shadow-lg shadow-rose-950/60 border border-rose-400/40 translate-x-1'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+              }`}
+            >
+              <div className={`p-2 rounded-xl transition-all ${
+                isActive 
+                  ? 'bg-white/20 text-white shadow-xs' 
+                  : 'bg-slate-900 text-rose-400 group-hover:text-amber-300 group-hover:bg-slate-800'
+              }`}>
+                <Icon className="w-4 h-4" />
+              </div>
+
+              {!isCollapsed && (
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-bold truncate">{item.label}</span>
+                    {item.badge && (
+                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shrink-0 ${item.badgeColor}`}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
+                  <div className={`text-[10px] truncate ${isActive ? 'text-rose-100' : 'text-slate-400'}`}>
+                    {item.sub}
+                  </div>
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Bottom PWA Install & Guarantee Box */}
+      <div className="p-3 border-t border-slate-900 flex flex-col gap-2">
+        {!isCollapsed ? (
+          <button
+            onClick={() => setActiveModal('install')}
+            className="w-full py-2.5 px-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-emerald-300 text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span>{isPt ? 'Instalar App no Celular' : isEn ? 'Install App on Phone' : 'Instalar App en el Celular'}</span>
+          </button>
         ) : (
           <button
-            onClick={() => setLanguage(isEn ? 'pt' : 'en')}
-            className="w-full py-2 bg-amber-400 text-slate-950 hover:bg-amber-300 rounded-xl text-xs font-black text-center transition-all cursor-pointer shadow-xs flex items-center justify-center gap-1"
-            title={isEn ? "Switch to Portuguese" : "Mudar para Inglês"}
+            onClick={() => setActiveModal('install')}
+            className="w-full p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center justify-center cursor-pointer"
+            title="Instalar App"
           >
-            <span>{isEn ? '🇺🇸' : '🇧🇷'}</span>
-            <span>{isEn ? 'EN' : 'PT'}</span>
+            <Download className="w-4 h-4" />
           </button>
         )}
       </div>
+
     </aside>
   );
 };
