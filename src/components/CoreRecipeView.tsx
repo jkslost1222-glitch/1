@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { CORE_BARIATRIC_RECIPE } from '../data/bariatricData';
+import { getCoreRecipe } from '../data/bariatricData';
 import { 
   Flame, 
   Clock, 
   Sparkles, 
-  CheckCircle2, 
-  AlertCircle, 
-  Play, 
-  Pause, 
-  RotateCcw, 
   Check, 
   Droplet, 
   ShieldCheck, 
@@ -18,13 +13,11 @@ import {
 } from 'lucide-react';
 
 export const CoreRecipeView: React.FC = () => {
-  const { isPt, isEn, setActiveModal } = useApp();
-  const recipe = CORE_BARIATRIC_RECIPE;
+  const { language, t, setActiveModal } = useApp();
+  const recipe = getCoreRecipe(language);
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const [timerSeconds, setTimerSeconds] = useState(300);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const toggleStepDone = (stepNum: number) => {
     setCompletedSteps(prev => 
@@ -78,15 +71,15 @@ export const CoreRecipeView: React.FC = () => {
               className="px-5 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-black text-xs sm:text-sm shadow-xl shadow-rose-950/50 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              <span>{isPt ? 'Calcular Minha Dose por Peso' : isEn ? 'Calculate Dose by Weight' : 'Calcular Mi Dosis por Peso'}</span>
+              <span>{t.recipeView.calcDoseBtn}</span>
             </button>
 
             <div className="p-3 rounded-2xl bg-slate-950/90 border border-rose-500/30 text-center">
               <div className="text-[11px] text-amber-300 font-black uppercase">
-                {isPt ? '⚡ Rende 3 a 4 Dias' : isEn ? '⚡ Yields 3 to 4 Days' : '⚡ Rinde 3 a 4 Días'}
+                {t.recipeView.yieldBadge}
               </div>
               <div className="text-[10px] text-slate-400 mt-0.5">
-                {isPt ? 'Conservar em pote de vidro na geladeira' : isEn ? 'Store in glass container in fridge' : 'Conservar en táper de vidrio en la nevera'}
+                {t.recipeView.storageTip}
               </div>
             </div>
           </div>
@@ -100,7 +93,7 @@ export const CoreRecipeView: React.FC = () => {
         </div>
         <div className="flex-1">
           <div className="text-xs font-black uppercase tracking-wider text-amber-300">
-            {isPt ? 'REVISE ANTES DE CONSUMIR • REGRA DE OURO' : isEn ? 'READ BEFORE DRINKING • GOLDEN RULE' : 'REVISA ANTES DE CONSUMIR • REGLA DE ORO'}
+            {t.recipeView.goldenRuleTitle}
           </div>
           <p className="text-xs sm:text-sm text-white font-semibold mt-0.5 leading-snug">
             {recipe.goldenRule}
@@ -118,11 +111,11 @@ export const CoreRecipeView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="text-lg">🧪</span>
                 <h3 className="text-base font-black text-white">
-                  {isPt ? 'Ingredientes Exatos' : isEn ? 'Exact Ingredients' : 'Ingredientes Exactos'}
+                  {t.recipeView.exactIngredientsTitle}
                 </h3>
               </div>
               <span className="text-xs font-bold text-rose-400">
-                {recipe.ingredients.length} {isPt ? 'itens' : isEn ? 'items' : 'elementos'}
+                {recipe.ingredients.length} {t.recipeView.elementsLabel}
               </span>
             </div>
 
@@ -143,13 +136,13 @@ export const CoreRecipeView: React.FC = () => {
 
                   {ing.importance && (
                     <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
-                      💡 <strong className="text-slate-300">{isPt ? 'Função:' : isEn ? 'Function:' : 'Función:'}</strong> {ing.importance}
+                      💡 <strong className="text-slate-300">{t.recipeView.functionLabel}</strong> {ing.importance}
                     </p>
                   )}
 
                   {ing.substitute && (
                     <div className="text-[10px] text-amber-300/90 font-medium mt-1">
-                      🔄 <em>{isPt ? 'Substituto:' : isEn ? 'Substitute:' : 'Sustituto:'}</em> {ing.substitute}
+                      🔄 <em>{t.recipeView.substituteLabel}</em> {ing.substitute}
                     </div>
                   )}
                 </div>
@@ -161,7 +154,7 @@ export const CoreRecipeView: React.FC = () => {
                 onClick={() => setActiveModal('shoppingList')}
                 className="text-xs font-bold text-amber-400 hover:text-amber-300 hover:underline flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
               >
-                <span>🛒 {isPt ? 'Ver Lista de Supermercado Completa' : isEn ? 'View Smart Shopping List' : 'Ver Lista de Supermercado Completa'}</span>
+                <span>🛒 {t.recipeView.viewShoppingList}</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -175,11 +168,11 @@ export const CoreRecipeView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="text-lg">🥣</span>
                 <h3 className="text-base font-black text-white">
-                  {isPt ? 'Modo de Preparo Passo a Passo' : isEn ? 'Step-by-Step Preparation' : 'Modo de Preparación Paso a Paso'}
+                  {t.recipeView.prepStepsTitle}
                 </h3>
               </div>
               <div className="text-xs text-emerald-400 font-bold">
-                {completedSteps.length} / {recipe.steps.length} {isPt ? 'concluídos' : isEn ? 'completed' : 'completados'}
+                {completedSteps.length} / {recipe.steps.length} {t.recipeView.completedLabel}
               </div>
             </div>
 
@@ -222,7 +215,7 @@ export const CoreRecipeView: React.FC = () => {
                             <span>{step.title}</span>
                             {step.durationMinutes && (
                               <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">
-                                ⏱️ {step.durationMinutes} min
+                                ⏱️ {step.durationMinutes} {t.recipeView.minDuration}
                               </span>
                             )}
                           </h4>
@@ -234,11 +227,11 @@ export const CoreRecipeView: React.FC = () => {
                           e.stopPropagation();
                           toggleStepDone(step.stepNumber);
                         }}
-                        className={`text-xs font-bold px-2.5 py-1 rounded-lg transition-colors ${
+                        className={`text-xs font-bold px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                           isDone ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-400 hover:text-white bg-slate-800/60'
                         }`}
                       >
-                        {isDone ? 'Listo ✓' : 'Marcar'}
+                        {isDone ? t.recipeView.markedDone : t.recipeView.markDone}
                       </button>
                     </div>
 
@@ -248,7 +241,7 @@ export const CoreRecipeView: React.FC = () => {
 
                     {step.tip && (
                       <div className="mt-2.5 ml-10 p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/20 text-[11px] text-amber-200 leading-relaxed">
-                        ⭐ <strong>{isPt ? 'Dica de Ouro:' : isEn ? 'Secret Tip:' : 'Consejo de Oro:'}</strong> {step.tip}
+                        ⭐ <strong>{t.recipeView.goldenTipLabel}</strong> {step.tip}
                       </div>
                     )}
                   </div>
@@ -260,7 +253,7 @@ export const CoreRecipeView: React.FC = () => {
             <div className="mt-6 p-4 rounded-2xl bg-slate-950 border border-rose-500/30">
               <div className="flex items-center gap-2 text-rose-300 font-bold text-xs uppercase mb-1">
                 <Clock className="w-4 h-4" />
-                <span>{isPt ? 'Horários Estratégicos de Consumo' : isEn ? 'Strategic Consumption Schedule' : 'Horarios Estratégicos de Consumo'}</span>
+                <span>{t.recipeView.consumptionScheduleTitle}</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                 {recipe.consumptionSchedule}

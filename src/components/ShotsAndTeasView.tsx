@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { MORNING_SHOTS, DRAINAGE_TEAS } from '../data/bariatricData';
+import { getMorningShots, getDrainageTeas } from '../data/bariatricData';
 import { Coffee, Flame, Droplet, Clock, Sparkles, ShieldCheck, Heart } from 'lucide-react';
 
 export const ShotsAndTeasView: React.FC = () => {
-  const { isPt, isEn } = useApp();
+  const { language, t } = useApp();
   const [activeSubTab, setActiveSubTab] = useState<'shots' | 'teas'>('shots');
+
+  const shots = getMorningShots(language);
+  const teas = getDrainageTeas(language);
 
   return (
     <div className="space-y-6 text-white pb-12 animate-fade-in">
@@ -15,17 +18,13 @@ export const ShotsAndTeasView: React.FC = () => {
         <div className="max-w-3xl space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-black uppercase tracking-wider">
             <Coffee className="w-3.5 h-3.5" />
-            <span>{isPt ? 'Módulos Aceleradores' : isEn ? 'Accelerator Modules' : 'Módulos Aceleradores'}</span>
+            <span>{t.shotsView.badge}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            {isPt ? 'Shots Matinais & Chás Drenantes' : isEn ? 'Morning Shots & Drainage Teas' : 'Shots Matutinos & Tés Drenantes'}
+            {t.shotsView.title}
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            {isPt
-              ? 'Combinações líquidas poderosas para desinflamar o fígado ao acordar e drenar até 1 litro de retenção de água sem perder minerais essenciais.'
-              : isEn
-              ? 'Potent liquid elixirs to awaken liver metabolism upon waking and flush excess water weight without mineral depletion.'
-              : 'Combinaciones líquidas de alta potencia para desintoxicar el hígado al despertar y eliminar la retención de líquidos acumulada en abdomen y piernas.'}
+            {t.shotsView.subtitle}
           </p>
         </div>
       </div>
@@ -41,7 +40,7 @@ export const ShotsAndTeasView: React.FC = () => {
           }`}
         >
           <span>🌅</span>
-          <span>{isPt ? '7 Shots Matinais' : isEn ? '7 Morning Shots' : '7 Shots Matutinos'}</span>
+          <span>{t.shotsView.tabShots}</span>
         </button>
 
         <button
@@ -53,14 +52,14 @@ export const ShotsAndTeasView: React.FC = () => {
           }`}
         >
           <span>🍵</span>
-          <span>{isPt ? 'Tés Drenantes' : isEn ? 'Drainage Teas' : 'Tés Drenantes'}</span>
+          <span>{t.shotsView.tabTeas}</span>
         </button>
       </div>
 
       {/* Shots Content */}
       {activeSubTab === 'shots' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {MORNING_SHOTS.map((shot) => (
+          {shots.map((shot) => (
             <div
               key={shot.id}
               className="p-5 rounded-3xl bg-slate-900/90 border border-purple-500/30 hover:border-purple-500/60 transition-all shadow-xl space-y-4"
@@ -77,7 +76,7 @@ export const ShotsAndTeasView: React.FC = () => {
               {/* Benefits */}
               <div className="space-y-1">
                 <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wide">
-                  {isPt ? 'Benefícios Principais:' : isEn ? 'Key Benefits:' : 'Beneficios Principales:'}
+                  {t.shotsView.benefitsLabel}:
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {shot.benefits.map((b, i) => (
@@ -91,7 +90,7 @@ export const ShotsAndTeasView: React.FC = () => {
               {/* Ingredients */}
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-850 space-y-1">
                 <div className="text-[11px] font-bold text-rose-300 uppercase">
-                  {isPt ? 'Ingredientes:' : isEn ? 'Ingredients:' : 'Ingredientes:'}
+                  {t.shotsView.ingredientsLabel}:
                 </div>
                 <ul className="text-xs text-slate-300 space-y-1">
                   {shot.ingredients.map((ing, idx) => (
@@ -102,7 +101,7 @@ export const ShotsAndTeasView: React.FC = () => {
 
               {/* Preparation */}
               <div className="text-xs text-slate-300 leading-relaxed bg-purple-950/20 p-3 rounded-2xl border border-purple-500/20">
-                <strong className="text-purple-300">{isPt ? 'Modo de Tomar:' : isEn ? 'How to Take:' : 'Modo de Tomar:'}</strong> {shot.preparation}
+                <strong className="text-purple-300 font-bold">{t.shotsView.prepLabel}:</strong> {shot.preparation}
               </div>
             </div>
           ))}
@@ -112,7 +111,7 @@ export const ShotsAndTeasView: React.FC = () => {
       {/* Teas Content */}
       {activeSubTab === 'teas' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {DRAINAGE_TEAS.map((tea) => (
+          {teas.map((tea) => (
             <div
               key={tea.id}
               className="p-5 rounded-3xl bg-slate-900/90 border border-teal-500/30 hover:border-teal-500/60 transition-all shadow-xl space-y-4"
@@ -121,16 +120,19 @@ export const ShotsAndTeasView: React.FC = () => {
                 <h3 className="font-black text-base text-white">
                   {tea.name}
                 </h3>
+                <span className="px-2.5 py-1 rounded-xl bg-teal-500/20 text-teal-300 text-[10px] font-black uppercase shrink-0">
+                  {tea.bestTime}
+                </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-emerald-300 font-semibold leading-relaxed">
-                💧 {tea.effect}
-              </p>
+              <div className="p-2.5 rounded-xl bg-teal-950/40 border border-teal-500/30 text-xs font-semibold text-teal-200">
+                ⚡ <strong>{t.shotsView.effectLabel}:</strong> {tea.effect}
+              </div>
 
               {/* Ingredients */}
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-850 space-y-1">
-                <div className="text-[11px] font-bold text-amber-300 uppercase">
-                  {isPt ? 'Ingredientes:' : isEn ? 'Ingredients:' : 'Ingredientes:'}
+                <div className="text-[11px] font-bold text-teal-300 uppercase">
+                  {t.shotsView.ingredientsLabel}:
                 </div>
                 <ul className="text-xs text-slate-300 space-y-1">
                   {tea.ingredients.map((ing, idx) => (
@@ -141,11 +143,7 @@ export const ShotsAndTeasView: React.FC = () => {
 
               {/* Instructions */}
               <div className="text-xs text-slate-300 leading-relaxed bg-slate-950 p-3 rounded-2xl border border-slate-800">
-                <strong className="text-white">{isPt ? 'Preparo:' : isEn ? 'Preparation:' : 'Preparación:'}</strong> {tea.instructions}
-              </div>
-
-              <div className="text-[11px] text-teal-300 font-bold bg-teal-500/10 p-2.5 rounded-xl border border-teal-500/20">
-                ⏰ <strong>{isPt ? 'Melhor Horário:' : isEn ? 'Best Timing:' : 'Mejor Horario:'}</strong> {tea.bestTime}
+                <strong className="text-amber-300 font-bold">{t.shotsView.prepLabel}:</strong> {tea.instructions}
               </div>
             </div>
           ))}

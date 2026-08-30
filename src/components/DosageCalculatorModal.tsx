@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Calculator, X, Sparkles, Scale, Target, Flame, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Calculator, X, Sparkles } from 'lucide-react';
 
 export const DosageCalculatorModal: React.FC = () => {
-  const { activeModal, setActiveModal, calculatorData, updateCalculator, isPt, isEn } = useApp();
+  const { activeModal, setActiveModal, calculatorData, updateCalculator, t } = useApp();
 
   const [weight, setWeight] = useState(calculatorData.currentWeight);
   const [target, setTarget] = useState(calculatorData.targetLoss);
   const [anxiety, setAnxiety] = useState<'leve' | 'moderada' | 'alta'>(calculatorData.anxietyLevel);
-  const [calculated, setCalculated] = useState(false);
 
   if (activeModal !== 'dosageCalc') return null;
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
     updateCalculator(weight, target, anxiety);
-    setCalculated(true);
   };
 
   return (
@@ -37,10 +35,10 @@ export const DosageCalculatorModal: React.FC = () => {
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-black text-white">
-              {isPt ? 'Calculadora de Doses Personalizada' : isEn ? 'Personalized Dosage Calculator' : 'Calculadora de Dosis Personalizada'}
+              {t.calculatorModal.title}
             </h3>
             <p className="text-xs text-rose-300">
-              {isPt ? 'Ajuste exato segundo seu peso e meta' : isEn ? 'Exact adjustment by weight & goal' : 'Ajuste exacto según tu peso y meta'}
+              {t.calculatorModal.subtitle}
             </p>
           </div>
         </div>
@@ -51,7 +49,7 @@ export const DosageCalculatorModal: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-black uppercase text-slate-300 mb-1">
-                {isPt ? 'Seu Peso Atual (kg)' : isEn ? 'Current Weight (kg)' : 'Tu Peso Actual (kg)'}
+                {t.calculatorModal.currentWeightLabel}
               </label>
               <input
                 type="number"
@@ -65,7 +63,7 @@ export const DosageCalculatorModal: React.FC = () => {
 
             <div>
               <label className="block text-xs font-black uppercase text-slate-300 mb-1">
-                {isPt ? 'Meta a Perder (kg)' : isEn ? 'Target Loss (kg)' : 'Meta a Perder (kg)'}
+                {t.calculatorModal.targetLossLabel}
               </label>
               <input
                 type="number"
@@ -80,23 +78,26 @@ export const DosageCalculatorModal: React.FC = () => {
 
           <div>
             <label className="block text-xs font-black uppercase text-slate-300 mb-1">
-              {isPt ? 'Nível de Ansiedade por Doces / Noite:' : isEn ? 'Night Cravings / Anxiety Level:' : 'Nivel de Ansiedad por Dulces / Noche:'}
+              {t.calculatorModal.anxietyLabel}
             </label>
             <div className="grid grid-cols-3 gap-2">
-              {(['leve', 'moderada', 'alta'] as const).map(lvl => (
-                <button
-                  type="button"
-                  key={lvl}
-                  onClick={() => setAnxiety(lvl)}
-                  className={`py-2 px-2 rounded-xl text-xs font-black capitalize transition-all cursor-pointer border ${
-                    anxiety === lvl
-                      ? 'bg-rose-600 text-white border-rose-400 shadow-md'
-                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
-                  }`}
-                >
-                  {lvl}
-                </button>
-              ))}
+              {(['leve', 'moderada', 'alta'] as const).map(lvl => {
+                const label = lvl === 'leve' ? t.calculatorModal.mild : lvl === 'moderada' ? t.calculatorModal.moderate : t.calculatorModal.high;
+                return (
+                  <button
+                    type="button"
+                    key={lvl}
+                    onClick={() => setAnxiety(lvl)}
+                    className={`py-2 px-2 rounded-xl text-xs font-black capitalize transition-all cursor-pointer border ${
+                      anxiety === lvl
+                        ? 'bg-rose-600 text-white border-rose-400 shadow-md'
+                        : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -105,7 +106,7 @@ export const DosageCalculatorModal: React.FC = () => {
             className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-black text-xs sm:text-sm tracking-wide shadow-xl shadow-rose-950/50 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
           >
             <Sparkles className="w-4 h-4" />
-            <span>{isPt ? 'CALCULAR MINHA PRESCRIÇÃO' : isEn ? 'CALCULATE MY DOSAGE' : 'CALCULAR MI PRESCRIPCIÓN'}</span>
+            <span>{t.calculatorModal.calculateBtn}</span>
           </button>
         </form>
 
@@ -113,10 +114,10 @@ export const DosageCalculatorModal: React.FC = () => {
         <div className="mt-5 p-4 rounded-2xl bg-slate-950 border border-rose-500/40 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black uppercase text-amber-300">
-              {isPt ? 'Prescrição Bariátrica Recomendada:' : isEn ? 'Recommended Bariatric Prescription:' : 'Prescripción Bariátrica Recomendada:'}
+              {t.calculatorModal.recommendedPrescription}
             </span>
             <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-black">
-              {calculatorData.dailyPortions} {isPt ? 'doses / dia' : isEn ? 'doses / day' : 'dosis / día'}
+              {calculatorData.dailyPortions} {t.calculatorModal.dosesPerDay}
             </span>
           </div>
 
@@ -127,11 +128,11 @@ export const DosageCalculatorModal: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800 text-center">
             <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
               <div className="text-amber-400 text-xs font-black">150 ml (2 cubos)</div>
-              <div className="text-[10px] text-slate-400">{isPt ? 'Por porção' : isEn ? 'Per portion' : 'Por porción'}</div>
+              <div className="text-[10px] text-slate-400">{t.calculatorModal.perPortion}</div>
             </div>
             <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
-              <div className="text-emerald-400 text-xs font-black">300 ml Água</div>
-              <div className="text-[10px] text-slate-400">{isPt ? 'Obrigatório junto' : isEn ? 'Must drink with it' : 'Obligatorio con la dosis'}</div>
+              <div className="text-emerald-400 text-xs font-black">300 ml {t.calculatorModal.waterRequired}</div>
+              <div className="text-[10px] text-slate-400">{t.calculatorModal.waterRequired}</div>
             </div>
           </div>
         </div>

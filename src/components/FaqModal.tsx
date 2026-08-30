@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { FREQUENT_QUESTIONS } from '../data/bariatricData';
-import { HelpCircle, X, ChevronDown, ChevronUp, ShieldCheck, Mail, MessageCircle, Heart } from 'lucide-react';
+import { getFrequentQuestions } from '../data/bariatricData';
+import { HelpCircle, X, ChevronDown, ChevronUp, ShieldCheck, Mail } from 'lucide-react';
 
 export const FaqModal: React.FC = () => {
-  const { activeModal, setActiveModal, isPt, isEn } = useApp();
+  const { activeModal, setActiveModal, language, t } = useApp();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   if (activeModal !== 'support') return null;
+
+  const faqs = getFrequentQuestions(language);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in text-white">
@@ -21,10 +23,10 @@ export const FaqModal: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base font-black text-white">
-                {isPt ? 'Perguntas Frequentes & Suporte' : isEn ? 'FAQ & VIP Support' : 'Preguntas Frecuentes & Soporte VIP'}
+                {t.faqModal.title}
               </h3>
               <p className="text-xs text-amber-300">
-                {isPt ? 'Tire todas as suas dúvidas' : isEn ? 'Get all your questions answered' : 'Resuelve todas tus dudas al instante'}
+                {t.faqModal.subtitle}
               </p>
             </div>
           </div>
@@ -39,7 +41,7 @@ export const FaqModal: React.FC = () => {
 
         {/* FAQ list */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 custom-scrollbar">
-          {FREQUENT_QUESTIONS.map((faq, i) => {
+          {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
 
             return (
@@ -56,7 +58,7 @@ export const FaqModal: React.FC = () => {
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-850 bg-slate-900/40">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800 bg-slate-900/40">
                     {faq.answer}
                   </div>
                 )}
@@ -68,14 +70,10 @@ export const FaqModal: React.FC = () => {
           <div className="mt-5 p-4 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-slate-950 border border-emerald-500/30 space-y-2">
             <div className="flex items-center gap-2 text-emerald-400 font-black text-xs uppercase">
               <ShieldCheck className="w-4 h-4" />
-              <span>{isPt ? 'Garantia Incondicional de 30 Dias' : isEn ? '30-Day Unconditional Guarantee' : 'Garantía Incondicional de 30 Días'}</span>
+              <span>{t.faqModal.guaranteeTitle}</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              {isPt
-                ? 'Se você seguir o protocolo e por qualquer motivo não amar os resultados, você tem suporte total e garantia blindada.'
-                : isEn
-                ? 'If you follow the protocol and are not 100% satisfied with your results, our team is here to assist you.'
-                : 'Si sigues el protocolo y por cualquier motivo no estás 100% satisfecha con tu reducción de apetito y medidas, cuentas con soporte prioritario.'}
+              {t.faqModal.guaranteeText}
             </p>
           </div>
         </div>
@@ -87,7 +85,7 @@ export const FaqModal: React.FC = () => {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors"
           >
             <Mail className="w-3.5 h-3.5 text-amber-400" />
-            <span>{isPt ? 'E-mail de Suporte: soporte@bienestarhoy.fun' : isEn ? 'Support Email: soporte@bienestarhoy.fun' : 'Correo de Soporte: soporte@bienestarhoy.fun'}</span>
+            <span>{t.faqModal.supportEmail}: soporte@bienestarhoy.fun</span>
           </a>
         </div>
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { SMART_SHOPPING_LIST } from '../data/bariatricData';
-import { ShoppingCart, Check, CheckSquare, Square, DollarSign, Sparkles } from 'lucide-react';
+import { getShoppingList } from '../data/bariatricData';
+import { ShoppingCart, Check } from 'lucide-react';
 
 export const ShoppingListView: React.FC = () => {
-  const { checkedShoppingItems, toggleShoppingItem, isPt, isEn } = useApp();
+  const { checkedShoppingItems, toggleShoppingItem, language, t } = useApp();
+  const shoppingList = getShoppingList(language);
 
   return (
     <div className="space-y-6 text-white pb-12 animate-fade-in">
@@ -14,17 +15,13 @@ export const ShoppingListView: React.FC = () => {
         <div className="max-w-3xl space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
             <ShoppingCart className="w-3.5 h-3.5" />
-            <span>{isPt ? 'Supermercado Inteligente' : isEn ? 'Smart Grocery' : 'Supermercado Inteligente'}</span>
+            <span>{t.shoppingView.badge}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            {isPt ? 'Lista de Compras Econômica' : isEn ? 'Budget-Friendly Shopping List' : 'Lista de Compras Económica'}
+            {t.shoppingView.title}
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            {isPt
-              ? 'Ingredientes acessíveis que você encontra em qualquer supermercado, feira ou ervanária sem gastar fortunas.'
-              : isEn
-              ? 'Affordable ingredients found in any local store or market without spending a fortune on luxury supplements.'
-              : 'Ingredientes económicos y accesibles que encuentras en cualquier supermercado o mercado local sin gastar de más.'}
+            {t.shoppingView.subtitle}
           </p>
         </div>
       </div>
@@ -33,15 +30,15 @@ export const ShoppingListView: React.FC = () => {
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-slate-800">
           <span className="text-xs font-black uppercase tracking-wider text-amber-300">
-            {isPt ? 'Toque no item para marcar como comprado:' : isEn ? 'Tap to mark as purchased:' : 'Toca el elemento para marcarlo como comprado:'}
+            {t.shoppingView.tapToMark}
           </span>
           <span className="text-xs text-emerald-400 font-bold">
-            {checkedShoppingItems.length} / {SMART_SHOPPING_LIST.length} {isPt ? 'comprados' : isEn ? 'bought' : 'comprados'}
+            {checkedShoppingItems.length} / {shoppingList.length} {t.shoppingView.purchasedCount}
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {SMART_SHOPPING_LIST.map((item) => {
+          {shoppingList.map((item) => {
             const isChecked = checkedShoppingItems.includes(item.id);
 
             return (

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { MessageSquare, X, Send, Sparkles, Bot, User, CheckCircle2 } from 'lucide-react';
+import { X, Send, Bot, User } from 'lucide-react';
 
 export const NutriCoachModal: React.FC = () => {
-  const { activeModal, setActiveModal, messages, sendMessage, isTypingCoach, isPt, isEn } = useApp();
+  const { activeModal, setActiveModal, messages, sendMessage, isTypingCoach, language, t } = useApp();
   const [inputText, setInputText] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -22,7 +22,17 @@ export const NutriCoachModal: React.FC = () => {
     setInputText('');
   };
 
-  const quickQuestions = [
+  const quickQuestions = language === 'pt' ? [
+    'Como conservar na geladeira?',
+    'Posso tomar se tiver diabetes?',
+    'E se eu esquecer de tomar com água?',
+    'Qual a melhor receita para a noite?'
+  ] : language === 'en' ? [
+    'How do I store it in the fridge?',
+    'Is it safe for diabetics?',
+    'What if I forget to drink the water?',
+    'What is the best recipe for night cravings?'
+  ] : [
     '¿Cómo se conserva en la nevera?',
     '¿Puedo tomarla si tengo diabetes?',
     '¿Qué pasa si olvido tomar el vaso de agua?',
@@ -45,14 +55,14 @@ export const NutriCoachModal: React.FC = () => {
             <div>
               <div className="flex items-center gap-1.5">
                 <h3 className="text-sm sm:text-base font-black text-white">
-                  Nutri-Coach IA 24/7
+                  {t.nutriCoach.title}
                 </h3>
                 <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                  ONLINE
+                  {t.nutriCoach.online}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                {isPt ? 'Assistente especialista na Gelatina Bariátrica' : isEn ? 'Bariatric Gelatin Smart Assistant' : 'Asistente especialista en la Gelatina Bariátrica'}
+                {t.nutriCoach.subtitle}
               </p>
             </div>
           </div>
@@ -101,7 +111,7 @@ export const NutriCoachModal: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-rose-400 animate-bounce" />
               <span className="w-2 h-2 rounded-full bg-rose-400 animate-bounce [animation-delay:0.2s]" />
               <span className="w-2 h-2 rounded-full bg-rose-400 animate-bounce [animation-delay:0.4s]" />
-              <span>{isPt ? 'Nutri-Coach digitando...' : isEn ? 'Coach is typing...' : 'Nutri-Coach escribiendo...'}</span>
+              <span>{t.nutriCoach.typing}</span>
             </div>
           )}
 
@@ -109,7 +119,7 @@ export const NutriCoachModal: React.FC = () => {
         </div>
 
         {/* Quick Question suggestions */}
-        <div className="px-3 py-2 bg-slate-950/80 border-t border-slate-850 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="px-3 py-2 bg-slate-950/80 border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {quickQuestions.map((q, i) => (
             <button
               key={i}
@@ -127,7 +137,7 @@ export const NutriCoachModal: React.FC = () => {
             type="text"
             value={inputText}
             onChange={e => setInputText(e.target.value)}
-            placeholder={isPt ? 'Faça sua pergunta sobre a gelatina...' : isEn ? 'Ask a question about the gelatin...' : 'Haz tu pregunta sobre la gelatina...'}
+            placeholder={t.nutriCoach.placeholder}
             className="flex-1 px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-rose-500"
           />
           <button

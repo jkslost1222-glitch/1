@@ -8,7 +8,7 @@ import { ShoppingListView } from './ShoppingListView';
 import { SatietyMealGuideView } from './SatietyMealGuideView';
 import { SosCravingsView } from './SosCravingsView';
 import { AudioSynthesizerPlayer } from './AudioSynthesizerPlayer';
-import { FREQUENT_QUESTIONS } from '../data/bariatricData';
+import { getFrequentQuestions } from '../data/bariatricData';
 import { 
   Flame, 
   Sparkles, 
@@ -17,16 +17,7 @@ import {
   Coffee, 
   Utensils, 
   AlertTriangle, 
-  ShoppingCart, 
-  Music, 
-  HelpCircle, 
-  Search, 
-  X, 
-  Clock, 
-  ShieldCheck, 
-  Award,
-  ArrowRight,
-  Download
+  ShoppingCart
 } from 'lucide-react';
 
 interface DashboardProps {
@@ -40,13 +31,13 @@ export const Dashboard: React.FC<DashboardProps> = () => {
     setActiveTab, 
     setActiveModal, 
     completedDays, 
+    language,
     isPt, 
     isEn, 
-    isEs,
     t 
   } = useApp();
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const faqs = getFrequentQuestions(language);
 
   const quickModules = [
     {
@@ -60,8 +51,8 @@ export const Dashboard: React.FC<DashboardProps> = () => {
     },
     {
       id: 'sabores',
-      title: isPt ? '6 Sabores Redutores' : isEn ? '6 Satiety Flavors' : '6 Sabores Reductores',
-      subtitle: isPt ? 'Frutos Vermelhos, Café, Piña' : isEn ? 'Berries, Coffee, Pineapple' : 'Frutos Rojos, Café, Piña',
+      title: isPt ? '3 Sabores Redutores' : isEn ? '3 Satiety Flavors' : '3 Sabores Reductores',
+      subtitle: isPt ? 'Frutas Vermelhas, Abacaxi, Maracujá' : isEn ? 'Berries, Pineapple, Passion Fruit' : 'Frutos Rojos, Piña, Maracuyá',
       icon: Sparkles,
       color: 'from-amber-600 to-amber-700',
       border: 'border-amber-500/40',
@@ -74,7 +65,7 @@ export const Dashboard: React.FC<DashboardProps> = () => {
       icon: Calendar,
       color: 'from-emerald-600 to-emerald-700',
       border: 'border-emerald-500/40',
-      badge: `${completedDays.length}/21 Días`
+      badge: `${completedDays.length}/21 ${isPt ? 'Dias' : isEn ? 'Days' : 'Días'}`
     },
     {
       id: 'calculadora',
@@ -88,7 +79,7 @@ export const Dashboard: React.FC<DashboardProps> = () => {
     {
       id: 'shots-tes',
       title: isPt ? 'Shots & Chás Drenantes' : isEn ? 'Shots & Drainage Teas' : 'Shots & Tés Drenantes',
-      subtitle: isPt ? '7 Shots + Chás Anti-Inchaço' : isEn ? '7 Shots + Detox Teas' : '7 Shots + Tés Anti-Retención',
+      subtitle: isPt ? 'Shots + Chás Anti-Inchaço' : isEn ? 'Shots + Detox Teas' : 'Shots + Tés Anti-Retención',
       icon: Coffee,
       color: 'from-purple-600 to-purple-700',
       border: 'border-purple-500/40',
@@ -177,7 +168,11 @@ export const Dashboard: React.FC<DashboardProps> = () => {
               {isPt ? 'Terapia Sonora Anti-Cortisol' : isEn ? 'Anti-Cortisol Sound Therapy' : 'Terapia Sonora Anti-Cortisol'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              El estrés y el cortisol alto bloquean la quema de grasa y disparan el apetito voraz por azúcar en las noches. Utiliza el sintetizador de frecuencia sonora en tiempo real abajo para relajarte.
+              {isPt
+                ? 'O estresse e o cortisol alto bloqueiam a queima de gordura e disparam a fome por doces à noite. Use o gerador de frequências em tempo real abaixo para relaxar o sistema nervoso.'
+                : isEn
+                ? 'High stress and cortisol block fat burning and trigger intense evening sugar cravings. Use the real-time restorative sound generator below to calm your nervous system.'
+                : 'El estrés y el cortisol alto bloquean la quema de grasa y disparan el apetito voraz por azúcar en las noches. Utiliza el sintetizador de frecuencia sonora en tiempo real abajo para relajarte.'}
             </p>
             <AudioSynthesizerPlayer />
           </div>
@@ -188,10 +183,10 @@ export const Dashboard: React.FC<DashboardProps> = () => {
         <div className="space-y-6 text-white pb-12">
           <div className="rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6">
             <h2 className="text-2xl font-black text-white">
-              {isPt ? 'Dúvidas Frequentes sobre a Gelatina Bariátrica' : isEn ? 'Frequently Asked Questions' : 'Preguntas Frecuentes sobre la Gelatina Bariátrica'}
+              {t.faqModal.title}
             </h2>
             <div className="space-y-3">
-              {FREQUENT_QUESTIONS.map((faq, idx) => (
+              {faqs.map((faq, idx) => (
                 <div key={idx} className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5">
                   <h4 className="font-bold text-sm text-amber-300">
                     {faq.question}

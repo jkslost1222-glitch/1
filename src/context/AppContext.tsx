@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language, UserProfile, ActiveModalType, BariatricRecipe, DailyPlanDay, ShotRecipe, TeaRecipe } from '../types';
 import { translations } from '../data/translations';
-import { CORE_BARIATRIC_RECIPE, FLAVOR_VARIATIONS, DAILY_21_DAYS_PLAN, MORNING_SHOTS, DRAINAGE_TEAS } from '../data/bariatricData';
+import { getCoreRecipe, getFlavorVariations, getDailyPlan, getMorningShots, getDrainageTeas } from '../data/bariatricData';
 
 interface ChatMessage {
   id: string;
@@ -69,7 +69,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Default to Spanish ('es')
+  // Default to Spanish ('es') or saved
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem('bariatric_lang');
     return (saved === 'pt' || saved === 'en' || saved === 'es') ? (saved as Language) : 'es';
@@ -101,8 +101,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const isAuthenticated = !!user;
 
   const login = (email: string, name?: string) => {
+    const defaultName = isPt ? 'Aluna VIP Oficial' : isEn ? 'Official VIP Member' : 'Alumna VIP Oficial';
     const newUser: UserProfile = {
-      name: name || email.split('@')[0] || 'Miembro VIP',
+      name: name || email.split('@')[0] || defaultName,
       email: email.trim().toLowerCase(),
       isVip: true,
       startDate: new Date().toISOString().split('T')[0],
@@ -116,7 +117,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const loginAsVip = () => {
-    login('cliente.vip@gelatinabariatrica.com', 'Alumna VIP Oficial');
+    const defaultName = isPt ? 'Aluna VIP Oficial' : isEn ? 'Official VIP Member' : 'Alumna VIP Oficial';
+    login('cliente.vip@gelatinabariatrica.com', defaultName);
   };
 
   const logout = () => {
@@ -135,7 +137,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : [1];
   });
 
-  const [activeDayDetail, setActiveDayDetail] = useState<DailyPlanDay | null>(DAILY_21_DAYS_PLAN[0]);
+  const [activeDayDetail, setActiveDayDetail] = useState<DailyPlanDay | null>(() => {
+    return getDailyPlan(language)[0];
+  });
+
+  // Keep activeDayDetail in sync with language
+  useEffect(() => {
+    const currentDayNum = activeDayDetail?.day || 1;
+    const plan = getDailyPlan(language);
+    const updated = plan.find(d => d.day === currentDayNum) || plan[0];
+    setActiveDayDetail(updated);
+  }, [language]);
 
   const toggleDayCompletion = (day: number) => {
     setCompletedDays(prev => {
@@ -146,32 +158,44 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Dosage Calculator Logic
-  const [calculatorData, setCalculatorData] = useState({
+  const getTimingAdvice = (portions: number, lang: Language) => {
+    if (lang === 'pt') {
+      if (portions === 3) return '3 doses diárias: 1 no meio da manhã (10:30), 1 antes do Almoço (12:30) e 1 de resgate noturno (19:30) para bloquear a compulsão.';
+      if (portions === 1) return '1 dose diária principal: 30 minutos antes da sua refeição mais pesada do dia com 1 copo grande de água.';
+      return '2 doses diárias: 1 porção 30 min antes do Almoço e 1 porção 30 min antes do Jantar ou no pico de fome da tarde.';
+    }
+    if (lang === 'en') {
+      if (portions === 3) return '3 daily portions: 1 mid-morning (10:30 AM), 1 before Lunch (12:30 PM) and 1 evening rescue portion (7:30 PM).';
+      if (portions === 1) return '1 main daily portion: 30 minutes before your heaviest meal of the day with 1 full glass of water.';
+      return '2 daily portions: 1 portion 30 min before Lunch and 1 portion 30 min before Dinner with 300ml water.';
+    }
+    if (portions === 3) return '3 dosis al día: 1 a media mañana (10:30 AM), 1 antes del Almuerzo (12:30 PM) y 1 de rescate nocturno (19:30 PM) para bloquear el hambre.';
+    if (portions === 1) return '1 dosis diaria principal: 30 minutos antes de tu comida más copiosa del día (normalmente el almuerzo) con 1 vaso de agua.';
+    return '2 dosis diarias: 1 porção 30 min antes del Almuerzo y 1 porción 30 min antes de la Cena o en el pico de ansiedad de la tarde.';
+  };
+
+  const [calculatorData, setCalculatorData] = useState(() => ({
     currentWeight: 75,
     targetLoss: 8,
     anxietyLevel: 'moderada' as 'leve' | 'moderada' | 'alta',
     dailyPortions: 2,
     cubesPerDose: 2,
-    timingAdvice: '1 dosis (150g o 2 cubos) 30 min antes del Almuerzo + 1 dosis 35 min antes de la Cena con 1 vaso grande de agua tibia.'
-  });
+    timingAdvice: getTimingAdvice(2, language)
+  }));
 
   const updateCalculator = (weight: number, target: number, anxiety: 'leve' | 'moderada' | 'alta') => {
     let portions = 2;
     let cubes = 2;
-    let timing = '';
 
     if (weight > 85 || target >= 12 || anxiety === 'alta') {
       portions = 3;
       cubes = 2;
-      timing = '3 dosis al día: 1 a media mañana (10:30 AM), 1 antes del Almuerzo (12:30 PM) y 1 de rescate nocturno (19:30 PM) para bloquear el hambre.';
     } else if (weight <= 60 || target <= 4) {
       portions = 1;
       cubes = 2;
-      timing = '1 dosis diaria principal: 30 minutos antes de tu comida más copiosa del día (normalmente el almuerzo) con 1 vaso de agua.';
     } else {
       portions = 2;
       cubes = 2;
-      timing = '2 dosis diarias: 1 porción 30 min antes del Almuerzo y 1 porción 30 min antes de la Cena o en el pico de ansiedad de la tarde.';
     }
 
     setCalculatorData({
@@ -180,47 +204,55 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       anxietyLevel: anxiety,
       dailyPortions: portions,
       cubesPerDose: cubes,
-      timingAdvice: timing
+      timingAdvice: getTimingAdvice(portions, language)
     });
   };
 
-  // Nutri-Coach Smart Chat (in Spanish)
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  // Nutri-Coach Smart Chat
+  const getInitialCoachMessage = (lang: Language) => {
+    if (lang === 'pt') return 'Olá! Sou seu Nutri-Coach da Gelatina Bariátrica. Tem alguma dúvida sobre o preparo, horários para tomar ou substituição de ingredientes? Escreva aqui.';
+    if (lang === 'en') return 'Hello! I am your Bariatric Gelatin AI Nutri-Coach. Do you have any questions about recipe prep, timing, water rules or dosages? Type here.';
+    return '¡Hola! Soy tu Nutri-Coach de la Gelatina Bariátrica. ¿Tienes alguna duda sobre la preparación, los horarios para tomarla o cómo sustituir algún ingrediente? Escríbeme aquí.';
+  };
+
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: '1',
       sender: 'coach',
-      text: '¡Hola! Soy tu Nutri-Coach de la Gelatina Bariátrica. ¿Tienes alguna duda sobre la preparación, los horarios para tomarla o cómo sustituir algún ingrediente? Escríbeme aquí.',
-      timestamp: 'Ahora'
+      text: getInitialCoachMessage(language),
+      timestamp: 'Agora'
     }
   ]);
   const [isTypingCoach, setIsTypingCoach] = useState(false);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     if (!text.trim()) return;
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       sender: 'user',
       text: text.trim(),
-      timestamp: 'Ahora'
+      timestamp: 'Agora'
     };
     setMessages(prev => [...prev, userMsg]);
     setIsTypingCoach(true);
 
-    setTimeout(() => {
-      let reply = '¡Excelente pregunta! La clave de la Gelatina Bariátrica es tomarla exactamente 25 a 35 minutos antes de comer con 1 vaso lleno de agua. Esto le da tiempo al hidrogel de expandirse en el estómago.';
-      const lower = text.toLowerCase();
+    try {
+      const response = await fetch('/api/coach/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text.trim(),
+          language: language,
+          history: messages.slice(-4).map(m => ({ sender: m.sender, text: m.text }))
+        })
+      });
 
-      if (lower.includes('diabetes') || lower.includes('azucar') || lower.includes('presion')) {
-        reply = 'Totalmente seguro. La receta no contiene azúcar ni químicos, y la canela junto con la grenetina ayuda a estabilizar la glucosa en sangre. Puedes usar stevia pura o fruto del monje.';
-      } else if (lower.includes('nevera') || lower.includes('dias') || lower.includes('durar') || lower.includes('guardar')) {
-        reply = 'Puedes preparar la cantidad de 4 a 5 días y guardarla en un recipiente hermético de vidrio en el refrigerador. Se conserva en perfecto estado y lista para consumir.';
-      } else if (lower.includes('limon') || lower.includes('vinagre') || lower.includes('acidez')) {
-        reply = 'El limón o el vinagre de manzana activa el pH para que la proteína forme la red viscoelástica saciante. Si tienes gastritis severa, puedes usar el Shot #4 de Sábila/Aloe Vera con agua tibia.';
-      } else if (lower.includes('agua') || lower.includes('vaso')) {
-        reply = '¡El agua es obligatoria! La fibra y el colágeno absorben el líquido para inflarse suavemente en el estómago. Toma mínimo 250ml de agua inmediatamente con tu porción.';
-      } else if (lower.includes('noche') || lower.includes('dulce') || lower.includes('ansiedad')) {
-        reply = 'Para la noche, te recomiendo la versión Maracuyá Anti-Cortisol o Frutos Rojos a las 19:30 o 20:00. Frena el antojo de azúcar de raíz en menos de 10 minutos.';
-      }
+      const data = await response.json();
+      const reply = data.answer || (language === 'pt' 
+        ? 'A gelatina bariátrica deve ser consumida 25 a 35 minutos antes da refeição com 300ml de água morna para expandir no estômago.' 
+        : language === 'en'
+        ? 'Bariatric gelatin must be taken 25 to 35 minutes before meals accompanied by 300ml of water to expand gastric fullness.'
+        : 'La gelatina bariátrica debe tomarse 25 a 35 minutos antes de comer con 300ml de agua tibia para expandirse en el estómago.');
 
       setMessages(prev => [
         ...prev,
@@ -228,11 +260,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           id: (Date.now() + 1).toString(),
           sender: 'coach',
           text: reply,
-          timestamp: 'Ahora'
+          timestamp: 'Agora'
         }
       ]);
+    } catch (e) {
+      const fallbackReply = language === 'pt'
+        ? 'A gelatina bariátrica deve ser consumida 25 a 35 minutos antes da refeição principal sempre acompanhada de 1 copo grande de água morna.'
+        : language === 'en'
+        ? 'Always consume your bariatric gelatin 25 to 35 minutes before your main meal with a full 300ml glass of water.'
+        : 'Consume siempre tu porción de gelatina 25 a 35 minutos antes de la comida principal con 1 vaso grande de agua tibia.';
+      
+      setMessages(prev => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          sender: 'coach',
+          text: fallbackReply,
+          timestamp: 'Agora'
+        }
+      ]);
+    } finally {
       setIsTypingCoach(false);
-    }, 900);
+    }
   };
 
   // Audio Relaxation Synthesizer
@@ -246,7 +295,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Shopping List state
   const [checkedShoppingItems, setCheckedShoppingItems] = useState<string[]>(() => {
     const saved = localStorage.getItem('bariatric_shopping_checked');
-    return saved ? JSON.parse(saved) : ['shop-1', 'shop-2'];
+    return saved ? JSON.parse(saved) : ['1', '2'];
   });
 
   const toggleShoppingItem = (id: string) => {
