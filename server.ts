@@ -1,14 +1,13 @@
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Safe resolution for both CJS and ESM
+const projectRoot = process.cwd();
 
 async function startServer() {
   const app = express();
@@ -21,10 +20,10 @@ async function startServer() {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
-  // AI Canine Coach Gemini Endpoint
+  // Nutri-Coach AI Endpoint
   app.post("/api/coach/chat", async (req, res) => {
     try {
-      const { message, history = [], isEn = false } = req.body;
+      const { message, history = [], language = "es" } = req.body;
 
       if (!message || typeof message !== "string") {
         return res.status(400).json({ error: "Message is required" });
@@ -36,9 +35,11 @@ async function startServer() {
         return res.status(200).json({
           success: false,
           fallback: true,
-          message: isEn
-            ? "API Key not configured. Using local veterinary knowledge base."
-            : "Chave de API não configurada. Utilizando base de conhecimento local."
+          answer: language === "pt"
+            ? "A gelatina bariátrica funciona criando um gel de alta viscosidade que ocupa espaço no estômago e estimula os receptores de saciedade mecânica. Tome sempre acompanhada de 300ml de água morna ou em temperatura ambiente 20 minutos antes da refeição principal."
+            : language === "en"
+            ? "Bariatric gelatin works by creating a high-viscosity mesh in the stomach that activates mechanical stretch receptors. Always drink 300ml of water alongside each portion, 20 minutes before meals."
+            : "La gelatina bariátrica crea una matriz colágena de alta viscosidad en el estómago que estimula los mecanorreceptores de saciedad. Tómala siempre con 300 ml de agua 20 minutos antes de tu comida principal."
         });
       }
 
@@ -51,50 +52,26 @@ async function startServer() {
         },
       });
 
-      const systemInstruction = isEn
-        ? `You are "Canine Coach 24/7", a world-class veterinary holistic specialist and canine behaviorist for the Portal Pet platform.
-Your expertise covers:
-1. Canine Ear Care & Otitis prevention (the Goodbye Otitis / Adeus Otite method, "L-shaped" ear canal anatomy, safe natural cleansers, no deep cotton swabs, temperature warming).
-2. Natural Nutrition & Functional Homemade Remedies (Golden Paste / Curcumin turmeric paste, Bone Broth, probiotics, pumpkin, toxic foods like chocolate/grapes/onions/xylitol).
-3. Anti-Itch & Skin Soothing (Gentian Violet 1% dilution 15 drops in 500ml shampoo, organic apple cider vinegar paw sprays, chamomile + aloe vera for hot spots).
-4. Canine Behavior & Training (positive reinforcement, stopping coprophagia/eating poop with pineapple/probiotics, potty training routines, separation anxiety, 432Hz calming frequencies).
-5. Fresh breath, teeth hygiene & joint/mobility care.
+      const systemInstruction = `Eres "Nutri-Coach IA 24/7", el asistente nutricional experto de la plataforma oficial "Gelatina Bariátrica • El Secreto Reductor".
+Tu objetivo es guiar, motivar y resolver cualquier duda del usuario sobre el método de la gelatina bariátrica, recetas reductoras de colágeno, shots matutinos, tés drenantes, cronograma de 21 días y técnicas anti-ansiedad.
 
-Response formatting guidelines:
-- Speak in a friendly, caring, highly competent tone.
-- Give concrete, actionable advice with step-by-step instructions and safe dosages.
-- Always include natural remedies or practical tips if relevant.
-- Include a bulleted breakdown of 2-4 key actionable points.
-- Include a safety disclaimer if symptoms are severe (foul black discharge, bleeding, constant vomiting, head tilt, intense lethargy -> see a vet).
-- Return your answer in JSON format with fields:
-  "text": string (main explanation),
-  "bullets": string[] (optional key points),
-  "warning": string (optional veterinary safety warning),
-  "recipe": object { "title": string, "items": string[], "instructions": string } (optional recipe/step).`
-        : `Você é o "Coach Canino 24h", um especialista veterinário holístico e adestrador positivo oficial da plataforma Portal Pet.
-Sua especialidade inclui:
-1. Cuidados e Higienização de Ouvidos / Otite Canina (Método Adeus Otite, anatomia do conduto auditivo em formato "L", nunca usar cotonete no fundo para não perfurar o tímpano, aquecer o frasco nas mãos por 2 min, massagem na cartilagem até ouvir som "tchuc-tchuc", extrato de Própolis Verde sem álcool com Calêndula).
-2. Alimentação Natural Funcional & Remédios Caseiros Seguros (Pasta Dourada de Cúrcuma, Caldo de Ossos, probióticos, alimentos tóxicos como chocolate, uva, cebola, alho em excesso e xilitol).
-3. Alívio de Coceiras, Alergias e Dermatites (Protocolo da Violeta Genciana 1% com 15 gotas em 500ml de shampoo neutro, tônico de vinagre de maçã orgânico 1:2 com água para patinhas, chá de camomila gelado e babosa).
-4. Comportamento e Adestramento Positivo (Parar de comer fezes/coprofagia com abacaxi e enzimas, educar xixi e cocô no lugar certo sem broncas, ansiedade de separação, dessensibilização de latidos, ondas sonoras 432Hz).
-5. Hálito fresco, tártaro e saúde articular/mobilidade (colágeno, cúrcuma, ômega 3).
+Conocimientos clave:
+1. Receta Madre (Gelatina Bariátrica): 2 sobres de gelatina sin sabor / neutra (24g) hidratados en 100ml de agua fría y disueltos en 300ml de agua caliente + jugo de limón + canela / cúrcuma + edulcorante puro (stevia o eritritol).
+2. Regla de Oro INMUTABLE: Siempre beber 1 vaso grande (300 ml) de agua pura junto con la porción para expandir la fibra colágena en el estómago (efecto balón gástrico natural).
+3. Horarios estratégicos: 20-30 minutos antes del almuerzo y 20-30 minutos antes de la cena.
+4. Conservación: En recipiente de vidrio con tapa hermética en la nevera hasta por 5 días.
+5. Variaciones de sabores funcionales: Frutos rojos antioxidante, Piña & Jengibre termogénica, Manzana & Canela glucorreguladora, Café Latte activa-metabolismo, Maracuyá anti-cortisol para la noche.
+6. Plato Saciante 50/25/25 (50% vegetales y fibra verde, 25% proteína magra, 25% grasas buenas o carbohidrato complejo).
+7. Protocolo SOS 3 minutos para antojos nocturnos de azúcar (hielo con limón y canela, respiración 4-7-8, porción nocturna de maracuyá).
 
-Diretrizes de resposta:
-- Responda sempre em Português do Brasil com tom acolhedor, profissional e prestativo.
-- Dê orientações práticas e precisas, com dosagens e passo a passo claro.
-- Seja empático e responda exatamente o que o tutor perguntou (mesmo se for uma saudação como "oi", uma dúvida sobre remédio caseiro ou um desabafo sobre o cão).
-- Adicione marcadores explicativos (bullets) para facilitar a leitura no celular.
-- Se os sintomas forem graves (sangue, secreção fétida escura, cabeça inclinada, vômitos contínuos, febre), adicione um alerta claro orientando consulta presencial.
-- Retorne SEMPRE em formato JSON com as chaves:
-  "text": string (resposta principal clara e empática),
-  "bullets": array de strings (pontos de ação ou passos práticos),
-  "warning": string (alerta veterinário se aplicável, ou string vazia),
-  "recipe": objeto opcional { "title": string, "items": string[], "instructions": string } (se envolver receita natural como Pasta Dourada, Tônico, etc.).`;
+Instrucciones de respuesta:
+- Responde con tono empático, seguro, científico pero accesible y muy motivador.
+- Responde en el idioma del usuario (${language === 'pt' ? 'Português' : language === 'en' ? 'English' : 'Español'}).
+- Da instrucciones prácticas, claras y directas.`;
 
       // Build conversation contents
       const conversationContents: any[] = [];
 
-      // Add recent history if provided
       if (Array.isArray(history) && history.length > 0) {
         for (const h of history.slice(-6)) {
           if (h.sender === "user") {
@@ -105,7 +82,6 @@ Diretrizes de resposta:
         }
       }
 
-      // Add current message
       conversationContents.push({ role: "user", parts: [{ text: message }] });
 
       const response = await ai.models.generateContent({
@@ -113,28 +89,18 @@ Diretrizes de resposta:
         contents: conversationContents,
         config: {
           systemInstruction: systemInstruction,
-          responseMimeType: "application/json",
           temperature: 0.7,
         },
       });
 
-      const rawText = response.text || "{}";
-      let parsedData: any = {};
-      try {
-        parsedData = JSON.parse(rawText);
-      } catch (parseErr) {
-        parsedData = { text: rawText };
-      }
+      const replyText = response.text || "Consulta procesada con éxito.";
 
       return res.json({
         success: true,
-        answer: parsedData.text || rawText,
-        bullets: parsedData.bullets || [],
-        warning: parsedData.warning || "",
-        recipe: parsedData.recipe || null,
+        answer: replyText,
       });
     } catch (err: any) {
-      console.error("Gemini Coach Chat Error:", err);
+      console.error("Coach Chat Error:", err);
       return res.status(500).json({
         success: false,
         error: err.message || "Failed to generate response",
@@ -150,7 +116,7 @@ Diretrizes de resposta:
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = path.join(projectRoot, "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
